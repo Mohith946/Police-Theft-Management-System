@@ -153,6 +153,7 @@ const seedDatabase = async () => {
         reportedBy: officer1Id,
         reporterName: 'John Doe',
         reporterContact: '+1-555-0199',
+        qrCodeToken: 'QR-COMP-BMW5-9831',
         createdAt: new Date()
       },
       {
@@ -166,6 +167,7 @@ const seedDatabase = async () => {
         reportedBy: officer1Id,
         reporterName: 'Jane Miller',
         reporterContact: '+1-555-0145',
+        qrCodeToken: 'QR-COMP-MBP16-1029',
         createdAt: new Date()
       },
       {
@@ -179,6 +181,7 @@ const seedDatabase = async () => {
         reportedBy: adminId,
         reporterName: 'David Lee',
         reporterContact: '+1-555-0177',
+        qrCodeToken: 'QR-COMP-DIA-5512',
         createdAt: new Date()
       }
     ];
@@ -190,7 +193,8 @@ const seedDatabase = async () => {
     const comp3Id = insertedComplaints.insertedIds[2];
 
     await complaintsCollection.createIndex({ complaintNumber: 1 }, { unique: true });
-    console.log('Created index on complaints.');
+    await complaintsCollection.createIndex({ qrCodeToken: 1 }, { unique: true });
+    console.log('Created indices on complaints.');
 
     // 4. Seed Stolen Items
     console.log('Seeding Stolen Items...');

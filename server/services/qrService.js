@@ -33,7 +33,13 @@ const generateQRCodeDataURL = async (text) => {
   }
 };
 
+const generateComplaintToken = () => {
+  const randomBytes = crypto.randomBytes(8).toString('hex');
+  return `QR-COMP-${Date.now()}-${randomBytes.toUpperCase()}`;
+};
+
 module.exports = {
   generateUniqueToken,
+  generateComplaintToken,
   generateQRCodeDataURL
 };

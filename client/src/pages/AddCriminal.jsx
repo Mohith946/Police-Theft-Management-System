@@ -90,7 +90,7 @@ const AddCriminal = () => {
         style={{
           background: 'none',
           border: 'none',
-          color: '#94a3b8',
+          color: 'var(--text-secondary)',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
@@ -104,7 +104,7 @@ const AddCriminal = () => {
         <span>Return to registry</span>
       </button>
 
-      <h2 style={{ fontSize: '1.25rem', color: '#ffffff', marginBottom: '1.5rem', fontFamily: 'Outfit' }}>
+      <h2 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '1.5rem', fontFamily: 'Outfit' }}>
         Create Suspect Profile
       </h2>
 
@@ -131,11 +131,11 @@ const AddCriminal = () => {
             height: '120px',
             borderRadius: '16px',
             overflow: 'hidden',
-            border: '2px dashed rgba(255,255,255,0.1)',
+            border: '2px dashed var(--border-color)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgba(255,255,255,0.02)',
+            background: 'var(--bg-secondary)',
             position: 'relative'
           }}>
             {photoPreview ? (
@@ -166,7 +166,7 @@ const AddCriminal = () => {
         </div>
 
         {/* Section 1: Basic Information */}
-        <h3 style={{ fontSize: '0.95rem', color: '#3b82f6', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+        <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
           1. Identity Details
         </h3>
         
@@ -212,7 +212,7 @@ const AddCriminal = () => {
         </div>
 
         {/* Section 2: Physical Description */}
-        <h3 style={{ fontSize: '0.95rem', color: '#3b82f6', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+        <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
           2. Physical Features
         </h3>
 
@@ -291,7 +291,7 @@ const AddCriminal = () => {
         </div>
 
         {/* Section 3: Geolocation */}
-        <h3 style={{ fontSize: '0.95rem', color: '#3b82f6', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+        <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
           3. Operating Region & Coordinates
         </h3>
 

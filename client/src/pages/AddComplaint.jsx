@@ -128,7 +128,7 @@ const AddComplaint = () => {
 
         {/* Panel 1: Incident Description */}
         <div className="glass-panel" style={{ padding: '2rem' }}>
-          <h3 style={{ fontSize: '0.95rem', color: '#3b82f6', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+          <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
             1. Incident Overview
           </h3>
 
@@ -205,7 +205,7 @@ const AddComplaint = () => {
 
         {/* Panel 2: Reporter Information */}
         <div className="glass-panel" style={{ padding: '2rem' }}>
-          <h3 style={{ fontSize: '0.95rem', color: '#3b82f6', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+          <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
             2. Reporter Contact Details
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
@@ -235,7 +235,7 @@ const AddComplaint = () => {
         {/* Panel 3: Dynamic Stolen Items List */}
         <div className="glass-panel" style={{ padding: '2rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', marginBottom: '1.25rem' }}>
-            <h3 style={{ fontSize: '0.95rem', color: '#3b82f6' }}>
+            <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)' }}>
               3. Stolen Property Registry ({items.length})
             </h3>
             <button

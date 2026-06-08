@@ -1,36 +1,37 @@
-/* CSS Design System - Police Theft Management System (Civic Sentinel Light Theme) */
+/* CSS Design System - Police Theft Management System (Civic Sentinel Slate Theme) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg-primary: #fbf9fa;
-  --bg-secondary: #efedef;
+  --bg-primary: #f8fafc; /* Slate 50 */
+  --bg-secondary: #f1f5f9; /* Slate 100 */
   --bg-card: #ffffff;
-  --border-color: #c4c6cd;
-  --border-glow: rgba(4, 22, 39, 0.1);
+  --border-color: #e2e8f0; /* Slate 200 */
+  --border-glow: rgba(79, 70, 229, 0.04);
   
-  --text-primary: #1b1c1d;
-  --text-secondary: #44474c;
-  --text-muted: #74777d;
+  --text-primary: #0f172a; /* Slate 900 */
+  --text-secondary: #475569; /* Slate 600 */
+  --text-muted: #94a3b8; /* Slate 400 */
   
-  --primary: #041627;
-  --primary-gradient: linear-gradient(135deg, #041627 0%, #1a2b3c 100%);
-  --success: #10b981;
-  --success-glow: rgba(16, 185, 129, 0.15);
-  --warning: #e1c29b;
-  --danger: #ba1a1a;
-  --danger-glow: rgba(186, 26, 26, 0.15);
+  --primary: #4f46e5; /* Indigo 600 */
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  --success: #10b981; /* Emerald 500 */
+  --success-glow: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b; /* Amber 500 */
+  --danger: #ef4444; /* Red 500 */
+  --danger-glow: rgba(239, 68, 68, 0.1);
   
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
   
-  --font-heading: 'Inter', sans-serif;
+  --font-heading: 'Outfit', 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
   
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   
-  --shadow-lg: 0 4px 6px rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 20px rgba(4, 22, 39, 0.05);
+  --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 10px 15px -3px rgba(79, 70, 229, 0.05);
 }
 
 /* Reset and Core Layout */
@@ -52,7 +53,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 /* Scrollbars */
@@ -83,44 +84,43 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--primary-gradient);
 }
 
-/* Glassmorphism Classes (Re-purposed for clean, tonal surfaces) */
+/* Clean, modern panels */
 .glass-panel {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
   transition: var(--transition-smooth);
 }
 
 .glass-panel:hover {
-  border-color: var(--primary);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 0 10px rgba(4, 22, 39, 0.03);
+  border-color: #cbd5e1; /* Slate 300 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* Inputs and Forms */
 .form-input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.85rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: var(--transition-smooth);
   outline: none;
 }
 
 .form-input:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(4, 22, 39, 0.15);
-  background: var(--bg-card);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
 }
 
 .form-label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 500;
+  margin-bottom: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -132,26 +132,25 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.6rem 1.25rem;
   border-radius: var(--radius-sm);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   cursor: pointer;
-  transition: var(--transition-bounce);
+  transition: var(--transition-smooth);
   border: none;
   text-decoration: none;
 }
 
 .btn-primary {
-  background: #3b82f6; /* Safety Blue */
+  background: var(--primary);
   color: #ffffff;
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .btn-primary:hover {
-  transform: translateY(-1px);
-  background: #2563eb;
-  box-shadow: 0 6px 14px rgba(59, 130, 246, 0.3);
+  background: #4338ca; /* Indigo 700 */
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1), 0 2px 4px -2px rgba(79, 70, 229, 0.1);
 }
 
 .btn-primary:active {
@@ -167,20 +166,17 @@ h1, h2, h3, h4, h5, h6 {
 .btn-secondary:hover {
   background: var(--bg-secondary);
   color: var(--text-primary);
-  border-color: var(--text-secondary);
-  transform: translateY(-1px);
+  border-color: #cbd5e1;
 }
 
 .btn-danger {
   background: var(--danger);
   color: #ffffff;
-  box-shadow: 0 4px 10px rgba(186, 26, 26, 0.2);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
 .btn-danger:hover {
-  transform: translateY(-1px);
-  background: #a61414;
-  box-shadow: 0 6px 14px rgba(186, 26, 26, 0.3);
+  background: #dc2626; /* Red 600 */
 }
 
 /* Badges & Status */
@@ -188,30 +184,36 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0.2rem 0.65rem;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .status-stolen, .status-pending {
-  background: rgba(186, 26, 26, 0.1);
+  background: #fef2f2;
   color: var(--danger);
-  border: 1px solid rgba(186, 26, 26, 0.25);
+  border: 1px solid rgba(239, 68, 68, 0.15);
 }
 
 .status-recovered, .status-resolved {
-  background: rgba(16, 185, 129, 0.1);
+  background: #ecfdf5;
   color: var(--success);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  border: 1px solid rgba(16, 185, 129, 0.15);
 }
 
 .status-investigating {
-  background: rgba(225, 194, 155, 0.15);
-  color: #c084fc; /* Tonal Purple fallback */
-  border: 1px solid rgba(192, 132, 252, 0.25);
+  background: #f5f3ff; /* Purple 50 */
+  color: #8b5cf6; /* Purple 500 */
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.status-closed {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
 }
 
 /* Dashboard Metrics Grid */
@@ -238,32 +240,33 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .custom-table th {
-  padding: 1rem;
-  background-color: var(--primary); /* Deep Navy */
-  color: #ffffff;
-  font-size: 0.8rem;
+  padding: 0.85rem 1rem;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  font-weight: 600;
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .custom-table td {
-  padding: 1.25rem 1rem;
+  padding: 1rem;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-primary);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
 }
 
 .custom-table tr:nth-child(even) td {
-  background-color: var(--bg-primary); /* Off-white #fbf9fa */
+  background-color: var(--bg-card);
 }
 
 .custom-table tr:nth-child(odd) td {
-  background-color: var(--bg-card); /* White #ffffff */
+  background-color: var(--bg-card);
 }
 
 .custom-table tr:hover td {
-  background-color: var(--bg-secondary) !important; /* surface container #efedef */
+  background-color: var(--bg-primary) !important;
 }
 
 /* Micro-animations */

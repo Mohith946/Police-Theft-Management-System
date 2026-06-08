@@ -45,7 +45,7 @@ const Login = () => {
       alignItems: 'center',
       justifyContent: 'center',
       padding: '2rem',
-      background: 'radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.04) 0%, transparent 40%), #090d16',
+      background: 'radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.04) 0%, transparent 40%), var(--bg-primary)',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -56,7 +56,7 @@ const Login = () => {
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px)',
+        backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.015) 1px, transparent 1px)',
         backgroundSize: '40px 40px',
         zIndex: 1
       }}></div>
@@ -65,14 +65,14 @@ const Login = () => {
         {/* Logo and Header */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <div style={{
-            background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+            background: 'var(--primary-gradient)',
             width: '56px',
             height: '56px',
             borderRadius: '16px',
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 8px 24px rgba(59, 130, 246, 0.4)',
+            boxShadow: '0 8px 24px rgba(79, 70, 229, 0.15)',
             marginBottom: '1rem'
           }}>
             <Shield size={28} color="#ffffff" />
@@ -81,12 +81,10 @@ const Login = () => {
             fontSize: '1.75rem',
             fontFamily: 'Outfit',
             fontWeight: 800,
-            background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            color: 'var(--text-primary)',
             letterSpacing: '-0.02em'
           }}>SHIELD PROTOCOL</h1>
-          <p style={{ color: '#94a3b8', fontSize: '0.85rem', marginTop: '0.25rem' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.25rem' }}>
             National Police Theft Management & Recovery Console
           </p>
         </div>
@@ -94,19 +92,20 @@ const Login = () => {
         {/* Login/Register Card */}
         <div className="glass-panel" style={{ padding: '2.25rem', borderRadius: '24px' }}>
           <h2 style={{
-            fontSize: '1.25rem',
+            fontSize: '1.15rem',
             marginBottom: '1.5rem',
-            color: '#ffffff',
+            color: 'var(--text-primary)',
             textAlign: 'center',
-            fontFamily: 'Outfit'
+            fontFamily: 'Outfit',
+            fontWeight: 700
           }}>
             Officer & Admin Protocol Login
           </h2>
 
           {message && (
             <div style={{
-              background: 'rgba(239, 68, 68, 0.12)',
-              border: '1px solid rgba(239, 68, 68, 0.25)',
+              background: 'rgba(239, 68, 68, 0.08)',
+              border: '1px solid rgba(239, 68, 68, 0.15)',
               borderRadius: '8px',
               padding: '0.75rem',
               color: '#ef4444',
@@ -120,8 +119,8 @@ const Login = () => {
 
           {successMsg && (
             <div style={{
-              background: 'rgba(16, 185, 129, 0.12)',
-              border: '1px solid rgba(16, 185, 129, 0.25)',
+              background: 'rgba(16, 185, 129, 0.08)',
+              border: '1px solid rgba(16, 185, 129, 0.15)',
               borderRadius: '8px',
               padding: '0.75rem',
               color: '#10b981',
@@ -146,7 +145,7 @@ const Login = () => {
                   required
                   style={{ paddingLeft: '2.5rem' }}
                 />
-                <Mail size={16} color="#64748b" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+                <Mail size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
               </div>
             </div>
 
@@ -162,7 +161,7 @@ const Login = () => {
                   required
                   style={{ paddingLeft: '2.5rem' }}
                 />
-                <Lock size={16} color="#64748b" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+                <Lock size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
               </div>
             </div>
 
@@ -178,7 +177,7 @@ const Login = () => {
                   required
                   style={{ paddingLeft: '2.5rem' }}
                 />
-                <Key size={16} color="#64748b" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+                <Key size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
               </div>
             </div>
 
@@ -201,8 +200,8 @@ const Login = () => {
           borderStyle: 'dashed'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-            <Info size={16} color="#3b82f6" />
-            <h3 style={{ fontSize: '0.8rem', color: '#ffffff', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <Info size={16} color="var(--primary)" />
+            <h3 style={{ fontSize: '0.8rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
               Demo Credentials Drawer
             </h3>
           </div>

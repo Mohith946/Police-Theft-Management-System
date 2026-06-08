@@ -60,8 +60,8 @@ const Navbar = () => {
   };
 
   const navLinkStyle = ({ isActive }) => ({
-    background: isActive ? '#0fa968' : '#f3f4f6',
-    color: isActive ? '#ffffff' : '#374151',
+    background: isActive ? 'var(--primary)' : 'var(--bg-secondary)',
+    color: isActive ? '#ffffff' : 'var(--text-secondary)',
     padding: '0.5rem 1.25rem',
     borderRadius: '9999px',
     fontWeight: 600,
@@ -96,7 +96,7 @@ const Navbar = () => {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
           <div style={{
-            background: '#0fa968',
+            background: 'var(--primary)',
             width: '36px',
             height: '36px',
             borderRadius: '10px',
@@ -109,7 +109,7 @@ const Navbar = () => {
           <h1 style={{
             fontSize: '1.25rem',
             fontWeight: 800,
-            color: '#1b1c1d',
+            color: 'var(--text-primary)',
             letterSpacing: '-0.02em',
             fontFamily: '"Outfit", "Inter", sans-serif',
             margin: 0
@@ -151,11 +151,11 @@ const Navbar = () => {
 
       {/* Action Buttons & Profile (Right) */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        {/* Quick Action (Solid Green Circle) */}
+        {/* Quick Action (Solid Indigo Circle) */}
         <Link 
           to="/complaints/add" 
           style={{
-            background: '#0fa968',
+            background: 'var(--primary)',
             width: '38px',
             height: '38px',
             borderRadius: '50%',
@@ -166,8 +166,8 @@ const Navbar = () => {
             textDecoration: 'none'
           }}
           title="File New Theft Report"
-          onMouseEnter={(e) => e.currentTarget.style.background = '#0c8f56'}
-          onMouseLeave={(e) => e.currentTarget.style.background = '#0fa968'}
+          onMouseEnter={(e) => e.currentTarget.style.background = '#4338ca'}
+          onMouseLeave={(e) => e.currentTarget.style.background = 'var(--primary)'}
         >
           <Plus size={18} color="#ffffff" />
         </Link>
@@ -262,14 +262,14 @@ const Navbar = () => {
             onMouseEnter={(e) => e.currentTarget.style.background = '#f9fafb'}
             onMouseLeave={(e) => !dropdownOpen && (e.currentTarget.style.background = 'transparent')}
           >
-            {/* Avatar image / initials (yellow background as in image) */}
+            {/* Avatar image / initials (light indigo background) */}
             <div style={{
               width: '38px',
               height: '38px',
               borderRadius: '50%',
-              background: '#fef3c7',
-              color: '#d97706',
-              border: '1px solid #fcd34d',
+              background: 'rgba(79, 70, 229, 0.08)',
+              color: 'var(--primary)',
+              border: '1px solid rgba(79, 70, 229, 0.15)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

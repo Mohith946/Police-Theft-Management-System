@@ -157,7 +157,7 @@ const CriminalDetails = () => {
         {/* Right Card: Features & Operating Areas */}
         <div className="glass-panel" style={{ padding: '2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-            <Sparkles size={18} color="#3b82f6" />
+            <Sparkles size={18} color="var(--primary)" />
             <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Physical & Geographical Profile</h3>
           </div>
 

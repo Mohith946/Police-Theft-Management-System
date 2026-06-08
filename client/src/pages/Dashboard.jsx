@@ -110,7 +110,7 @@ const Dashboard = () => {
     fetchDashboardData();
   }, [user]);
 
-  const PIE_COLORS = ['#3b82f6', '#6366f1', '#10b981', '#e1c29b', '#ba1a1a'];
+  const PIE_COLORS = ['var(--primary)', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
   const recoveryRate = stats.totalStolen + stats.totalRecovered > 0
     ? ((stats.totalRecovered / (stats.totalStolen + stats.totalRecovered)) * 100).toFixed(1)
@@ -184,8 +184,8 @@ const Dashboard = () => {
         </div>
 
         <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{ background: 'rgba(59, 130, 246, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(59,130,246,0.15)' }}>
-            <Compass size={24} color="#3b82f6" />
+          <div style={{ background: 'rgba(79, 70, 229, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(79, 70, 229, 0.15)' }}>
+            <Compass size={24} color="var(--primary)" />
           </div>
           <div>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Recovery Rate</p>
@@ -194,8 +194,8 @@ const Dashboard = () => {
         </div>
 
         <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{ background: 'rgba(225, 194, 155, 0.12)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(225,194,155,0.2)' }}>
-            <ShieldAlert size={24} color="#c084fc" />
+          <div style={{ background: 'rgba(139, 92, 246, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(139, 92, 246, 0.15)' }}>
+            <ShieldAlert size={24} color="#8b5cf6" />
           </div>
           <div>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Match Alarms</p>
@@ -216,14 +216,14 @@ const Dashboard = () => {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorComplaints" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2} />
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.15} />
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} />
                 <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} allowDecimals={false} />
                 <Tooltip contentStyle={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', borderRadius: 'var(--radius-sm)', color: 'var(--text-primary)' }} />
-                <Area type="monotone" dataKey="Complaints" stroke="#3b82f6" strokeWidth={2} fillOpacity={1} fill="url(#colorComplaints)" />
+                <Area type="monotone" dataKey="Complaints" stroke="var(--primary)" strokeWidth={2} fillOpacity={1} fill="url(#colorComplaints)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -271,7 +271,7 @@ const Dashboard = () => {
         <div className="glass-panel" style={{ padding: '1.5rem' }}>
           <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
             <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Recent Complaints</h3>
-            <Link to="/complaints" style={{ color: '#3b82f6', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', textDecoration: 'none', marginLeft: 'auto' }}>
+            <Link to="/complaints" style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', textDecoration: 'none', marginLeft: 'auto' }}>
               <span>View All</span>
               <ArrowUpRight size={14} />
             </Link>
@@ -311,7 +311,7 @@ const Dashboard = () => {
           <div className="glass-panel" style={{ padding: '1.5rem' }}>
             <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Active Suspect Matches</h3>
-              <Link to="/match-results" style={{ color: '#3b82f6', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', textDecoration: 'none', marginLeft: 'auto' }}>
+              <Link to="/match-results" style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', textDecoration: 'none', marginLeft: 'auto' }}>
                 <span>Alert Panel</span>
                 <ArrowUpRight size={14} />
               </Link>

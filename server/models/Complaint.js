@@ -47,6 +47,10 @@ const ComplaintSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  qrCodeToken: {
+    type: String,
+    unique: true
+  },
   createdAt: {
     type: Date,
     default: Date.now
@@ -54,6 +58,7 @@ const ComplaintSchema = new mongoose.Schema({
 });
 
 ComplaintSchema.index({ complaintNumber: 1 }, { unique: true });
+ComplaintSchema.index({ qrCodeToken: 1 }, { unique: true, sparse: true });
 ComplaintSchema.index({ reportedBy: 1 });
 ComplaintSchema.index({ status: 1 });
 

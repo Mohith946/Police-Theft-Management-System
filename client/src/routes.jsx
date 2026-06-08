@@ -70,8 +70,8 @@ const AppRoutes = () => {
         width: '32px',
         height: '32px',
         borderRadius: '50%',
-        border: '3px solid #3b82f6',
-        borderTopColor: 'transparent',
+        border: '3px solid rgba(79, 70, 229, 0.15)',
+        borderTopColor: 'var(--primary)',
         animation: 'spin 1s linear infinite'
       }} />
       <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>

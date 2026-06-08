@@ -12,16 +12,16 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100vh',
-        backgroundColor: '#090d16',
-        color: '#f8fafc',
+        backgroundColor: 'var(--bg-primary)',
+        color: 'var(--text-primary)',
         fontFamily: 'sans-serif'
       }}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
             width: '40px',
             height: '40px',
-            border: '3px solid rgba(59, 130, 246, 0.2)',
-            borderTopColor: '#3b82f6',
+            border: '3px solid rgba(79, 70, 229, 0.15)',
+            borderTopColor: 'var(--primary)',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 1rem'

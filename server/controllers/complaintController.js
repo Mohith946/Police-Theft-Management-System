@@ -1,7 +1,7 @@
 const Complaint = require('../models/Complaint');
 const StolenItem = require('../models/StolenItem');
 const MatchResult = require('../models/MatchResult');
-const { generateUniqueToken } = require('../services/qrService');
+const { generateUniqueToken, generateComplaintToken } = require('../services/qrService');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
 
 /**
@@ -90,6 +90,9 @@ const createComplaint = async (req, res) => {
     const randStr = Math.floor(1000 + Math.random() * 9000);
     const complaintNumber = `COMP-${dateStr}-${randStr}`;
 
+    // Generate unique complaint QR token
+    const complaintToken = generateComplaintToken();
+
     // Create the complaint
     const complaint = await Complaint.create({
       complaintNumber,
@@ -101,6 +104,7 @@ const createComplaint = async (req, res) => {
       reportedBy: req.user._id,
       reporterName,
       reporterContact: reporterContact || '',
+      qrCodeToken: complaintToken,
       status: 'pending'
     });
 

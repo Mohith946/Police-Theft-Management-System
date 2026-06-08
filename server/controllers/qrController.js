@@ -30,7 +30,35 @@ const generateItemQRCode = async (req, res) => {
 };
 
 /**
- * @desc    Scan QR code token and retrieve item info / execute recovery
+ * @desc    Get QR code image data URL for a complaint
+ * @route   GET /api/qr/generate/complaint/:complaintId
+ * @access  Private
+ */
+const generateComplaintQRCode = async (req, res) => {
+  try {
+    const Complaint = require('../models/Complaint');
+    const complaint = await Complaint.findById(req.params.complaintId);
+    if (!complaint) {
+      return sendError(res, 'Complaint record not found', 404);
+    }
+
+    // Generate the Base64 QR code image using its unique token
+    const qrCodeDataURL = await qrService.generateQRCodeDataURL(complaint.qrCodeToken);
+
+    return sendSuccess(res, {
+      complaintId: complaint._id,
+      complaintNumber: complaint.complaintNumber,
+      qrCodeToken: complaint.qrCodeToken,
+      qrCodeDataURL
+    }, 'Complaint QR Code data URL generated successfully');
+  } catch (error) {
+    console.error('Complaint QR code generation error:', error);
+    return sendError(res, error.message, 500);
+  }
+};
+
+/**
+ * @desc    Scan QR code token and retrieve item/complaint info / suspect history
  * @route   POST /api/qr/scan
  * @access  Private (Officer/Admin)
  */
@@ -42,12 +70,58 @@ const scanQRCode = async (req, res) => {
       return sendError(res, 'Missing QR code token', 400);
     }
 
-    // Find the item matching this unique token
+    // 1. Check if this is a Complaint QR token
+    if (token.startsWith('QR-COMP-')) {
+      const Complaint = require('../models/Complaint');
+      const MatchResult = require('../models/MatchResult');
+
+      const complaint = await Complaint.findOne({ qrCodeToken: token })
+        .populate('reportedBy', 'username email');
+      
+      if (!complaint) {
+        return sendError(res, 'No complaint found matching this QR code token', 404);
+      }
+
+      const items = await StolenItem.find({ complaintId: complaint._id });
+
+      // Find similarity matches for this complaint
+      const matches = await MatchResult.find({ complaintId: complaint._id })
+        .populate('criminalId')
+        .sort({ matchScore: -1 });
+
+      // For each match, retrieve the criminal's history (other matches)
+      const matchesWithHistory = [];
+      for (const match of matches) {
+        if (match.criminalId) {
+          const history = await MatchResult.find({ 
+            criminalId: match.criminalId._id,
+            complaintId: { $ne: complaint._id } // exclude current case
+          })
+          .populate('complaintId', 'complaintNumber title category status')
+          .sort({ createdAt: -1 });
+
+          matchesWithHistory.push({
+            match,
+            criminal: match.criminalId,
+            history
+          });
+        }
+      }
+
+      return sendSuccess(res, {
+        type: 'complaint',
+        complaint,
+        items,
+        matches: matchesWithHistory
+      }, 'Complaint QR Code scanned successfully');
+    }
+
+    // 2. Fallback to StolenItem QR token
     const item = await StolenItem.findOne({ qrCodeToken: token })
       .populate('complaintId');
 
     if (!item) {
-      return sendError(res, 'No item found matching this QR code token', 404);
+      return sendError(res, 'No item or complaint found matching this QR code token', 404);
     }
 
     // Optional: Directly mark as recovered during scan
@@ -77,5 +151,6 @@ const scanQRCode = async (req, res) => {
 
 module.exports = {
   generateItemQRCode,
+  generateComplaintQRCode,
   scanQRCode
 };

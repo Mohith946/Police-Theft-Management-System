@@ -61,7 +61,7 @@ const FloatingToolbar = () => {
       padding: '0 1rem'
     }}>
       <div style={{
-        background: 'rgba(255, 255, 255, 0.9)',
+        background: 'rgba(255, 255, 255, 0.85)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         border: '1px solid var(--border-color)',
@@ -70,7 +70,7 @@ const FloatingToolbar = () => {
         display: 'flex',
         alignItems: 'center',
         gap: '0.25rem',
-        boxShadow: '0 10px 30px rgba(4, 22, 39, 0.15)',
+        boxShadow: '0 10px 30px rgba(79, 70, 229, 0.08)',
         pointerEvents: 'auto',
         maxWidth: '100%',
         overflowX: 'auto'

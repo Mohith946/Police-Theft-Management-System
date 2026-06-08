@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { formatDate, formatDateTime } from '../utils/dateUtils';
-import { FilePlus, Search, ArrowLeft, ClipboardList, QrCode } from 'lucide-react';
-import QRCodeCard from '../components/QRCodeCard';
+import { FilePlus, Search, ArrowLeft, ClipboardList, QrCode, Package } from 'lucide-react';
+import ComplaintQRCodeCard from '../components/ComplaintQRCodeCard';
 
 const Complaints = () => {
   const { user } = useAuth();
@@ -162,7 +162,7 @@ const Complaints = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
               <div>
                 <h2 style={{ fontSize: '1.35rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>{singleComplaint.title}</h2>
-                <p style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: '#3b82f6', marginTop: '0.15rem' }}>
+                <p style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--primary)', marginTop: '0.15rem' }}>
                   Case ID: {singleComplaint.complaintNumber}
                 </p>
               </div>
@@ -234,35 +234,39 @@ const Complaints = () => {
             )}
           </div>
 
-          {/* Right Panel: Reporter Info */}
-          <div className="glass-panel" style={{ padding: '1.5rem', height: 'fit-content' }}>
-            <h3 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', marginBottom: '1rem', fontFamily: 'var(--font-heading)' }}>
-              Reporter Profile
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.85rem' }}>
-              <div>
-                <span style={{ color: 'var(--text-muted)' }}>Full Name:</span>
-                <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.9rem' }}>{singleComplaint.reporterName}</p>
-              </div>
-              <div>
-                <span style={{ color: 'var(--text-muted)' }}>Contact Info:</span>
-                <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{singleComplaint.reporterContact || 'No contact provided'}</p>
-              </div>
-              {singleComplaint.reportedBy && (
+          {/* Right Panel: Reporter Info & QR Code */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div className="glass-panel" style={{ padding: '1.5rem' }}>
+              <h3 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', marginBottom: '1rem', fontFamily: 'var(--font-heading)' }}>
+                Reporter Profile
+              </h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.85rem' }}>
                 <div>
-                  <span style={{ color: 'var(--text-muted)' }}>System User:</span>
-                  <p style={{ color: '#3b82f6', fontWeight: 500 }}>@{singleComplaint.reportedBy.username}</p>
+                  <span style={{ color: 'var(--text-muted)' }}>Full Name:</span>
+                  <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.9rem' }}>{singleComplaint.reporterName}</p>
                 </div>
-              )}
+                <div>
+                  <span style={{ color: 'var(--text-muted)' }}>Contact Info:</span>
+                  <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{singleComplaint.reporterContact || 'No contact provided'}</p>
+                </div>
+                {singleComplaint.reportedBy && (
+                  <div>
+                    <span style={{ color: 'var(--text-muted)' }}>System User:</span>
+                    <p style={{ color: 'var(--primary)', fontWeight: 500 }}>@{singleComplaint.reportedBy.username}</p>
+                  </div>
+                )}
+              </div>
             </div>
+
+            <ComplaintQRCodeCard complaint={singleComplaint} />
           </div>
         </div>
 
-        {/* Associated Stolen Items & QRs Section */}
+        {/* Associated Stolen Items Section (No QR codes) */}
         <div>
           <h3 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '1rem', fontFamily: 'var(--font-heading)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <QrCode size={18} color="#3b82f6" />
-            <span>Registered Stolen Items & Labels ({associatedItems.length})</span>
+            <Package size={18} color="var(--primary)" />
+            <span>Registered Stolen Items ({associatedItems.length})</span>
           </h3>
 
           {associatedItems.length === 0 ? (
@@ -276,22 +280,37 @@ const Complaints = () => {
               gap: '1.5rem'
             }}>
               {associatedItems.map(item => (
-                <div key={item._id} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <QRCodeCard item={item} />
+                <div key={item._id} className="glass-panel" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Item Details</span>
+                    <h4 style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: 700, marginTop: '0.15rem' }}>{item.itemName}</h4>
+                  </div>
                   
-                  {/* Additional recovery metadata below the card */}
-                  <div className="glass-panel" style={{ padding: '0.75rem 1rem', fontSize: '0.75rem' }}>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>Status:</span>
-                      <strong style={{ 
-                        textTransform: 'uppercase', 
-                        color: item.status === 'recovered' ? 'var(--success)' : 'var(--danger)' 
-                      }}>{item.status}</strong>
+                      <span style={{ color: 'var(--text-muted)' }}>Category:</span>
+                      <span style={{ fontWeight: 600, textTransform: 'capitalize' }}>{item.category}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Serial Number:</span>
+                      <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{item.serialNumber || 'N/A'}</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Est. Value:</span>
+                      <span style={{ fontWeight: 600 }}>₹{item.estimatedValue ? item.estimatedValue.toLocaleString() : '0'}</span>
+                    </div>
+                  </div>
+
+                  <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '0.75rem', marginTop: '0.25rem', fontSize: '0.8rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Status:</span>
+                      <strong className={`status-badge status-${item.status}`} style={{ textTransform: 'uppercase', fontSize: '0.65rem' }}>{item.status}</strong>
                     </div>
                     {item.status === 'recovered' && (
-                      <div style={{ marginTop: '0.35rem', color: 'var(--success)', display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
-                        <span>Date: {formatDate(item.recoveredDate)}</span>
-                        <span>Location: {item.recoveryLocation}</span>
+                      <div style={{ marginTop: '0.5rem', padding: '0.5rem', background: '#ecfdf5', borderRadius: 'var(--radius-sm)', color: 'var(--success)', fontSize: '0.75rem' }}>
+                        <p style={{ fontWeight: 600 }}>Recovered Findings:</p>
+                        <p style={{ color: 'var(--text-secondary)', marginTop: '0.15rem' }}>Date: {formatDate(item.recoveredDate)}</p>
+                        <p style={{ color: 'var(--text-secondary)' }}>Location: {item.recoveryLocation}</p>
                       </div>
                     )}
                   </div>
@@ -407,7 +426,7 @@ const Complaints = () => {
               <tbody>
                 {filteredComplaints.map(comp => (
                   <tr key={comp._id}>
-                    <td style={{ fontFamily: 'monospace', fontWeight: 600, color: '#3b82f6' }}>
+                    <td style={{ fontFamily: 'monospace', fontWeight: 600, color: 'var(--primary)' }}>
                       {comp.complaintNumber}
                     </td>
                     <td>
@@ -440,16 +459,16 @@ const Complaints = () => {
                           borderRadius: '50%',
                           background: 'var(--bg-secondary)',
                           border: '1px solid var(--border-color)',
-                          color: '#3b82f6',
+                          color: 'var(--primary)',
                           transition: 'all 0.2s'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = '#3b82f6';
+                          e.currentTarget.style.background = 'var(--primary)';
                           e.currentTarget.style.color = '#fff';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.background = 'var(--bg-secondary)';
-                          e.currentTarget.style.color = '#3b82f6';
+                          e.currentTarget.style.color = 'var(--primary)';
                         }}
                       >
                         <ArrowLeft size={14} style={{ transform: 'rotate(180deg)' }} />
