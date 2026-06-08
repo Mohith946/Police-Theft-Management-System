@@ -118,100 +118,92 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', color: 'var(--text-secondary)' }}>
+      <div className="flex items-center justify-center min-h-[60vh] text-slate-500 text-sm">
         <p>Loading Dashboard Console...</p>
       </div>
     );
   }
 
-  const isOfficer = true;
+  const isOfficer = user.role === 'officer' || user.role === 'admin';
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {/* Welcome banner */}
-      <div className="glass-panel" style={{
-        padding: '1.75rem 2rem',
-        marginBottom: '2rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        background: 'var(--bg-secondary)', // Civic Sentinel Container Fill
-        borderColor: 'var(--border-color)'
-      }}>
+      <div className="glass-panel p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-100 border-slate-200">
         <div>
-          <h2 style={{ fontSize: '1.5rem', color: 'var(--text-primary)' }}>
-            Welcome back, <span className="gradient-text">{user.username}</span>
+          <h2 className="text-xl font-bold text-slate-900 m-0">
+            Welcome back, <span className="bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">{user.username}</span>
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.25rem' }}>
+          <p className="text-slate-500 text-xs mt-1 m-0">
             {isOfficer
-              //? `Authorized session established. Badge: ${user.badgeNumber}. Monitoring active alarms.`
-              //: 'Citizen Portal. Monitor and file item recovery applications.'
+              ? `Authorized session established. Badge: ${user.badgeNumber || 'N/A'}. Monitoring active matches.`
+              : 'Citizen Portal. Monitor and file theft incidents.'
             }
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
-          <Link to="/complaints/add" className="btn btn-primary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.85rem' }}>
+        <div className="flex gap-3">
+          <Link to="/complaints/add" className="btn btn-primary text-xs md:text-sm">
             <span>File New Theft</span>
           </Link>
           {isOfficer && (
-            <Link to="/criminals/add" className="btn btn-secondary" style={{ padding: '0.6rem 1.25rem', fontSize: '0.85rem' }}>
-              <span>Add suspect</span>
+            <Link to="/criminals/add" className="btn btn-secondary text-xs md:text-sm">
+              <span>Add Suspect</span>
             </Link>
           )}
         </div>
       </div>
 
       {/* Metrics Cards */}
-      <div className="metrics-grid">
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{ background: 'rgba(186, 26, 26, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(186,26,26,0.15)' }}>
-            <Package size={24} color="var(--danger)" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="glass-panel p-6 flex items-center gap-5">
+          <div className="bg-red-50 border border-red-200/50 p-3 rounded-xl flex items-center justify-center">
+            <Package size={24} className="text-danger" />
           </div>
           <div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Stolen Items</p>
-            <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginTop: '0.15rem' }}>{stats.totalStolen}</h3>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider m-0">Stolen Items</p>
+            <h3 className="text-2xl font-extrabold text-slate-900 mt-0.5 m-0">{stats.totalStolen}</h3>
           </div>
         </div>
 
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{ background: 'rgba(16, 185, 129, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(16,185,129,0.15)' }}>
-            <Award size={24} color="var(--success)" />
+        <div className="glass-panel p-6 flex items-center gap-5">
+          <div className="bg-emerald-50 border border-emerald-200/50 p-3 rounded-xl flex items-center justify-center">
+            <Award size={24} className="text-success" />
           </div>
           <div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Recovered Items</p>
-            <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginTop: '0.15rem' }}>{stats.totalRecovered}</h3>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider m-0">Recovered Items</p>
+            <h3 className="text-2xl font-extrabold text-slate-900 mt-0.5 m-0">{stats.totalRecovered}</h3>
           </div>
         </div>
 
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{ background: 'rgba(79, 70, 229, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(79, 70, 229, 0.15)' }}>
-            <Compass size={24} color="var(--primary)" />
+        <div className="glass-panel p-6 flex items-center gap-5">
+          <div className="bg-indigo-50 border border-indigo-200/50 p-3 rounded-xl flex items-center justify-center">
+            <Compass size={24} className="text-primary" />
           </div>
           <div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Recovery Rate</p>
-            <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginTop: '0.15rem' }}>{recoveryRate}%</h3>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider m-0">Recovery Rate</p>
+            <h3 className="text-2xl font-extrabold text-slate-900 mt-0.5 m-0">{recoveryRate}%</h3>
           </div>
         </div>
 
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div style={{ background: 'rgba(139, 92, 246, 0.08)', padding: '0.75rem', borderRadius: '8px', border: '1px solid rgba(139, 92, 246, 0.15)' }}>
-            <ShieldAlert size={24} color="#8b5cf6" />
+        <div className="glass-panel p-6 flex items-center gap-5">
+          <div className="bg-purple-50 border border-purple-200/50 p-3 rounded-xl flex items-center justify-center">
+            <ShieldAlert size={24} className="text-purple-500" />
           </div>
           <div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Match Alarms</p>
-            <h3 style={{ fontSize: '1.75rem', color: 'var(--text-primary)', marginTop: '0.15rem' }}>{stats.activeMatches}</h3>
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider m-0">Match Alarms</p>
+            <h3 className="text-2xl font-extrabold text-slate-900 mt-0.5 m-0">{stats.activeMatches}</h3>
           </div>
         </div>
       </div>
 
       {/* Charts Section */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Area timeline chart */}
-        <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '320px' }}>
-          <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '1.25rem', fontFamily: 'var(--font-heading)' }}>
+        <div className="glass-panel p-6 lg:col-span-2 min-h-[340px]">
+          <h3 className="text-sm font-bold text-slate-900 mb-5">
             Intake Load (Recent Complaints Logged)
           </h3>
-          <div style={{ width: '100%', height: '240px' }}>
+          <div className="w-full h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData}>
                 <defs>
@@ -230,11 +222,11 @@ const Dashboard = () => {
         </div>
 
         {/* Pie category chart */}
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', marginBottom: '1.25rem', fontFamily: 'var(--font-heading)' }}>
+        <div className="glass-panel p-6 flex flex-col min-h-[340px]">
+          <h3 className="text-sm font-bold text-slate-900 mb-5">
             Theft by Category
           </h3>
-          <div style={{ width: '100%', height: '170px', flex: 1 }}>
+          <div className="w-full h-[170px] flex-1">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -254,10 +246,10 @@ const Dashboard = () => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', justifyContent: 'center', fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
+          <div className="flex flex-wrap gap-3 justify-center text-[10px] text-slate-600 mt-4">
             {categoryData.map((item, index) => (
-              <div key={item.name} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: PIE_COLORS[index % PIE_COLORS.length] }}></span>
+              <div key={item.name} className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full" style={{ background: PIE_COLORS[index % PIE_COLORS.length] }}></span>
                 <span>{item.name} ({item.value})</span>
               </div>
             ))}
@@ -266,35 +258,27 @@ const Dashboard = () => {
       </div>
 
       {/* Suspect alerts & complaints list preview */}
-      <div style={{ display: 'grid', gridTemplateColumns: isOfficer ? '1fr 1fr' : '1fr', gap: '1.5rem' }}>
+      <div className={`grid grid-cols-1 ${isOfficer ? 'lg:grid-cols-2' : ''} gap-6`}>
         {/* Recent unresolved complaints list */}
-        <div className="glass-panel" style={{ padding: '1.5rem' }}>
-          <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Recent Complaints</h3>
-            <Link to="/complaints" style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', textDecoration: 'none', marginLeft: 'auto' }}>
+        <div className="glass-panel p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-sm font-bold text-slate-900 m-0">Recent Complaints</h3>
+            <Link to="/complaints" className="text-primary text-xs font-semibold flex items-center gap-1 hover:underline">
               <span>View All</span>
               <ArrowUpRight size={14} />
             </Link>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div className="flex flex-col gap-3">
             {recentComplaints.length === 0 ? (
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textAlign: 'center', padding: '1.5rem' }}>No complaints filed yet.</p>
+              <p className="text-slate-400 text-xs text-center py-6">No complaints filed yet.</p>
             ) : (
               recentComplaints.map(comp => (
-                <div key={comp._id} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  background: 'var(--bg-primary)',
-                  padding: '0.75rem 1rem',
-                  border: '1px solid var(--border-color)',
-                  borderRadius: 'var(--radius-sm)'
-                }}>
+                <div key={comp._id} className="flex justify-between items-center bg-slate-50/50 border border-slate-100 hover:border-slate-200 hover:bg-slate-50 p-4 rounded-xl transition-all duration-200">
                   <div>
-                    <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 600 }}>{comp.title}</h4>
-                    <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>
-                      <span style={{ fontFamily: 'monospace' }}>{comp.complaintNumber}</span>
+                    <h4 className="text-sm font-semibold text-slate-900 m-0">{comp.title}</h4>
+                    <div className="flex gap-2 text-xs text-slate-500 mt-1">
+                      <span className="font-mono">{comp.complaintNumber}</span>
                       <span>•</span>
                       <span>{formatDate(comp.theftDate)}</span>
                     </div>
@@ -308,50 +292,38 @@ const Dashboard = () => {
 
         {/* Officer only: Recent suspect alerts preview */}
         {isOfficer && (
-          <div className="glass-panel" style={{ padding: '1.5rem' }}>
-            <div style={{ display: 'flex', justifycontent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Active Suspect Matches</h3>
-              <Link to="/match-results" style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 600, display: 'flex', alignItems: 'center', textDecoration: 'none', marginLeft: 'auto' }}>
+          <div className="glass-panel p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-sm font-bold text-slate-900 m-0">Active Suspect Matches</h3>
+              <Link to="/match-results" className="text-primary text-xs font-semibold flex items-center gap-1 hover:underline">
                 <span>Alert Panel</span>
                 <ArrowUpRight size={14} />
               </Link>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="flex flex-col gap-3">
               {recentAlerts.length === 0 ? (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem', color: 'var(--text-muted)' }}>
-                  <AlertTriangle size={24} style={{ marginBottom: '0.5rem' }} />
-                  <p style={{ fontSize: '0.85rem' }}>No suspect matching alarms currently trigger.</p>
+                <div className="flex flex-col items-center py-6 text-slate-400 gap-1.5">
+                  <AlertTriangle size={24} />
+                  <p className="text-xs">No suspect matching alarms currently trigger.</p>
                 </div>
               ) : (
                 recentAlerts.map(alert => (
-                  <div key={alert._id} style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    background: 'var(--bg-primary)',
-                    padding: '0.75rem 1rem',
-                    border: '1px solid var(--border-color)',
-                    borderRadius: 'var(--radius-sm)'
-                  }}>
+                  <div key={alert._id} className="flex justify-between items-center bg-slate-50/50 border border-slate-100 hover:border-slate-200 hover:bg-slate-50 p-4 rounded-xl transition-all duration-200">
                     <div>
-                      <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 600 }}>
+                      <h4 className="text-sm font-semibold text-slate-900 m-0">
                         {alert.criminalId?.name}
                       </h4>
-                      <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.15rem' }}>
-                        Match on case: <strong style={{ color: 'var(--text-primary)' }}>{alert.complaintId?.complaintNumber}</strong>
+                      <p className="text-xs text-slate-500 mt-1 m-0">
+                        Match on case: <strong className="text-slate-700">{alert.complaintId?.complaintNumber}</strong>
                       </p>
                     </div>
 
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{
-                        fontSize: '0.95rem',
-                        fontWeight: 800,
-                        color: alert.matchScore >= 80 ? 'var(--danger)' : 'var(--text-primary)'
-                      }}>
+                    <div className="text-right">
+                      <div className={`text-lg font-extrabold ${alert.matchScore >= 80 ? 'text-red-500' : 'text-slate-950'}`}>
                         {Math.round(alert.matchScore)}%
                       </div>
-                      <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>score</span>
+                      <span className="text-[10px] text-slate-400 block mt-0.5">score</span>
                     </div>
                   </div>
                 ))

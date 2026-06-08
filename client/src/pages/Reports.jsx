@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { 
   BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell, LineChart, Line, CartesianGrid
+  PieChart, Pie, Cell
 } from 'recharts';
-import { BarChart3, FileText, ArrowRight, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 const Reports = () => {
   const [loading, setLoading] = useState(true);
@@ -72,69 +72,63 @@ const Reports = () => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', color: '#94a3b8' }}>
+      <div className="flex items-center justify-center min-h-[60vh] text-slate-500 text-sm">
         <p>Running analytical data models...</p>
       </div>
     );
   }
 
+  const successRate = ((financialStats.recoveredValue / (financialStats.stolenValue + financialStats.recoveredValue || 1)) * 100).toFixed(1);
+
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {/* Page Header */}
-      <div style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.25rem', color: '#ffffff', fontFamily: 'Outfit' }}>Caseload Trend Analysis</h2>
-        <p style={{ color: '#94a3b8', fontSize: '0.85rem' }}>System diagnostics, category breakdowns, recovery indicators, and financial statistics</p>
+      <div className="mb-4">
+        <h2 className="text-xl font-bold text-slate-900 font-heading m-0">Caseload Trend Analysis</h2>
+        <p className="text-slate-500 text-xs mt-0.5 m-0">System diagnostics, category breakdowns, recovery indicators, and financial statistics</p>
       </div>
 
       {/* Financial Valuation Summary Card */}
-      <div className="glass-panel" style={{
-        padding: '1.75rem 2rem',
-        marginBottom: '2rem',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '2rem',
-        background: 'linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(16,185,129,0.05) 100%)',
-        borderColor: 'rgba(59, 130, 246, 0.15)'
-      }}>
-        <div>
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>
+      <div className="glass-panel p-6 md:p-8 mb-2 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-br from-blue-50/50 to-emerald-50/50 border-blue-100">
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
             Total Valued Stolen Property
           </span>
-          <h3 style={{ fontSize: '2rem', color: '#ef4444', marginTop: '0.25rem' }}>
+          <h3 className="text-3xl font-extrabold text-danger m-0 mt-1">
             ₹{financialStats.stolenValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </h3>
-          <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.35rem' }}>
+          <p className="text-[11px] text-slate-400 m-0 mt-1">
             Aggregate valuation from open pending claims
           </p>
         </div>
-        <div style={{ borderLeft: '1px solid rgba(255,255,255,0.08)', paddingLeft: '2rem' }}>
-          <span style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600 }}>
+        <div className="flex flex-col gap-1 border-t md:border-t-0 md:border-l border-slate-200/60 pt-6 md:pt-0 md:pl-8">
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
             Total Value Recovered by Officers
           </span>
-          <h3 style={{ fontSize: '2rem', color: '#10b981', marginTop: '0.25rem' }}>
+          <h3 className="text-3xl font-extrabold text-success m-0 mt-1">
             ₹{financialStats.recoveredValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </h3>
-          <p style={{ fontSize: '0.75rem', color: '#10b981', marginTop: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+          <p className="text-[11px] text-success font-semibold flex items-center gap-1 m-0 mt-1">
             <ShieldCheck size={14} />
-            <span>Success rate logged: {((financialStats.recoveredValue / (financialStats.stolenValue + financialStats.recoveredValue || 1)) * 100).toFixed(1)}%</span>
+            <span>Success rate logged: {successRate}%</span>
           </p>
         </div>
       </div>
 
       {/* Grid of charts */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Recovery indicators chart */}
-        <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '340px' }}>
-          <h3 style={{ fontSize: '1rem', color: '#ffffff', marginBottom: '1.25rem', fontFamily: 'Outfit' }}>
+        <div className="glass-panel p-6 min-h-[340px]">
+          <h3 className="text-sm font-bold text-slate-900 mb-5 font-heading m-0">
             Open vs Recovered Items by Category
           </h3>
-          <div style={{ width: '100%', height: '260px' }}>
+          <div className="w-full h-[260px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={recoveryData}>
-                <XAxis dataKey="category" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} allowDecimals={false} />
-                <Tooltip contentStyle={{ background: '#111827', borderColor: 'rgba(255,255,255,0.08)', borderRadius: '8px', color: '#fff' }} />
+                <XAxis dataKey="category" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} allowDecimals={false} />
+                <Tooltip contentStyle={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', borderRadius: 'var(--radius-sm)', color: 'var(--text-primary)' }} />
                 <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: 11 }} />
                 <Bar dataKey="Stolen" fill="#ef4444" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="Recovered" fill="#10b981" radius={[4, 4, 0, 0]} />
@@ -144,11 +138,11 @@ const Reports = () => {
         </div>
 
         {/* Categories pie chart */}
-        <div className="glass-panel" style={{ padding: '1.5rem', minHeight: '340px', display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ fontSize: '1rem', color: '#ffffff', marginBottom: '1.25rem', fontFamily: 'Outfit' }}>
+        <div className="glass-panel p-6 min-h-[340px] flex flex-col">
+          <h3 className="text-sm font-bold text-slate-900 mb-5 font-heading m-0">
             Thefts Classification Spread
           </h3>
-          <div style={{ width: '100%', height: '220px', flex: 1 }}>
+          <div className="w-full h-[220px] flex-1">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -165,7 +159,7 @@ const Reports = () => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: '#111827', borderColor: 'rgba(255,255,255,0.08)', borderRadius: '8px', color: '#fff' }} />
+                <Tooltip contentStyle={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', borderRadius: 'var(--radius-sm)', color: 'var(--text-primary)' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>

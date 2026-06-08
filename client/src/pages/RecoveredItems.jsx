@@ -37,94 +37,93 @@ const RecoveredItems = () => {
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {/* Page Header */}
-      <div style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Recovered Property Vault</h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Browse logs of retrieved items and view recovery locations</p>
+      <div className="mb-4">
+        <h2 className="text-xl font-bold text-slate-900 font-heading m-0">Recovered Property Vault</h2>
+        <p className="text-slate-500 text-xs mt-0.5 m-0">Browse logs of retrieved items and view recovery locations</p>
       </div>
 
       {/* Search Input */}
-      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
-        <div style={{ position: 'relative', maxWidth: '400px' }}>
+      <div className="glass-panel p-5 mb-2">
+        <div className="relative max-w-md">
           <input
             type="text"
-            className="form-input"
+            className="form-input pl-9"
             placeholder="Search recovered items by keyword, serial, or area..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            style={{ paddingLeft: '2.5rem' }}
           />
-          <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
         </div>
       </div>
 
       {/* Recovered List */}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+        <div className="text-center py-12 text-slate-500 text-sm">
           <p>Retrieving vault registry...</p>
         </div>
       ) : filteredItems.length === 0 ? (
-        <div className="glass-panel" style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-          <Award size={40} style={{ marginBottom: '1rem' }} />
-          <h3>No Recovered Items</h3>
-          <p style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>No item recoveries are logged matching your request.</p>
+        <div className="glass-panel p-16 text-center text-slate-400 flex flex-col items-center gap-3">
+          <Award size={40} className="text-slate-300" />
+          <h3 className="text-sm font-bold text-slate-800 m-0">No Recovered Items</h3>
+          <p className="text-xs m-0">No item recoveries are logged matching your request.</p>
         </div>
       ) : (
-        <div className="glass-panel" style={{ padding: '1rem' }}>
-          <div className="table-container">
-            <table className="custom-table">
-              <thead>
-                <tr>
-                  <th>Item Details</th>
-                  <th>Category</th>
-                  <th>Serial / Ident Number</th>
-                  <th>Recovery Date</th>
-                  <th>Recovery Location Details</th>
-                  <th>Case File Link</th>
+        <div className="table-container p-1">
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>Item Details</th>
+                <th>Category</th>
+                <th>Serial / Ident Number</th>
+                <th>Recovery Date</th>
+                <th>Recovery Location Details</th>
+                <th>Case File Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredItems.map(item => (
+                <tr key={item._id}>
+                  <td>
+                    <div>
+                      <div className="font-semibold text-slate-900">{item.itemName}</div>
+                      <div className="text-[11px] text-slate-500 mt-0.5 m-0">
+                        Value: ₹{item.estimatedValue ? item.estimatedValue.toLocaleString() : '0.00'}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <span className="capitalize text-slate-800 text-xs">{item.category}</span>
+                  </td>
+                  <td className="font-mono text-slate-700 text-xs">
+                    {item.serialNumber || 'N/A'}
+                  </td>
+                  <td className="text-success font-semibold text-xs">
+                    {formatDate(item.recoveredDate)}
+                  </td>
+                  <td>
+                    <div className="flex items-center gap-1 text-slate-700 text-xs">
+                      <MapPin size={12} className="text-success shrink-0" />
+                      <span>{item.recoveryLocation}</span>
+                    </div>
+                  </td>
+                  <td>
+                    {item.complaintId ? (
+                      <Link 
+                        to={`/complaints/${item.complaintId._id}`} 
+                        className="text-blue-500 font-mono font-semibold hover:underline"
+                      >
+                        {item.complaintId.complaintNumber}
+                      </Link>
+                    ) : (
+                      <span className="text-slate-400">Orphan</span>
+                    )}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {filteredItems.map(item => (
-                  <tr key={item._id}>
-                    <td>
-                      <div>
-                        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{item.itemName}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.15rem' }}>
-                          Value: ₹{item.estimatedValue ? item.estimatedValue.toLocaleString() : '0.00'}
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <span style={{ textTransform: 'capitalize', fontSize: '0.85rem' }}>{item.category}</span>
-                    </td>
-                    <td style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
-                      {item.serialNumber || 'N/A'}
-                    </td>
-                    <td style={{ color: 'var(--success)', fontWeight: 500 }}>
-                      {formatDate(item.recoveredDate)}
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.85rem' }}>
-                        <MapPin size={12} color="var(--success)" />
-                        <span>{item.recoveryLocation}</span>
-                      </div>
-                    </td>
-                    <td>
-                      {item.complaintId ? (
-                        <Link 
-                          to={`/complaints/${item.complaintId._id}`} 
-                          style={{ color: '#3b82f6', textDecoration: 'none', fontFamily: 'monospace', fontWeight: 600 }}
-                        >
-                          {item.complaintId.complaintNumber}
-                        </Link>
-                      ) : 'Orphan'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

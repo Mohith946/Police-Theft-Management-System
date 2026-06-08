@@ -66,10 +66,10 @@ const ComplaintQRCodeCard = ({ complaint }) => {
 
   if (loading) {
     return (
-      <div className="glass-panel" style={{ padding: '1.5rem', textAlign: 'center', minHeight: '220px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="glass-panel p-6 text-center min-h-[220px] flex items-center justify-center">
         <div>
-          <QrCode size={32} color="var(--primary)" style={{ animation: 'pulse 1.5s infinite', margin: '0 auto' }} />
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>Generating QR Label...</p>
+          <QrCode size={32} className="text-primary animate-pulse mx-auto" />
+          <p className="text-slate-400 text-xs mt-2">Generating QR Label...</p>
         </div>
       </div>
     );
@@ -77,64 +77,46 @@ const ComplaintQRCodeCard = ({ complaint }) => {
 
   if (error || !qrData) {
     return (
-      <div className="glass-panel" style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--danger)' }}>
-        <p>{error || 'Failed to render QR Code'}</p>
+      <div className="glass-panel p-6 text-center text-danger text-xs">
+        <p className="m-0">{error || 'Failed to render QR Code'}</p>
       </div>
     );
   }
 
   return (
-    <div className="glass-panel" style={{
-      padding: '1.5rem',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '1rem',
-      maxWidth: '320px',
-      margin: '0 auto'
-    }}>
-      <div style={{ textAlign: 'center' }}>
-        <h3 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', marginBottom: '0.25rem', fontWeight: 700 }}>
+    <div className="glass-panel p-6 flex flex-col items-center gap-4 max-w-xs mx-auto w-full">
+      <div className="text-center">
+        <h3 className="text-sm font-bold text-slate-900 m-0">
           {complaint.complaintNumber}
         </h3>
-        <span className="status-badge status-stolen" style={{ fontSize: '0.65rem' }}>Case QR Label</span>
+        <span className="status-badge status-stolen text-[9px] mt-1.5">Case QR Label</span>
       </div>
 
       {/* QR Code Container */}
-      <div style={{
-        background: '#ffffff',
-        padding: '1rem',
-        borderRadius: '12px',
-        border: '1px solid var(--border-color)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/60 flex items-center justify-center">
         <img 
           src={qrData.qrCodeDataURL} 
           alt="Complaint QR Code" 
-          style={{ width: '180px', height: '180px', display: 'block' }}
+          className="w-44 h-44 block"
         />
       </div>
 
-      <div style={{ width: '100%', fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
-        <p style={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>Token: {complaint.qrCodeToken}</p>
+      <div className="w-full text-[10px] text-slate-400 font-mono break-all text-center">
+        <p className="m-0">Token: {complaint.qrCodeToken}</p>
       </div>
 
       {/* Action buttons */}
-      <div style={{ display: 'flex', gap: '0.75rem', width: '100%' }}>
+      <div className="flex gap-3 w-full">
         <button 
           onClick={handleDownload} 
-          className="btn btn-secondary" 
-          style={{ flex: 1, padding: '0.5rem', fontSize: '0.8rem' }}
+          className="btn btn-secondary flex-1 py-2 text-xs flex items-center justify-center gap-1.5"
         >
           <Download size={14} />
           <span>Save</span>
         </button>
         <button 
           onClick={handlePrint} 
-          className="btn btn-secondary" 
-          style={{ flex: 1, padding: '0.5rem', fontSize: '0.8rem' }}
+          className="btn btn-secondary flex-1 py-2 text-xs flex items-center justify-center gap-1.5"
         >
           <Printer size={14} />
           <span>Print</span>

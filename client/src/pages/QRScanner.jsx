@@ -115,32 +115,20 @@ const QRScanner = () => {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+    <div className="max-w-xl mx-auto">
       
       {/* Invisible dummy scanner div for file scanning uploads */}
-      <div id="file-scanner-dummy" style={{ display: 'none' }}></div>
+      <div id="file-scanner-dummy" className="hidden"></div>
 
-      <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>QR Code Recovery Scanner</h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: '0.25rem' }}>
+      <div className="mb-8 text-center">
+        <h2 className="text-lg font-bold text-slate-900 font-heading m-0">QR Code Recovery Scanner</h2>
+        <p className="text-slate-500 text-xs mt-1 m-0">
           Scan physical item labels using device camera or file upload to register property recovery
         </p>
       </div>
 
       {scanError && (
-        <div style={{
-          background: 'rgba(186, 26, 26, 0.08)',
-          border: '1px solid rgba(186, 26, 26, 0.25)',
-          borderRadius: 'var(--radius-sm)',
-          padding: '0.75rem',
-          color: 'var(--danger)',
-          fontSize: '0.85rem',
-          marginBottom: '1.5rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          justifyContent: 'center'
-        }}>
+        <div className="bg-red-50 border border-red-200/50 rounded-xl p-3 text-danger text-xs mb-6 flex items-center justify-center gap-2">
           <AlertCircle size={16} />
           <span>{scanError}</span>
         </div>
@@ -148,37 +136,25 @@ const QRScanner = () => {
 
       {/* RENDER SCANNER SCREEN */}
       {!scanResult && (
-        <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center' }}>
+        <div className="glass-panel p-8 flex flex-col gap-6 items-center">
           {/* Toggle camera/file */}
-          <div className="glass-panel" style={{ padding: '0.25rem', display: 'flex', gap: '0.25rem', borderRadius: '10px', background: 'var(--bg-secondary)', borderColor: 'var(--border-color)' }}>
+          <div className="glass-panel p-1 flex gap-1 rounded-xl bg-slate-100 border-slate-200/60 shadow-inner">
             <button
               onClick={() => setScanMode('camera')}
-              className="btn"
-              style={{
-                padding: '0.4rem 0.9rem',
-                fontSize: '0.75rem',
-                borderRadius: 'var(--radius-sm)',
-                background: scanMode === 'camera' ? '#3b82f6' : 'transparent',
-                color: scanMode === 'camera' ? '#ffffff' : 'var(--text-secondary)',
-                boxShadow: 'none'
-              }}
+              className={`btn px-4 py-1.5 text-xs rounded-lg shadow-none ${
+                scanMode === 'camera' ? 'bg-primary text-white shadow-xs' : 'bg-transparent text-slate-500 hover:text-slate-900'
+              }`}
             >
-              <Camera size={12} style={{ marginRight: '0.25rem' }} />
+              <Camera size={12} className="mr-1" />
               <span>Live Camera</span>
             </button>
             <button
               onClick={() => setScanMode('upload')}
-              className="btn"
-              style={{
-                padding: '0.4rem 0.9rem',
-                fontSize: '0.75rem',
-                borderRadius: 'var(--radius-sm)',
-                background: scanMode === 'upload' ? '#3b82f6' : 'transparent',
-                color: scanMode === 'upload' ? '#ffffff' : 'var(--text-secondary)',
-                boxShadow: 'none'
-              }}
+              className={`btn px-4 py-1.5 text-xs rounded-lg shadow-none ${
+                scanMode === 'upload' ? 'bg-primary text-white shadow-xs' : 'bg-transparent text-slate-500 hover:text-slate-900'
+              }`}
             >
-              <Upload size={12} style={{ marginRight: '0.25rem' }} />
+              <Upload size={12} className="mr-1" />
               <span>Upload Image</span>
             </button>
           </div>
@@ -187,45 +163,24 @@ const QRScanner = () => {
           {scanMode === 'camera' ? (
             <div 
               id="webcam-scanner-container" 
-              className="glass-panel"
-              style={{
-                width: '100%',
-                maxWidth: '340px',
-                minHeight: '340px',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                borderColor: 'var(--border-color)'
-              }}
+              className="glass-panel w-full max-w-[340px] min-h-[340px] rounded-2xl overflow-hidden border-slate-200"
             ></div>
           ) : (
             /* Upload Scanner Panel */
-            <div style={{
-              width: '100%',
-              maxWidth: '340px',
-              height: '240px',
-              border: '2px dashed var(--border-color)',
-              background: 'var(--bg-secondary)',
-              borderRadius: '16px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1rem',
-              cursor: 'pointer'
-            }}>
+            <div className="w-full max-w-[340px] h-60 border-2 border-dashed border-slate-200 bg-slate-50/50 rounded-2xl flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-slate-300 hover:bg-slate-50 transition-all duration-200">
               <input
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoUpload}
-                style={{ display: 'none' }}
+                className="hidden"
                 id="qr-file-upload"
               />
-              <label htmlFor="qr-file-upload" style={{ textAlign: 'center', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Scan size={36} color="#3b82f6" />
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', fontWeight: 600, marginTop: '0.5rem' }}>
+              <label htmlFor="qr-file-upload" className="text-center cursor-pointer flex flex-col items-center">
+                <Scan size={36} className="text-primary mb-2" />
+                <span className="text-sm font-semibold text-slate-900">
                   Select QR Label Image
                 </span>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                <span className="text-[10px] text-slate-400 mt-1">
                   Decodes snapshot of QR sticker
                 </span>
               </label>
@@ -236,66 +191,66 @@ const QRScanner = () => {
 
       {/* RENDER SCANNED RESULTS PANEL */}
       {scanResult && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div className="flex flex-col gap-6">
           
           {scanResult.type === 'complaint' ? (
             /* COMPLAINT SCAN RESULT VIEW */
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div className="flex flex-col gap-6">
               
               {/* Complaint Overview Card */}
-              <div className="glass-panel" style={{ padding: '2rem', borderLeft: '4px solid var(--primary)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+              <div className="glass-panel p-6 border-l-4 border-l-primary">
+                <div className="flex justify-between items-start gap-4 mb-4">
                   <div>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Scanned Theft Case File</span>
-                    <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', fontWeight: 800, marginTop: '0.15rem' }}>{scanResult.complaint.title}</h3>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--primary)', fontFamily: 'monospace', fontWeight: 600, marginTop: '0.15rem' }}>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Scanned Theft Case File</span>
+                    <h3 className="text-base font-bold text-slate-900 font-heading mt-1 m-0">{scanResult.complaint.title}</h3>
+                    <p className="text-xs text-primary font-mono font-bold mt-1 m-0">
                       Case #: {scanResult.complaint.complaintNumber}
                     </p>
                   </div>
                   <span className={`status-badge status-${scanResult.complaint.status}`}>{scanResult.complaint.status}</span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', fontSize: '0.85rem', color: 'var(--text-primary)', marginBottom: '1.25rem' }}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-700 mt-4 border-t border-slate-100 pt-4">
                   <div>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Incident Category:</span>
-                    <p style={{ textTransform: 'capitalize', fontWeight: 600 }}>{scanResult.complaint.category}</p>
+                    <span className="text-slate-400 block mb-0.5">Incident Category:</span>
+                    <p className="font-semibold text-slate-800 capitalize m-0">{scanResult.complaint.category}</p>
                   </div>
                   <div>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Theft Location:</span>
-                    <p style={{ fontWeight: 600 }}>{scanResult.complaint.theftLocation}</p>
+                    <span className="text-slate-400 block mb-0.5">Theft Location:</span>
+                    <p className="font-semibold text-slate-800 m-0">{scanResult.complaint.theftLocation}</p>
                   </div>
                   <div>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Theft Date:</span>
-                    <p style={{ fontWeight: 600 }}>{new Date(scanResult.complaint.theftDate).toLocaleString()}</p>
+                    <span className="text-slate-400 block mb-0.5">Theft Date:</span>
+                    <p className="font-semibold text-slate-800 m-0">{new Date(scanResult.complaint.theftDate).toLocaleString()}</p>
                   </div>
                   <div>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Reporter Profile:</span>
-                    <p style={{ fontWeight: 600 }}>{scanResult.complaint.reporterName} ({scanResult.complaint.reporterContact || 'no phone'})</p>
+                    <span className="text-slate-400 block mb-0.5">Reporter Profile:</span>
+                    <p className="font-semibold text-slate-800 m-0">{scanResult.complaint.reporterName} ({scanResult.complaint.reporterContact || 'no phone'})</p>
                   </div>
                 </div>
 
-                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
-                  <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Description Summary:</span>
-                  <p style={{ fontSize: '0.85rem', lineHeight: '1.5', marginTop: '0.25rem' }}>{scanResult.complaint.description}</p>
+                <div className="border-t border-slate-100 pt-4 mt-4 text-xs">
+                  <span className="text-slate-400 block mb-1">Description Summary:</span>
+                  <p className="text-slate-700 leading-relaxed m-0">{scanResult.complaint.description}</p>
                 </div>
               </div>
 
               {/* Registered Items Card */}
-              <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', marginBottom: '1rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', fontWeight: 700 }}>
+              <div className="glass-panel p-6">
+                <h4 className="text-xs font-bold text-slate-900 border-b border-slate-200/60 pb-2 mb-4 font-heading m-0">
                   Associated Stolen Property ({scanResult.items.length})
                 </h4>
                 {scanResult.items.length === 0 ? (
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>No items listed for this complaint case.</p>
+                  <p className="text-xs text-slate-400 m-0">No items listed for this complaint case.</p>
                 ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div className="flex flex-col gap-3">
                     {scanResult.items.map(item => (
-                      <div key={item._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-primary)', padding: '0.75rem 1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem' }}>
+                      <div key={item._id} className="flex justify-between items-center bg-slate-50/50 border border-slate-100 p-3 rounded-xl text-xs hover:bg-slate-50 transition-all">
                         <div>
-                          <p style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{item.itemName}</p>
-                          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.1rem' }}>S/N: {item.serialNumber || 'N/A'} • Est: ₹{item.estimatedValue?.toLocaleString()}</p>
+                          <p className="font-bold text-slate-900 m-0">{item.itemName}</p>
+                          <p className="text-[10px] text-slate-400 mt-0.5 m-0">S/N: {item.serialNumber || 'N/A'} • Est: ₹{item.estimatedValue?.toLocaleString()}</p>
                         </div>
-                        <span className={`status-badge status-${item.status}`}>{item.status}</span>
+                        <span className={`status-badge status-${item.status} text-[9px]`}>{item.status}</span>
                       </div>
                     ))}
                   </div>
@@ -303,115 +258,98 @@ const QRScanner = () => {
               </div>
 
               {/* Matched Suspects & History Card */}
-              <div className="glass-panel" style={{ padding: '1.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
-                  <Sparkles size={18} color="var(--primary)" />
-                  <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 700, margin: 0 }}>
+              <div className="glass-panel p-6">
+                <div className="flex items-center gap-2 border-b border-slate-200/60 pb-2 mb-4">
+                  <Sparkles size={18} className="text-primary" />
+                  <h4 className="text-xs font-bold text-slate-900 font-heading m-0">
                     Matched Suspect & Criminal History ({scanResult.matches.length})
                   </h4>
                 </div>
 
                 {scanResult.matches.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '1.5rem 0', color: 'var(--text-muted)' }}>
-                    <p style={{ fontSize: '0.85rem' }}>No active suspect profiles match this complaint's characteristics yet.</p>
+                  <div className="text-center py-6 text-slate-400 text-xs">
+                    <p className="m-0">No active suspect profiles match this complaint's characteristics yet.</p>
                   </div>
                 ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                  <div className="flex flex-col gap-6">
                     {scanResult.matches.map(({ match, criminal, history }) => (
-                      <div key={match._id} className="glass-panel" style={{ padding: '1.25rem', background: 'var(--bg-primary)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      <div key={match._id} className="glass-panel p-4 bg-slate-50/20 border border-slate-200 flex flex-col gap-4">
                         
                         {/* Suspect summary */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                            <div style={{
-                              width: '48px',
-                              height: '48px',
-                              borderRadius: '50%',
-                              overflow: 'hidden',
-                              background: 'var(--bg-secondary)',
-                              border: '1px solid var(--border-color)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center'
-                            }}>
+                        <div className="flex justify-between items-start gap-4">
+                          <div className="flex gap-3 items-center">
+                            <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0">
                               {criminal.photoUrl ? (
-                                <img src={criminal.photoUrl} alt={criminal.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <img src={criminal.photoUrl} alt={criminal.name} className="w-full h-full object-cover" />
                               ) : (
-                                <User size={20} color="var(--text-muted)" />
+                                <User size={20} className="text-slate-400" />
                               )}
                             </div>
                             <div>
-                              <h5 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', fontWeight: 700 }}>{criminal.name}</h5>
-                              {criminal.aliases && <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Aliases: {criminal.aliases}</p>}
+                              <h5 className="text-sm font-bold text-slate-900 m-0">{criminal.name}</h5>
+                              {criminal.aliases && <p className="text-[10px] text-slate-500 mt-0.5 m-0">Aliases: {criminal.aliases}</p>}
                             </div>
                           </div>
-                          <div style={{ textAlign: 'right' }}>
-                            <div style={{
-                              background: match.matchScore >= 80 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(79, 70, 229, 0.1)',
-                              color: match.matchScore >= 80 ? 'var(--danger)' : 'var(--primary)',
-                              border: match.matchScore >= 80 ? '1px solid rgba(239, 68, 68, 0.2)' : '1px solid rgba(79, 70, 229, 0.2)',
-                              padding: '0.2rem 0.6rem',
-                              borderRadius: '20px',
-                              fontWeight: 800,
-                              fontSize: '0.8rem',
-                              display: 'inline-block'
-                            }}>
+                          <div className="text-right">
+                            <div className={`font-extrabold text-xs px-2.5 py-1 rounded-full border ${
+                              match.matchScore >= 80 ? 'bg-red-50 text-danger border-red-200' : 'bg-indigo-50 text-primary border-indigo-200'
+                            }`}>
                               {Math.round(match.matchScore)}% Match
                             </div>
-                            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>Similarity Score</p>
+                            <p className="text-[9px] text-slate-400 mt-1 m-0">Similarity Score</p>
                           </div>
                         </div>
 
                         {/* Physical Traits */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', fontSize: '0.8rem', padding: '0.75rem', background: 'var(--bg-card)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-white border border-slate-100 p-3.5 rounded-xl">
                           <div>
-                            <span style={{ color: 'var(--text-muted)' }}>Status:</span>
-                            <span style={{ fontWeight: 600, marginLeft: '0.25rem', textTransform: 'capitalize' }}>{criminal.status}</span>
+                            <span className="text-slate-400">Status:</span>
+                            <span className="font-semibold text-slate-800 ml-1 capitalize">{criminal.status}</span>
                           </div>
                           <div>
-                            <span style={{ color: 'var(--text-muted)' }}>Gender:</span>
-                            <span style={{ fontWeight: 600, marginLeft: '0.25rem', textTransform: 'capitalize' }}>{criminal.gender}</span>
+                            <span className="text-slate-400">Gender:</span>
+                            <span className="font-semibold text-slate-800 ml-1 capitalize">{criminal.gender}</span>
                           </div>
-                          <div style={{ gridColumn: 'span 2' }}>
-                            <span style={{ color: 'var(--text-muted)' }}>Last Location:</span>
-                            <span style={{ fontWeight: 600, marginLeft: '0.25rem' }}>{criminal.lastKnownLocation}</span>
+                          <div className="sm:col-span-2">
+                            <span className="text-slate-400">Last Location:</span>
+                            <span className="font-semibold text-slate-800 ml-1">{criminal.lastKnownLocation}</span>
                           </div>
                           {criminal.physicalFeatures?.tattoos && criminal.physicalFeatures.tattoos !== 'none' && (
-                            <div style={{ gridColumn: 'span 2' }}>
-                              <span style={{ color: 'var(--text-muted)' }}>Tattoos:</span>
-                              <span style={{ marginLeft: '0.25rem' }}>{criminal.physicalFeatures.tattoos}</span>
+                            <div className="sm:col-span-2">
+                              <span className="text-slate-400">Tattoos:</span>
+                              <span className="text-slate-700 ml-1">{criminal.physicalFeatures.tattoos}</span>
                             </div>
                           )}
                           {criminal.physicalFeatures?.scars && criminal.physicalFeatures.scars !== 'none' && (
-                            <div style={{ gridColumn: 'span 2' }}>
-                              <span style={{ color: 'var(--text-muted)' }}>Scars:</span>
-                              <span style={{ marginLeft: '0.25rem' }}>{criminal.physicalFeatures.scars}</span>
+                            <div className="sm:col-span-2">
+                              <span className="text-slate-400">Scars:</span>
+                              <span className="text-slate-700 ml-1">{criminal.physicalFeatures.scars}</span>
                             </div>
                           )}
                         </div>
 
                         {/* CRIMINAL CASE HISTORY LOG */}
-                        <div style={{ marginTop: '0.25rem' }}>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>
+                        <div className="mt-3 border-t border-slate-100 pt-4">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
                             Other Matches on File (Suspect Crime Log)
                           </span>
                           {history.length === 0 ? (
-                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem', fontStyle: 'italic' }}>
+                            <p className="text-xs text-slate-400 italic mt-1 m-0">
                               No other matching cases found in database.
                             </p>
                           ) : (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '0.5rem' }}>
+                            <div className="flex flex-col gap-2 mt-2">
                               {history.map(hist => (
-                                <div key={hist._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-card)', padding: '0.5rem 0.75rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-sm)', fontSize: '0.75rem' }}>
-                                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{hist.complaintId?.title}</span>
-                                    <span style={{ fontFamily: 'monospace', fontSize: '0.7rem', color: 'var(--text-muted)' }}>{hist.complaintId?.complaintNumber}</span>
+                                <div key={hist._id} className="flex justify-between items-center bg-white border border-slate-100 p-2.5 rounded-xl text-xs hover:bg-slate-50 transition-all">
+                                  <div className="flex flex-col">
+                                    <span className="font-bold text-slate-900">{hist.complaintId?.title}</span>
+                                    <span className="font-mono text-[10px] text-slate-400 mt-0.5">{hist.complaintId?.complaintNumber}</span>
                                   </div>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <span style={{ fontWeight: 700, color: hist.matchScore >= 80 ? 'var(--danger)' : 'var(--text-secondary)' }}>
+                                  <div className="flex items-center gap-3">
+                                    <span className={`font-extrabold ${hist.matchScore >= 80 ? 'text-danger' : 'text-slate-600'}`}>
                                       {Math.round(hist.matchScore)}%
                                     </span>
-                                    <span className={`status-badge status-${hist.complaintId?.status}`} style={{ fontSize: '0.6rem', padding: '0.1rem 0.4rem' }}>
+                                    <span className={`status-badge status-${hist.complaintId?.status} text-[9px]`}>
                                       {hist.complaintId?.status}
                                     </span>
                                   </div>
@@ -431,52 +369,44 @@ const QRScanner = () => {
           ) : (
             /* Scanned Item Card Details */
             <>
-              <div className="glass-panel" style={{ padding: '2rem', borderLeft: `4px solid ${scanResult.status === 'recovered' ? 'var(--success)' : 'var(--danger)'}` }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+              <div className={`glass-panel p-6 border-l-4 ${scanResult.status === 'recovered' ? 'border-l-success' : 'border-l-danger'}`}>
+                <div className="flex justify-between items-start gap-4 mb-4">
                   <div>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Scanned Property</span>
-                    <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)', fontWeight: 700 }}>{scanResult.itemName}</h3>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontFamily: 'monospace', marginTop: '0.15rem' }}>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Scanned Property</span>
+                    <h3 className="text-base font-bold text-slate-900 font-heading mt-1 m-0">{scanResult.itemName}</h3>
+                    <p className="text-xs text-slate-400 font-mono mt-1 m-0">
                       Token: {scanResult.qrCodeToken}
                     </p>
                   </div>
                   <span className={`status-badge status-${scanResult.status}`}>{scanResult.status}</span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', fontSize: '0.85rem', color: 'var(--text-primary)' }}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-700 mt-4 border-t border-slate-100 pt-4">
                   <div>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Category:</span>
-                    <p style={{ textTransform: 'capitalize', fontWeight: 600 }}>{scanResult.category}</p>
+                    <span className="text-slate-400 block mb-0.5">Category:</span>
+                    <p className="font-semibold text-slate-800 capitalize m-0">{scanResult.category}</p>
                   </div>
                   <div>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Serial / Identification S/N:</span>
-                    <p style={{ fontFamily: 'monospace', fontWeight: 600 }}>{scanResult.serialNumber || 'N/A'}</p>
+                    <span className="text-slate-400 block mb-0.5">Serial / Identification S/N:</span>
+                    <p className="font-mono font-semibold text-slate-800 m-0">{scanResult.serialNumber || 'N/A'}</p>
                   </div>
                   <div>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Estimated Value:</span>
-                    <p style={{ fontWeight: 600 }}>₹{scanResult.estimatedValue ? scanResult.estimatedValue.toLocaleString() : '0.00'}</p>
+                    <span className="text-slate-400 block mb-0.5">Estimated Value:</span>
+                    <p className="font-semibold text-slate-800 m-0">₹{scanResult.estimatedValue ? scanResult.estimatedValue.toLocaleString() : '0.00'}</p>
                   </div>
                   <div>
-                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>Linked Incident case:</span>
-                    <p style={{ fontWeight: 600 }}>{scanResult.complaintId?.complaintNumber || 'N/A'}</p>
+                    <span className="text-slate-400 block mb-0.5">Linked Incident case:</span>
+                    <p className="font-semibold text-slate-800 m-0">{scanResult.complaintId?.complaintNumber || 'N/A'}</p>
                   </div>
                 </div>
 
                 {scanResult.status === 'recovered' && (
-                  <div style={{
-                    marginTop: '1.5rem',
-                    background: 'rgba(16, 185, 129, 0.08)',
-                    border: '1px solid rgba(16, 185, 129, 0.15)',
-                    borderRadius: 'var(--radius-sm)',
-                    padding: '0.75rem 1rem',
-                    fontSize: '0.8rem',
-                    color: 'var(--success)'
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 700 }}>
+                  <div className="mt-5 bg-emerald-50/50 border border-emerald-100 rounded-xl p-4 text-success text-xs">
+                    <div className="flex items-center gap-1.5 font-bold mb-1">
                       <CheckCircle size={14} />
                       <span>Property Successfully Recovered</span>
                     </div>
-                    <p style={{ marginTop: '0.25rem', color: 'var(--text-primary)' }}>
+                    <p className="text-slate-600 m-0">
                       Recovered on {formatDate(scanResult.recoveredDate)} at: {scanResult.recoveryLocation}
                     </p>
                   </div>
@@ -485,13 +415,13 @@ const QRScanner = () => {
 
               {/* Recovery submission form if property is still status: 'stolen' */}
               {scanResult.status === 'stolen' && (
-                <form onSubmit={handleRecover} className="glass-panel" style={{ padding: '2rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                    <CheckCircle size={18} color="var(--success)" />
-                    <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Register Recovery Findings</h3>
+                <form onSubmit={handleRecover} className="glass-panel p-6 md:p-8 flex flex-col gap-5">
+                  <div className="flex items-center gap-2 mb-2">
+                    <CheckCircle size={18} className="text-success" />
+                    <h3 className="text-sm font-bold text-slate-900 font-heading m-0">Register Recovery Findings</h3>
                   </div>
 
-                  <div style={{ marginBottom: '1.5rem' }}>
+                  <div>
                     <label className="form-label">Recovery Location Coordinates / Area *</label>
                     <input
                       type="text"
@@ -506,8 +436,7 @@ const QRScanner = () => {
 
                   <button 
                     type="submit" 
-                    className="btn btn-primary" 
-                    style={{ width: '100%', background: 'var(--success)', color: '#ffffff' }}
+                    className="btn btn-primary bg-success hover:bg-emerald-600 border-none w-full py-3 text-sm"
                     disabled={recovering || !recoveryLocation.trim()}
                   >
                     <span>{recovering ? 'Saving recovery details...' : 'Confirm Property Recovery'}</span>
@@ -518,7 +447,7 @@ const QRScanner = () => {
           )}
 
           {/* Return button */}
-          <button onClick={resetScanner} className="btn btn-secondary" style={{ width: '100%' }}>
+          <button onClick={resetScanner} className="btn btn-secondary w-full py-3 text-sm flex justify-center items-center gap-2">
             <RefreshCw size={16} />
             <span>Scan Another Label</span>
           </button>

@@ -87,67 +87,48 @@ const Users = () => {
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {/* Page Header */}
-      <div style={{ marginBottom: '2rem' }}>
-        <h2 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <ShieldAlert size={22} color="var(--primary)" />
+      <div className="mb-4">
+        <h2 className="text-lg font-bold text-slate-900 font-heading flex items-center gap-2 m-0">
+          <ShieldAlert size={22} className="text-primary" />
           <span>User Access Control & Members Directory</span>
         </h2>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+        <p className="text-slate-500 text-xs mt-0.5 m-0">
           Grant, upgrade, or revoke authorization levels for police officers and administrators
         </p>
       </div>
 
       {/* Message Banners */}
       {error && (
-        <div style={{
-          background: 'rgba(186, 26, 26, 0.08)',
-          border: '1px solid rgba(186, 26, 26, 0.25)',
-          borderRadius: 'var(--radius-md)',
-          padding: '0.75rem',
-          color: 'var(--danger)',
-          fontSize: '0.85rem',
-          marginBottom: '1.5rem',
-          textAlign: 'center'
-        }}>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-danger text-xs text-center mb-2">
           {error}
         </div>
       )}
 
       {success && (
-        <div style={{
-          background: 'rgba(16, 185, 129, 0.08)',
-          border: '1px solid rgba(16, 185, 129, 0.25)',
-          borderRadius: 'var(--radius-md)',
-          padding: '0.75rem',
-          color: 'var(--success)',
-          fontSize: '0.85rem',
-          marginBottom: '1.5rem',
-          textAlign: 'center'
-        }}>
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-success text-xs text-center mb-2">
           {success}
         </div>
       )}
 
       {/* Filters Bar */}
-      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div className="glass-panel p-5 mb-2">
+        <div className="flex flex-wrap gap-4 items-center">
           {/* Search */}
-          <div style={{ flex: 1, minWidth: '240px', position: 'relative' }}>
+          <div className="flex-1 min-w-[240px] relative">
             <input
               type="text"
-              className="form-input"
+              className="form-input pl-9"
               placeholder="Search users by name, email, badge..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              style={{ paddingLeft: '2.5rem' }}
             />
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           </div>
 
           {/* Role Filter */}
-          <div style={{ minWidth: '160px' }}>
+          <div className="min-w-[160px]">
             <select
               className="form-input"
               value={roleFilter}
@@ -163,86 +144,78 @@ const Users = () => {
 
       {/* Users Registry List */}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+        <div className="text-center py-12 text-slate-500 text-sm">
           <p>Querying security credentials database...</p>
         </div>
       ) : filteredUsers.length === 0 ? (
-        <div className="glass-panel" style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-          <UsersIcon size={40} style={{ marginBottom: '1rem' }} />
-          <h3>No Accounts Found</h3>
-          <p style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>No user records match your search criteria.</p>
+        <div className="glass-panel p-16 text-center text-slate-400 flex flex-col items-center gap-3">
+          <UsersIcon size={40} className="text-slate-300" />
+          <h3 className="text-sm font-bold text-slate-800 m-0">No Accounts Found</h3>
+          <p className="text-xs m-0">No user records match your search criteria.</p>
         </div>
       ) : (
-        <div className="glass-panel" style={{ padding: '1rem' }}>
-          <div className="table-container">
-            <table className="custom-table">
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Email Address</th>
-                  <th>Badge Number</th>
-                  <th>Current Role</th>
-                  <th>Change Permission</th>
-                  <th style={{ textAlign: 'center' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map(usr => {
-                  const isSelf = usr._id === currentUser._id;
-                  
-                  return (
-                    <tr key={usr._id}>
-                      <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
-                        @{usr.username} {isSelf && <span style={{ fontSize: '0.7rem', color: '#3b82f6', fontWeight: 'normal' }}>(You)</span>}
-                      </td>
-                      <td>{usr.email}</td>
-                      <td style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: usr.badgeNumber ? '#3b82f6' : 'var(--text-muted)' }}>
-                        {usr.badgeNumber || 'N/A'}
-                      </td>
-                      <td>
-                        <span className={`status-badge`} style={{
-                          background: usr.role === 'admin' ? 'rgba(4, 22, 39, 0.08)' : usr.role === 'officer' ? 'rgba(59, 130, 246, 0.08)' : 'rgba(116, 119, 125, 0.08)',
-                          color: usr.role === 'admin' ? 'var(--primary)' : usr.role === 'officer' ? '#3b82f6' : 'var(--text-muted)',
-                          border: usr.role === 'admin' ? '1px solid var(--primary)' : usr.role === 'officer' ? '1px solid #3b82f6' : '1px solid var(--border-color)',
-                        }}>
-                          {usr.role}
-                        </span>
-                      </td>
-                      <td>
-                        <select
-                          className="form-input"
-                          style={{ padding: '0.35rem 0.5rem', fontSize: '0.8rem', width: 'auto', display: 'inline-block' }}
-                          value={usr.role}
-                          onChange={(e) => handleRoleChange(usr._id, e.target.value)}
-                          disabled={isSelf}
-                        >
-                          <option value="officer">Officer</option>
-                          <option value="admin">Administrator</option>
-                        </select>
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        <button
-                          onClick={() => handleDeleteUser(usr._id, usr.username)}
-                          disabled={isSelf}
-                          className="btn btn-secondary"
-                          style={{
-                            padding: '0.4rem 0.6rem',
-                            fontSize: '0.75rem',
-                            borderColor: 'var(--border-color)',
-                            color: isSelf ? 'var(--text-muted)' : 'var(--danger)',
-                            opacity: isSelf ? 0.5 : 1
-                          }}
-                        >
-                          <Trash2 size={13} />
-                          <span>Delete</span>
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+        <div className="table-container p-1">
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Email Address</th>
+                <th>Badge Number</th>
+                <th>Current Role</th>
+                <th>Change Permission</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredUsers.map(usr => {
+                const isSelf = usr._id === currentUser._id;
+                
+                return (
+                  <tr key={usr._id}>
+                    <td className="font-semibold text-slate-900">
+                      @{usr.username} {isSelf && <span className="text-[10px] text-blue-500 font-normal ml-1">(You)</span>}
+                    </td>
+                    <td className="text-slate-600">{usr.email}</td>
+                    <td className={`font-mono text-xs ${usr.badgeNumber ? 'text-blue-500' : 'text-slate-400'}`}>
+                      {usr.badgeNumber || 'N/A'}
+                    </td>
+                    <td>
+                      <span className={`status-badge text-[9px] ${
+                        usr.role === 'admin' 
+                          ? 'bg-indigo-50 text-primary border border-indigo-200/50' 
+                          : 'bg-blue-50 text-blue-600 border border-blue-200/50'
+                      }`}>
+                        {usr.role}
+                      </span>
+                    </td>
+                    <td>
+                      <select
+                        className="form-input py-1 px-2.5 text-xs w-auto inline-block"
+                        value={usr.role}
+                        onChange={(e) => handleRoleChange(usr._id, e.target.value)}
+                        disabled={isSelf}
+                      >
+                        <option value="officer">Officer</option>
+                        <option value="admin">Administrator</option>
+                      </select>
+                    </td>
+                    <td className="text-center">
+                      <button
+                        onClick={() => handleDeleteUser(usr._id, usr.username)}
+                        disabled={isSelf}
+                        className={`btn btn-secondary py-1.5 px-3 text-xs flex justify-center items-center gap-1.5 border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 ${
+                          isSelf ? 'opacity-50 pointer-events-none' : ''
+                        }`}
+                      >
+                        <Trash2 size={13} />
+                        <span>Delete</span>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

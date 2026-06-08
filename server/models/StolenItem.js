@@ -52,7 +52,6 @@ const StolenItemSchema = new mongoose.Schema({
   }
 });
 
-StolenItemSchema.index({ qrCodeToken: 1 }, { unique: true });
 StolenItemSchema.index({ complaintId: 1 });
 StolenItemSchema.index({ status: 1 });
 

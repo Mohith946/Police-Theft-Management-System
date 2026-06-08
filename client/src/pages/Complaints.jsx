@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { formatDate, formatDateTime } from '../utils/dateUtils';
-import { FilePlus, Search, ArrowLeft, ClipboardList, QrCode, Package } from 'lucide-react';
+import { FilePlus, Search, ArrowLeft, ClipboardList, Package } from 'lucide-react';
 import ComplaintQRCodeCard from '../components/ComplaintQRCodeCard';
 
 const Complaints = () => {
@@ -113,7 +113,7 @@ const Complaints = () => {
   if (id) {
     if (loading) {
       return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '50vh', color: 'var(--text-secondary)' }}>
+        <div className="flex items-center justify-center min-h-[50vh] text-slate-500 text-sm">
           <p>Retrieving case records...</p>
         </div>
       );
@@ -121,9 +121,9 @@ const Complaints = () => {
 
     if (error || !singleComplaint) {
       return (
-        <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center', padding: '3rem' }} className="glass-panel">
-          <p style={{ color: 'var(--danger)' }}>{error || 'Complaint case details not found'}</p>
-          <button onClick={() => navigate('/complaints')} className="btn btn-secondary" style={{ marginTop: '1rem' }}>
+        <div className="max-w-xl mx-auto text-center p-12 glass-panel">
+          <p className="text-danger text-sm">{error || 'Complaint case details not found'}</p>
+          <button onClick={() => navigate('/complaints')} className="btn btn-secondary mt-4">
             Return to Case List
           </button>
         </div>
@@ -133,72 +133,60 @@ const Complaints = () => {
     const isOfficer = user.role === 'officer' || user.role === 'admin';
 
     return (
-      <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      <div className="max-w-5xl mx-auto">
         {/* Back Link */}
         <button 
           onClick={() => navigate('/complaints')} 
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-secondary)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            fontSize: '0.85rem',
-            marginBottom: '1rem',
-            padding: 0
-          }}
+          className="bg-transparent border-none text-slate-500 cursor-pointer flex items-center gap-1.5 text-xs mb-4 p-0 hover:text-slate-900 transition-all duration-200"
         >
           <ArrowLeft size={16} />
           <span>Return to case list</span>
         </button>
 
         {/* Case File Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: '1.5rem', marginBottom: '2rem' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
           
           {/* Main Complaint info panel */}
-          <div className="glass-panel" style={{ padding: '2rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+          <div className="glass-panel p-6 md:p-8 lg:col-span-3">
+            <div className="flex justify-between items-start gap-4 mb-5">
               <div>
-                <h2 style={{ fontSize: '1.35rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>{singleComplaint.title}</h2>
-                <p style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--primary)', marginTop: '0.15rem' }}>
+                <h2 className="text-xl font-bold text-slate-900 m-0 font-heading">{singleComplaint.title}</h2>
+                <p className="font-mono text-xs text-primary mt-1 m-0">
                   Case ID: {singleComplaint.complaintNumber}
                 </p>
               </div>
               <span className={`status-badge status-${singleComplaint.status}`}>{singleComplaint.status}</span>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.9rem', color: 'var(--text-primary)' }}>
+            <div className="flex flex-col gap-5 text-sm text-slate-700">
               <div>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>Incident Category</p>
-                <p style={{ textTransform: 'capitalize', fontWeight: 600, color: 'var(--text-primary)' }}>{singleComplaint.category}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Incident Category</p>
+                <p className="text-sm font-semibold text-slate-900 capitalize m-0">{singleComplaint.category}</p>
               </div>
               
               <div>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>Theft Date & Time</p>
-                <p style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{formatDateTime(singleComplaint.theftDate)}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Theft Date & Time</p>
+                <p className="text-sm font-semibold text-slate-900 m-0">{formatDateTime(singleComplaint.theftDate)}</p>
               </div>
 
               <div>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>Location Details</p>
-                <p style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{singleComplaint.theftLocation}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Location Details</p>
+                <p className="text-sm font-semibold text-slate-900 m-0">{singleComplaint.theftLocation}</p>
               </div>
 
-              <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Incident Description</p>
-                <p style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', fontSize: '0.88rem' }}>{singleComplaint.description}</p>
+              <div className="border-t border-slate-200/60 pt-4 mt-2">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Incident Description</p>
+                <p className="text-sm text-slate-700 leading-relaxed white-space-pre-wrap m-0">{singleComplaint.description}</p>
               </div>
             </div>
 
-            {/* Officer & Admin status modification and deletion controls */}
+            {/* Officer & Admin actions */}
             {(isOfficer || user.role === 'admin') && (
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginTop: '2rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem', alignItems: 'center' }}>
+              <div className="flex flex-wrap gap-3 mt-8 border-t border-slate-200/60 pt-5 items-center">
                 {isOfficer && singleComplaint.status === 'pending' && (
                   <button 
                     onClick={() => handleUpdateStatus('investigating')} 
-                    className="btn btn-primary"
-                    style={{ padding: '0.5rem 1rem', fontSize: '0.8rem' }}
+                    className="btn btn-primary text-xs"
                   >
                     Start Investigation
                   </button>
@@ -206,8 +194,7 @@ const Complaints = () => {
                 {isOfficer && singleComplaint.status === 'investigating' && (
                   <button 
                     onClick={() => handleUpdateStatus('resolved')} 
-                    className="btn btn-primary"
-                    style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', background: 'var(--success)' }}
+                    className="btn btn-primary text-xs bg-success hover:bg-emerald-600 border-none"
                   >
                     Mark Case Resolved
                   </button>
@@ -215,8 +202,7 @@ const Complaints = () => {
                 {isOfficer && singleComplaint.status !== 'resolved' && singleComplaint.status !== 'closed' && (
                   <button 
                     onClick={() => handleUpdateStatus('closed')} 
-                    className="btn btn-secondary"
-                    style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', color: 'var(--danger)', borderColor: 'var(--border-color)' }}
+                    className="btn btn-secondary text-xs text-danger border-slate-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
                   >
                     Close Case File
                   </button>
@@ -224,8 +210,7 @@ const Complaints = () => {
                 {user.role === 'admin' && (
                   <button 
                     onClick={handleDeleteComplaint} 
-                    className="btn btn-danger"
-                    style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', marginLeft: 'auto' }}
+                    className="btn btn-danger text-xs ml-auto"
                   >
                     Delete Case File
                   </button>
@@ -235,24 +220,24 @@ const Complaints = () => {
           </div>
 
           {/* Right Panel: Reporter Info & QR Code */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div className="glass-panel" style={{ padding: '1.5rem' }}>
-              <h3 style={{ fontSize: '0.95rem', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', marginBottom: '1rem', fontFamily: 'var(--font-heading)' }}>
+          <div className="flex flex-col gap-6 lg:col-span-2">
+            <div className="glass-panel p-5">
+              <h3 className="text-xs font-bold text-slate-900 border-b border-slate-200/60 pb-2 mb-4 uppercase tracking-wider font-heading m-0">
                 Reporter Profile
               </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.85rem' }}>
+              <div className="flex flex-col gap-3 text-xs">
                 <div>
-                  <span style={{ color: 'var(--text-muted)' }}>Full Name:</span>
-                  <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.9rem' }}>{singleComplaint.reporterName}</p>
+                  <span className="text-slate-400 block mb-0.5">Full Name</span>
+                  <p className="text-sm font-semibold text-slate-900 m-0">{singleComplaint.reporterName}</p>
                 </div>
                 <div>
-                  <span style={{ color: 'var(--text-muted)' }}>Contact Info:</span>
-                  <p style={{ color: 'var(--text-primary)', fontWeight: 600 }}>{singleComplaint.reporterContact || 'No contact provided'}</p>
+                  <span className="text-slate-400 block mb-0.5">Contact Info</span>
+                  <p className="text-sm font-semibold text-slate-900 m-0">{singleComplaint.reporterContact || 'No contact provided'}</p>
                 </div>
                 {singleComplaint.reportedBy && (
                   <div>
-                    <span style={{ color: 'var(--text-muted)' }}>System User:</span>
-                    <p style={{ color: 'var(--primary)', fontWeight: 500 }}>@{singleComplaint.reportedBy.username}</p>
+                    <span className="text-slate-400 block mb-0.5">System User</span>
+                    <p className="text-xs font-semibold text-primary m-0">@{singleComplaint.reportedBy.username}</p>
                   </div>
                 )}
               </div>
@@ -262,58 +247,53 @@ const Complaints = () => {
           </div>
         </div>
 
-        {/* Associated Stolen Items Section (No QR codes) */}
+        {/* Associated Stolen Items Section */}
         <div>
-          <h3 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', marginBottom: '1rem', fontFamily: 'var(--font-heading)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Package size={18} color="var(--primary)" />
+          <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2 font-heading">
+            <Package size={18} className="text-primary" />
             <span>Registered Stolen Items ({associatedItems.length})</span>
           </h3>
 
           {associatedItems.length === 0 ? (
-            <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+            <div className="glass-panel p-8 text-center text-slate-400 text-xs">
               <p>No items registered under this case report.</p>
             </div>
           ) : (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-              gap: '1.5rem'
-            }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {associatedItems.map(item => (
-                <div key={item._id} className="glass-panel" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div key={item._id} className="glass-panel p-5 flex flex-col gap-4">
                   <div>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Item Details</span>
-                    <h4 style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: 700, marginTop: '0.15rem' }}>{item.itemName}</h4>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Item Details</span>
+                    <h4 className="text-sm font-bold text-slate-900 mt-1 m-0">{item.itemName}</h4>
                   </div>
                   
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-primary)', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Category:</span>
-                      <span style={{ fontWeight: 600, textTransform: 'capitalize' }}>{item.category}</span>
+                  <div className="text-xs text-slate-600 flex flex-col gap-2">
+                    <div className="flex justify-between border-b border-slate-50 pb-1.5">
+                      <span className="text-slate-400">Category</span>
+                      <span className="font-semibold text-slate-800 capitalize">{item.category}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Serial Number:</span>
-                      <span style={{ fontFamily: 'monospace', fontWeight: 600 }}>{item.serialNumber || 'N/A'}</span>
+                    <div className="flex justify-between border-b border-slate-50 pb-1.5">
+                      <span className="text-slate-400">Serial Number</span>
+                      <span className="font-mono font-semibold text-slate-800">{item.serialNumber || 'N/A'}</span>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Est. Value:</span>
-                      <span style={{ fontWeight: 600 }}>₹{item.estimatedValue ? item.estimatedValue.toLocaleString() : '0'}</span>
+                    <div className="flex justify-between border-b border-slate-50 pb-1.5">
+                      <span className="text-slate-400">Est. Value</span>
+                      <span className="font-semibold text-slate-800">₹{item.estimatedValue ? item.estimatedValue.toLocaleString() : '0'}</span>
                     </div>
                   </div>
 
-                  <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '0.75rem', marginTop: '0.25rem', fontSize: '0.8rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Status:</span>
-                      <strong className={`status-badge status-${item.status}`} style={{ textTransform: 'uppercase', fontSize: '0.65rem' }}>{item.status}</strong>
-                    </div>
-                    {item.status === 'recovered' && (
-                      <div style={{ marginTop: '0.5rem', padding: '0.5rem', background: '#ecfdf5', borderRadius: 'var(--radius-sm)', color: 'var(--success)', fontSize: '0.75rem' }}>
-                        <p style={{ fontWeight: 600 }}>Recovered Findings:</p>
-                        <p style={{ color: 'var(--text-secondary)', marginTop: '0.15rem' }}>Date: {formatDate(item.recoveredDate)}</p>
-                        <p style={{ color: 'var(--text-secondary)' }}>Location: {item.recoveryLocation}</p>
-                      </div>
-                    )}
+                  <div className="border-t border-slate-200/60 pt-3 mt-1 flex justify-between items-center text-xs">
+                    <span className="text-slate-400 font-semibold">Status:</span>
+                    <strong className={`status-badge status-${item.status} text-[9px]`}>{item.status}</strong>
                   </div>
+                  
+                  {item.status === 'recovered' && (
+                    <div className="mt-1 p-3 bg-emerald-50/50 border border-emerald-100 rounded-lg text-xs text-success">
+                      <p className="font-bold m-0">Recovery Details:</p>
+                      <p className="text-[11px] text-slate-500 mt-1 m-0">Date: {formatDate(item.recoveredDate)}</p>
+                      <p className="text-[11px] text-slate-500 m-0">Location: {item.recoveryLocation}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -327,46 +307,40 @@ const Complaints = () => {
   // RENDER COMPLAINTS LIST VIEW
   // ==========================================
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {/* Header Panel */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '2rem'
-      }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
         <div>
-          <h2 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>
+          <h2 className="text-xl font-bold text-slate-950 font-heading m-0">
             Theft Complaints Database
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+          <p className="text-slate-500 text-xs mt-0.5 m-0">
             Review and audit public theft reports and file updates
           </p>
         </div>
-        <Link to="/complaints/add" className="btn btn-primary">
+        <Link to="/complaints/add" className="btn btn-primary text-xs sm:text-sm">
           <FilePlus size={16} />
           <span>File New Theft Report</span>
         </Link>
       </div>
 
       {/* Filters Panel */}
-      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+      <div className="glass-panel p-5 mb-2">
+        <div className="flex flex-wrap gap-4 items-center">
           {/* Search Input */}
-          <div style={{ flex: 1, minWidth: '220px', position: 'relative' }}>
+          <div className="flex-1 min-w-[240px] relative">
             <input
               type="text"
-              className="form-input"
+              className="form-input pl-9"
               placeholder="Search by case #, title, reporter name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ paddingLeft: '2.5rem' }}
             />
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           </div>
 
           {/* Category Filter */}
-          <div style={{ minWidth: '150px' }}>
+          <div className="min-w-[160px]">
             <select
               className="form-input"
               value={categoryFilter}
@@ -382,7 +356,7 @@ const Complaints = () => {
           </div>
 
           {/* Status Filter */}
-          <div style={{ minWidth: '150px' }}>
+          <div className="min-w-[160px]">
             <select
               className="form-input"
               value={statusFilter}
@@ -400,85 +374,64 @@ const Complaints = () => {
 
       {/* Complaints Table */}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+        <div className="text-center py-12 text-slate-500 text-sm">
           <p>Querying case history...</p>
         </div>
       ) : filteredComplaints.length === 0 ? (
-        <div className="glass-panel" style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-          <ClipboardList size={40} style={{ marginBottom: '1rem' }} />
-          <h3>No Complaints Logged</h3>
-          <p style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>No case files match your search query.</p>
+        <div className="glass-panel p-16 text-center text-slate-400 flex flex-col items-center gap-3">
+          <ClipboardList size={40} className="text-slate-300" />
+          <h3 className="text-sm font-bold text-slate-800 m-0">No Complaints Logged</h3>
+          <p className="text-xs m-0">No case files match your search query.</p>
         </div>
       ) : (
-        <div className="glass-panel" style={{ padding: '1rem' }}>
-          <div className="table-container">
-            <table className="custom-table">
-              <thead>
-                <tr>
-                  <th>Case ID</th>
-                  <th>Incident Details</th>
-                  <th>Date Logged</th>
-                  <th>Reporter</th>
-                  <th>Status</th>
-                  <th style={{ textAlign: 'center' }}>Inspect</th>
+        <div className="table-container p-1">
+          <table className="custom-table">
+            <thead>
+              <tr>
+                <th>Case ID</th>
+                <th>Incident Details</th>
+                <th>Date Logged</th>
+                <th>Reporter</th>
+                <th>Status</th>
+                <th className="text-center">Inspect</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredComplaints.map(comp => (
+                <tr key={comp._id}>
+                  <td className="font-mono font-semibold text-primary">
+                    {comp.complaintNumber}
+                  </td>
+                  <td>
+                    <div>
+                      <div className="font-semibold text-slate-900">{comp.title}</div>
+                      <div className="text-[11px] text-slate-500 capitalize mt-0.5">
+                        Category: {comp.category} • Location: {comp.theftLocation}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="text-slate-500">{formatDate(comp.theftDate)}</td>
+                  <td>
+                    <div>
+                      <div className="font-medium text-slate-900">{comp.reporterName}</div>
+                      <div className="text-[11px] text-slate-400 mt-0.5">{comp.reporterContact || 'No phone'}</div>
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`status-badge status-${comp.status}`}>{comp.status}</span>
+                  </td>
+                  <td className="text-center">
+                    <Link 
+                      to={`/complaints/${comp._id}`} 
+                      className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 border border-slate-200/60 text-primary hover:bg-primary hover:text-white transition-all duration-200 rotate-180"
+                    >
+                      <ArrowLeft size={14} />
+                    </Link>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {filteredComplaints.map(comp => (
-                  <tr key={comp._id}>
-                    <td style={{ fontFamily: 'monospace', fontWeight: 600, color: 'var(--primary)' }}>
-                      {comp.complaintNumber}
-                    </td>
-                    <td>
-                      <div>
-                        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{comp.title}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'capitalize', marginTop: '0.15rem' }}>
-                          Category: {comp.category} • Location: {comp.theftLocation}
-                        </div>
-                      </div>
-                    </td>
-                    <td>{formatDate(comp.theftDate)}</td>
-                    <td>
-                      <div>
-                        <div style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{comp.reporterName}</div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{comp.reporterContact || 'No phone'}</div>
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`status-badge status-${comp.status}`}>{comp.status}</span>
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
-                      <Link 
-                        to={`/complaints/${comp._id}`} 
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '50%',
-                          background: 'var(--bg-secondary)',
-                          border: '1px solid var(--border-color)',
-                          color: 'var(--primary)',
-                          transition: 'all 0.2s'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'var(--primary)';
-                          e.currentTarget.style.color = '#fff';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'var(--bg-secondary)';
-                          e.currentTarget.style.color = 'var(--primary)';
-                        }}
-                      >
-                        <ArrowLeft size={14} style={{ transform: 'rotate(180deg)' }} />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

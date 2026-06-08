@@ -33,53 +33,41 @@ const Criminals = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       {/* Header Panel */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '2rem'
-      }}>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
         <div>
-          <h2 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Active Suspect Registry</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Search and manage profiles of suspects in active investigations</p>
+          <h2 className="text-xl font-bold text-slate-900 font-heading m-0">Active Suspect Registry</h2>
+          <p className="text-slate-500 text-xs mt-0.5 m-0">Search and manage profiles of suspects in active investigations</p>
         </div>
-        <Link to="/criminals/add" className="btn btn-primary">
+        <Link to="/criminals/add" className="btn btn-primary text-xs sm:text-sm">
           <UserPlus size={16} />
           <span>Add Suspect</span>
         </Link>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="glass-panel" style={{ padding: '1.25rem', marginBottom: '1.5rem' }}>
-        <form onSubmit={handleSearchSubmit} style={{
-          display: 'flex',
-          gap: '1rem',
-          flexWrap: 'wrap',
-          alignItems: 'center'
-        }}>
+      <div className="glass-panel p-5 mb-2">
+        <form onSubmit={handleSearchSubmit} className="flex flex-wrap gap-4 items-center">
           {/* Search box */}
-          <div style={{ flex: 1, minWidth: '260px', position: 'relative' }}>
+          <div className="flex-1 min-w-[260px] relative">
             <input
               type="text"
-              className="form-input"
+              className="form-input pl-9"
               placeholder="Search by name, aliases, scars, tattoos..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ paddingLeft: '2.5rem' }}
             />
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           </div>
 
           {/* Status filter */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: '180px' }}>
-            <Filter size={16} color="var(--text-muted)" />
+          <div className="flex items-center gap-2 min-w-[180px]">
+            <Filter size={16} className="text-slate-400" />
             <select
               className="form-input"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              style={{ paddingRight: '2rem' }}
             >
               <option value="">All Statuses</option>
               <option value="active">Active</option>
@@ -88,7 +76,7 @@ const Criminals = () => {
             </select>
           </div>
 
-          <button type="submit" className="btn btn-secondary">
+          <button type="submit" className="btn btn-secondary text-xs sm:text-sm">
             <span>Execute Search</span>
           </button>
         </form>
@@ -96,86 +84,54 @@ const Criminals = () => {
 
       {/* Suspect Listing Grid */}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+        <div className="text-center py-12 text-slate-500 text-sm">
           <p>Querying suspect profiles...</p>
         </div>
       ) : criminals.length === 0 ? (
-        <div className="glass-panel" style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-          <UserX size={40} style={{ marginBottom: '1rem' }} />
-          <h3>No Suspects Found</h3>
-          <p style={{ fontSize: '0.85rem', marginTop: '0.25rem' }}>No suspect profiles match your query or exist in the registry.</p>
+        <div className="glass-panel p-16 text-center text-slate-400 flex flex-col items-center gap-3">
+          <UserX size={40} className="text-slate-300" />
+          <h3 className="text-sm font-bold text-slate-800 m-0">No Suspects Found</h3>
+          <p className="text-xs m-0">No suspect profiles match your query or exist in the registry.</p>
         </div>
       ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '1.5rem'
-        }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {criminals.map(crim => (
-            <div key={crim._id} className="glass-panel" style={{
-              padding: '1.25rem',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              minHeight: '200px'
-            }}>
+            <div key={crim._id} className="glass-panel p-5 flex flex-col justify-between min-h-[220px]">
               <div>
                 {/* Photo or placeholder */}
-                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-                  <div style={{
-                    width: '60px',
-                    height: '60px',
-                    borderRadius: 'var(--radius-sm)',
-                    overflow: 'hidden',
-                    background: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-color)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
+                <div className="flex gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
                     {crim.photoUrl ? (
                       <img 
                         src={crim.photoUrl} 
                         alt={crim.name} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        className="w-full h-full object-cover"
                       />
                     ) : (
-                      <span style={{ fontSize: '1.5rem' }}>👤</span>
+                      <span className="text-2xl">👤</span>
                     )}
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '1rem', color: 'var(--text-primary)' }}>{crim.name}</h3>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                    <h3 className="text-sm font-bold text-slate-900 m-0">{crim.name}</h3>
+                    <p className="text-[11px] text-slate-500 mt-0.5 m-0">
                       {crim.aliases ? `"${crim.aliases}"` : 'No known aliases'}
                     </p>
-                    <span className="status-badge" style={{
-                      fontSize: '0.55rem', 
-                      marginTop: '0.25rem',
-                      background: crim.status === 'active' ? 'rgba(186,26,26,0.1)' : 'rgba(16,185,129,0.1)',
-                      color: crim.status === 'active' ? 'var(--danger)' : 'var(--success)',
-                      border: crim.status === 'active' ? '1px solid rgba(186,26,26,0.2)' : '1px solid rgba(16,185,129,0.2)'
-                    }}>{crim.status}</span>
+                    <span className={`status-badge mt-2 text-[9px] ${
+                      crim.status === 'active' ? 'status-stolen' : 'status-recovered'
+                    }`}>{crim.status}</span>
                   </div>
                 </div>
 
                 {/* Characteristics summary */}
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: 'var(--text-primary)',
-                  borderTop: '1px solid var(--border-color)',
-                  paddingTop: '0.75rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.25rem'
-                }}>
+                <div className="text-xs text-slate-600 border-t border-slate-100 pt-3 flex flex-col gap-1.5">
                   {crim.physicalFeatures?.height && <span>Height: {crim.physicalFeatures.height} cm</span>}
                   {crim.physicalFeatures?.scars && crim.physicalFeatures.scars !== 'none' && (
-                    <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                    <span className="truncate">
                       Scars: {crim.physicalFeatures.scars}
                     </span>
                   )}
                   {crim.physicalFeatures?.tattoos && crim.physicalFeatures.tattoos !== 'none' && (
-                    <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                    <span className="truncate">
                       Tattoos: {crim.physicalFeatures.tattoos}
                     </span>
                   )}
@@ -183,19 +139,10 @@ const Criminals = () => {
               </div>
 
               {/* View details button */}
-              <div style={{ marginTop: '1.25rem', borderTop: '1px solid var(--border-color)', paddingTop: '0.75rem' }}>
+              <div className="mt-4 border-t border-slate-100 pt-3">
                 <Link 
                   to={`/criminals/${crim._id}`} 
-                  className="btn btn-secondary" 
-                  style={{
-                    width: '100%',
-                    padding: '0.4rem 0.8rem',
-                    fontSize: '0.8rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.35rem'
-                  }}
+                  className="btn btn-secondary w-full py-2 text-xs flex justify-center items-center gap-1.5"
                 >
                   <Eye size={14} />
                   <span>Inspect Profile</span>

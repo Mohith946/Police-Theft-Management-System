@@ -5,37 +5,15 @@ import AppRoutes from './routes';
 import Navbar from './components/Navbar';
 import FloatingToolbar from './components/FloatingToolbar';
 
-// Subcomponent that renders layout based on auth state
 const AppContent = () => {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        backgroundColor: 'var(--bg-primary)',
-        color: 'var(--text-primary)',
-        fontFamily: 'sans-serif'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            border: '3px solid rgba(79, 70, 229, 0.15)',
-            borderTopColor: 'var(--primary)',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 1rem'
-          }}></div>
-          <p style={{ letterSpacing: '0.05em', fontSize: '0.9rem' }}>Initializing SHIELD Terminal...</p>
-          <style>{`
-            @keyframes spin {
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
+      <div className="flex items-center justify-center min-h-screen bg-slate-50 text-slate-900 font-sans">
+        <div className="text-center">
+          <div className="w-10 h-10 border-3 border-indigo-100 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="tracking-wide text-sm text-slate-600">Initializing SHIELD Terminal...</p>
         </div>
       </div>
     );
@@ -46,12 +24,12 @@ const AppContent = () => {
   }
 
   return (
-    <div className="layout-container" style={{ flexDirection: 'column' }}>
+    <div className="flex flex-col min-h-screen">
       {/* Top Global Header Navigation */}
       <Navbar />
       
       {/* Main content frame (full width, padded for floating toolbar at bottom) */}
-      <main className="main-content" style={{ paddingBottom: '7rem' }}>
+      <main className="flex-1 p-6 md:p-10 pb-28 bg-slate-50">
         <AppRoutes />
       </main>
 

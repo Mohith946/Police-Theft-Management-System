@@ -83,94 +83,63 @@ const AddCriminal = () => {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <div className="max-w-3xl mx-auto">
       {/* Navigation Header */}
       <button 
         onClick={() => navigate(-1)} 
-        style={{
-          background: 'none',
-          border: 'none',
-          color: 'var(--text-secondary)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.35rem',
-          fontSize: '0.85rem',
-          marginBottom: '1rem',
-          padding: 0
-        }}
+        className="bg-transparent border-none text-slate-500 cursor-pointer flex items-center gap-1.5 text-xs mb-4 p-0 hover:text-slate-900 transition-all duration-200"
       >
         <ArrowLeft size={16} />
         <span>Return to registry</span>
       </button>
 
-      <h2 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '1.5rem', fontFamily: 'Outfit' }}>
+      <h2 className="text-xl font-bold text-slate-950 mb-6 font-heading">
         Create Suspect Profile
       </h2>
 
       {error && (
-        <div style={{
-          background: 'rgba(239, 68, 68, 0.12)',
-          border: '1px solid rgba(239, 68, 68, 0.25)',
-          borderRadius: '8px',
-          padding: '0.75rem',
-          color: '#ef4444',
-          fontSize: '0.85rem',
-          marginBottom: '1.5rem',
-          textAlign: 'center'
-        }}>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3.5 text-danger text-xs text-center mb-6">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '2rem' }}>
+      <form onSubmit={handleSubmit} className="glass-panel p-6 md:p-8">
         {/* Profile photo upload */}
-        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem', alignItems: 'center' }}>
-          <div style={{
-            width: '120px',
-            height: '120px',
-            borderRadius: '16px',
-            overflow: 'hidden',
-            border: '2px dashed var(--border-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'var(--bg-secondary)',
-            position: 'relative'
-          }}>
+        <div className="flex gap-6 flex-wrap mb-6 items-center">
+          <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 flex items-center justify-center bg-slate-50 relative shadow-inner">
             {photoPreview ? (
-              <img src={photoPreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
             ) : (
-              <div style={{ textAlign: 'center', color: '#64748b' }}>
-                <Image size={24} style={{ margin: '0 auto 0.25rem' }} />
-                <span style={{ fontSize: '0.65rem' }}>No Photo</span>
+              <div className="text-center text-slate-400">
+                <Image size={24} className="mx-auto mb-1" />
+                <span className="text-[10px] block">No Photo</span>
               </div>
             )}
           </div>
           <div>
-            <label className="form-label">Attach suspect photograph</label>
+            <label className="form-label mb-2">Attach suspect photograph</label>
             <input
               type="file"
               accept="image/*"
               onChange={handlePhotoChange}
-              style={{ display: 'none' }}
+              className="hidden"
               id="photo-upload-input"
             />
-            <label htmlFor="photo-upload-input" className="btn btn-secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', cursor: 'pointer' }}>
+            <label htmlFor="photo-upload-input" className="btn btn-secondary py-1.5 px-3.5 text-xs cursor-pointer">
               Select Image File
             </label>
-            <p style={{ color: '#64748b', fontSize: '0.7rem', marginTop: '0.35rem' }}>
+            <p className="text-slate-400 text-[10px] mt-1.5">
               Allowed formats: JPG, PNG, WEBP. Max size: 5MB.
             </p>
           </div>
         </div>
 
         {/* Section 1: Basic Information */}
-        <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+        <h3 className="text-sm font-bold text-primary border-b border-slate-200/60 pb-2 mb-5 font-heading">
           1. Identity Details
         </h3>
         
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.5rem' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <div>
             <label className="form-label">Suspect Name *</label>
             <input
@@ -212,11 +181,11 @@ const AddCriminal = () => {
         </div>
 
         {/* Section 2: Physical Description */}
-        <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+        <h3 className="text-sm font-bold text-primary border-b border-slate-200/60 pb-2 mb-5 font-heading mt-6">
           2. Physical Features
         </h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-5">
           <div>
             <label className="form-label">Height (cm)</label>
             <input
@@ -267,7 +236,7 @@ const AddCriminal = () => {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.5rem' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <div>
             <label className="form-label">Distinguishing Scars</label>
             <input
@@ -291,11 +260,11 @@ const AddCriminal = () => {
         </div>
 
         {/* Section 3: Geolocation */}
-        <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+        <h3 className="text-sm font-bold text-primary border-b border-slate-200/60 pb-2 mb-5 font-heading mt-6">
           3. Operating Region & Coordinates
         </h3>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
+        <div className="flex flex-col gap-4 mb-6">
           <div>
             <label className="form-label">Last Known Area Address *</label>
             <input
@@ -311,9 +280,8 @@ const AddCriminal = () => {
 
         <button 
           type="submit" 
-          className="btn btn-primary" 
+          className="btn btn-primary w-full py-3 text-sm flex justify-center items-center gap-2 mt-2"
           disabled={submitting} 
-          style={{ width: '100%', gap: '0.5rem' }}
         >
           <Save size={18} />
           <span>{submitting ? 'Creating suspect profile...' : 'Save Suspect Record'}</span>

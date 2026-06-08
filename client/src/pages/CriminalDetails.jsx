@@ -66,7 +66,7 @@ const CriminalDetails = () => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', color: 'var(--text-secondary)' }}>
+      <div className="flex items-center justify-center min-h-[60vh] text-slate-500 text-sm">
         <p>Retrieving suspect profile records...</p>
       </div>
     );
@@ -74,9 +74,9 @@ const CriminalDetails = () => {
 
   if (error || !criminal) {
     return (
-      <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center', padding: '3rem' }} className="glass-panel">
-        <p style={{ color: 'var(--danger)' }}>{error || 'Suspect profile not found'}</p>
-        <button onClick={() => navigate('/criminals')} className="btn btn-secondary" style={{ marginTop: '1rem' }}>
+      <div className="max-w-xl mx-auto text-center p-12 glass-panel">
+        <p className="text-danger text-sm">{error || 'Suspect profile not found'}</p>
+        <button onClick={() => navigate('/criminals')} className="btn btn-secondary mt-4">
           Return to Registry
         </button>
       </div>
@@ -84,22 +84,12 @@ const CriminalDetails = () => {
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <div className="max-w-4xl mx-auto">
       {/* Action Header bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+      <div className="flex justify-between items-center mb-6">
         <button 
           onClick={() => navigate('/criminals')} 
-          style={{
-            background: 'none',
-            border: 'none',
-            color: 'var(--text-secondary)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.35rem',
-            fontSize: '0.85rem',
-            padding: 0
-          }}
+          className="bg-transparent border-none text-slate-500 cursor-pointer flex items-center gap-1.5 text-xs p-0 hover:text-slate-900 transition-all duration-200"
         >
           <ArrowLeft size={16} />
           <span>Return to registry</span>
@@ -108,8 +98,7 @@ const CriminalDetails = () => {
         {user?.role === 'admin' && (
           <button
             onClick={handleDeleteCriminal}
-            className="btn btn-danger"
-            style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
+            className="btn btn-danger text-xs py-1.5 px-3"
           >
             Delete Suspect Record
           </button>
@@ -117,89 +106,75 @@ const CriminalDetails = () => {
       </div>
 
       {/* Main Profile Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1.5rem', marginBottom: '2rem' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {/* Left Card: Image & Identity */}
-        <div className="glass-panel" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem', height: 'fit-content' }}>
-          <div style={{
-            width: '140px',
-            height: '140px',
-            borderRadius: '50%',
-            overflow: 'hidden',
-            background: 'var(--bg-secondary)',
-            border: '2px solid var(--border-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: 'var(--shadow-lg)'
-          }}>
+        <div className="glass-panel p-6 flex flex-col items-center gap-5 h-fit md:col-span-1">
+          <div className="w-32 h-32 rounded-full overflow-hidden bg-slate-100 border-2 border-slate-200 flex items-center justify-center shadow-md shrink-0">
             {criminal.photoUrl ? (
               <img 
                 src={criminal.photoUrl} 
                 alt={criminal.name} 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                className="w-full h-full object-cover"
               />
             ) : (
-              <User size={64} color="var(--text-muted)" />
+              <User size={64} className="text-slate-400" />
             )}
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <h3 style={{ fontSize: '1.2rem', color: 'var(--text-primary)' }}>{criminal.name}</h3>
-            {criminal.aliases && <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '0.15rem' }}>"{criminal.aliases}"</p>}
-            <span className="status-badge" style={{
-              marginTop: '0.5rem',
-              background: criminal.status === 'active' ? 'rgba(186,26,26,0.1)' : 'rgba(16,185,129,0.1)',
-              color: criminal.status === 'active' ? 'var(--danger)' : 'var(--success)',
-              border: criminal.status === 'active' ? '1px solid rgba(186,26,26,0.2)' : '1px solid rgba(16,185,129,0.2)'
-            }}>{criminal.status}</span>
+          <div className="text-center">
+            <h3 className="text-base font-bold text-slate-900 m-0">{criminal.name}</h3>
+            {criminal.aliases && <p className="text-xs text-slate-500 mt-1 m-0">"{criminal.aliases}"</p>}
+            <span className={`status-badge mt-3 text-[9px] ${
+              criminal.status === 'active' ? 'status-stolen' : 'status-recovered'
+            }`}>{criminal.status}</span>
           </div>
         </div>
 
         {/* Right Card: Features & Operating Areas */}
-        <div className="glass-panel" style={{ padding: '2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}>
-            <Sparkles size={18} color="var(--primary)" />
-            <h3 style={{ fontSize: '1.05rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>Physical & Geographical Profile</h3>
+        <div className="glass-panel p-6 md:p-8 md:col-span-2">
+          <div className="flex items-center gap-2 border-b border-slate-200/60 pb-2 mb-5 font-heading">
+            <Sparkles size={18} className="text-primary" />
+            <h3 className="text-sm font-bold text-slate-900 m-0">Physical & Geographical Profile</h3>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', fontSize: '0.9rem' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-xs text-slate-700">
             <div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sex / Gender</p>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, textTransform: 'capitalize', marginTop: '0.15rem' }}>{criminal.gender}</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Sex / Gender</p>
+              <p className="text-sm font-semibold text-slate-900 capitalize m-0">{criminal.gender}</p>
             </div>
             <div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date of Birth</p>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginTop: '0.15rem' }}>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Date of Birth</p>
+              <p className="text-sm font-semibold text-slate-900 m-0">
                 {criminal.dateOfBirth ? new Date(criminal.dateOfBirth).toLocaleDateString() : 'Unknown'}
               </p>
             </div>
             <div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Height & Weight</p>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginTop: '0.15rem' }}>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Height & Weight</p>
+              <p className="text-sm font-semibold text-slate-900 m-0">
                 {criminal.physicalFeatures?.height ? `${criminal.physicalFeatures.height} cm` : 'N/A'} / {criminal.physicalFeatures?.weight ? `${criminal.physicalFeatures.weight} kg` : 'N/A'}
               </p>
             </div>
             <div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Hair & Eye Color</p>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginTop: '0.15rem' }}>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Hair & Eye Color</p>
+              <p className="text-sm font-semibold text-slate-900 m-0">
                 {criminal.physicalFeatures?.hairColor || 'N/A'} / {criminal.physicalFeatures?.eyeColor || 'N/A'}
               </p>
             </div>
             <div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tattoos</p>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginTop: '0.15rem' }}>{criminal.physicalFeatures?.tattoos || 'none'}</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Tattoos</p>
+              <p className="text-sm font-semibold text-slate-900 m-0">{criminal.physicalFeatures?.tattoos || 'none'}</p>
             </div>
             <div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Scars / Marks</p>
-              <p style={{ color: 'var(--text-primary)', fontWeight: 600, marginTop: '0.15rem' }}>{criminal.physicalFeatures?.scars || 'none'}</p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Scars / Marks</p>
+              <p className="text-sm font-semibold text-slate-900 m-0">{criminal.physicalFeatures?.scars || 'none'}</p>
             </div>
           </div>
 
-          <div style={{ borderTop: '1px solid var(--border-color)', marginTop: '1.5rem', paddingTop: '1.25rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
-              <MapPin size={16} color="var(--danger)" />
+          <div className="border-t border-slate-200/60 mt-5 pt-4">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 font-semibold mb-1">
+              <MapPin size={16} className="text-danger" />
               <span>Last Known Operating Address:</span>
             </div>
-            <p style={{ color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.9rem', marginTop: '0.25rem' }}>
+            <p className="text-sm font-semibold text-slate-900 m-0">
               {criminal.lastKnownLocation}
             </p>
           </div>
@@ -208,19 +183,19 @@ const CriminalDetails = () => {
 
       {/* Matching alarms feed linked to this suspect */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-          <Bell size={18} color="#f59e0b" />
-          <h3 style={{ fontSize: '1.1rem', color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>
+        <div className="flex items-center gap-2 mb-4">
+          <Bell size={18} className="text-amber-500" />
+          <h3 className="text-sm font-bold text-slate-900 font-heading m-0">
             Active Cases Similarity Checks ({matches.length})
           </h3>
         </div>
 
         {matches.length === 0 ? (
-          <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-            <p>No active case similarity alarms currently trigger for this suspect.</p>
+          <div className="glass-panel p-8 text-center text-slate-400 text-xs">
+            <p className="m-0">No active case similarity alarms currently trigger for this suspect.</p>
           </div>
         ) : (
-          <div>
+          <div className="flex flex-col gap-4">
             {matches.map(match => (
               <MatchScoreCard 
                 key={match._id} 

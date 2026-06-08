@@ -45,7 +45,7 @@ const AddComplaint = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !description || !theftLocation || !theftDate || !reporterName) {
-      setError('Please fill in all mandatory fields highlighted in red');
+      setError('Please fill in all mandatory fields');
       return;
     }
 
@@ -84,56 +84,36 @@ const AddComplaint = () => {
   };
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+    <div className="max-w-4xl mx-auto">
       {/* Return link */}
       <button
         onClick={() => navigate(-1)}
-        style={{
-          background: 'none',
-          border: 'none',
-          color: 'var(--text-secondary)',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.35rem',
-          fontSize: '0.85rem',
-          marginBottom: '1rem',
-          padding: 0
-        }}
+        className="bg-transparent border-none text-slate-500 cursor-pointer flex items-center gap-1.5 text-xs mb-4 p-0 hover:text-slate-900 transition-all duration-200"
       >
         <ArrowLeft size={16} />
         <span>Return to case list</span>
       </button>
 
-      <h2 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '1.5rem', fontFamily: 'var(--font-heading)' }}>
+      <h2 className="text-xl font-bold text-slate-950 mb-6 font-heading">
         File Theft Complaint Report
       </h2>
 
       {error && (
-        <div style={{
-          background: 'rgba(186, 26, 26, 0.08)',
-          border: '1px solid rgba(186, 26, 26, 0.25)',
-          borderRadius: 'var(--radius-md)',
-          padding: '0.75rem',
-          color: 'var(--danger)',
-          fontSize: '0.85rem',
-          marginBottom: '1.5rem',
-          textAlign: 'center'
-        }}>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3.5 text-danger text-xs text-center mb-6">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8">
 
         {/* Panel 1: Incident Description */}
-        <div className="glass-panel" style={{ padding: '2rem' }}>
-          <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+        <div className="glass-panel p-6 md:p-8">
+          <h3 className="text-sm font-bold text-primary border-b border-slate-200/60 pb-2 mb-5 font-heading">
             1. Incident Overview
           </h3>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-5">
+            <div className="md:col-span-2">
               <label className="form-label">Report Title *</label>
               <input
                 type="text"
@@ -144,7 +124,7 @@ const AddComplaint = () => {
                 required
               />
             </div>
-            <div>
+            <div className="md:col-span-1">
               <label className="form-label">Primary Category *</label>
               <select
                 className="form-input"
@@ -164,7 +144,7 @@ const AddComplaint = () => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1.25rem' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
             <div>
               <label className="form-label">Theft Date & Time *</label>
               <input
@@ -188,8 +168,6 @@ const AddComplaint = () => {
             </div>
           </div>
 
-
-
           <div>
             <label className="form-label">Theft Details Description *</label>
             <textarea
@@ -204,11 +182,11 @@ const AddComplaint = () => {
         </div>
 
         {/* Panel 2: Reporter Information */}
-        <div className="glass-panel" style={{ padding: '2rem' }}>
-          <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.35rem', marginBottom: '1.25rem' }}>
+        <div className="glass-panel p-6 md:p-8">
+          <h3 className="text-sm font-bold text-primary border-b border-slate-200/60 pb-2 mb-5 font-heading">
             2. Reporter Contact Details
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label className="form-label">Reporter Name *</label>
               <input
@@ -233,56 +211,40 @@ const AddComplaint = () => {
         </div>
 
         {/* Panel 3: Dynamic Stolen Items List */}
-        <div className="glass-panel" style={{ padding: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem', marginBottom: '1.25rem' }}>
-            <h3 style={{ fontSize: '0.95rem', color: 'var(--primary)' }}>
+        <div className="glass-panel p-6 md:p-8">
+          <div className="flex justify-between items-center border-b border-slate-200/60 pb-3 mb-5">
+            <h3 className="text-sm font-bold text-primary m-0 font-heading">
               3. Stolen Property Registry ({items.length})
             </h3>
             <button
               type="button"
               onClick={handleAddItem}
-              className="btn btn-secondary"
-              style={{ padding: '0.4rem 0.8rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
+              className="btn btn-secondary py-1.5 px-3 text-xs flex items-center gap-1"
             >
               <Plus size={14} />
               <span>Add Item Line</span>
             </button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className="flex flex-col gap-6">
             {items.map((item, index) => (
-              <div key={index} style={{
-                padding: '1.25rem',
-                border: '1px solid var(--border-color)',
-                background: 'var(--bg-primary)',
-                borderRadius: 'var(--radius-md)',
-                position: 'relative'
-              }}>
+              <div key={index} className="p-5 border border-slate-200 bg-slate-50/50 rounded-2xl relative">
                 {items.length > 1 && (
                   <button
                     type="button"
                     onClick={() => handleRemoveItem(index)}
-                    style={{
-                      position: 'absolute',
-                      right: '1rem',
-                      top: '1rem',
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--danger)',
-                      cursor: 'pointer',
-                      padding: '4px'
-                    }}
+                    className="absolute right-4 top-4 bg-transparent border-none text-danger cursor-pointer p-1 hover:bg-red-50 rounded-lg transition-all"
                   >
                     <Trash2 size={16} />
                   </button>
                 )}
 
-                <h4 style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '1rem' }}>
+                <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-4">
                   Property Item #{index + 1}
                 </h4>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.25rem', marginBottom: '1rem' }}>
-                  <div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
+                  <div className="md:col-span-2">
                     <label className="form-label">Item Name *</label>
                     <input
                       type="text"
@@ -293,7 +255,7 @@ const AddComplaint = () => {
                       required
                     />
                   </div>
-                  <div>
+                  <div className="md:col-span-1">
                     <label className="form-label">Item Category</label>
                     <select
                       className="form-input"
@@ -309,7 +271,7 @@ const AddComplaint = () => {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem', marginBottom: '1rem' }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
                   <div>
                     <label className="form-label">Serial / Frame / VIN Number</label>
                     <input
@@ -349,9 +311,8 @@ const AddComplaint = () => {
 
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary w-full py-3.5 text-base flex justify-center items-center gap-2 mt-2"
           disabled={submitting}
-          style={{ width: '100%', padding: '0.9rem', fontSize: '1rem' }}
         >
           <Save size={18} />
           <span>{submitting ? 'Lodging Case File...' : 'Submit Complaint & Generate QR Labels'}</span>
