@@ -119,6 +119,4 @@ Prefilled credentials are provided inside the **Demo Credentials Drawer** on the
 * **Officer Account**:
   - Email: `officer1@police.gov`
   - Password: `password123`
-* **Citizen Account**:
-  - Email: `john.doe@gmail.com`
-  - Password: `password123`
+
