@@ -1,0 +1,60 @@
+-- ==========================================
+-- MongoDB / Mongoose Middleware & Hooks (Triggers)
+-- ==========================================
+-- This file documents how PostgreSQL triggers are implemented using
+-- Mongoose hooks and background services in the MongoDB version of the system.
+--
+-- 1. Automating Suspect Match Scores (Post-Save on Complaint / StolenItem)
+-- --------------------------------------------------------------------------
+-- PostgreSQL Trigger: AFTER INSERT ON stolen_items OR complaints
+-- MongoDB/Mongoose Equivalent: Mongoose Post-Save Middleware
+-- Location: server/models/Complaint.js and server/models/StolenItem.js
+--
+-- Logic:
+--   schema.post('save', async function(doc) {
+--     // 1. Retrieve the newly logged complaint/item.
+--     // 2. Fetch all active criminals in the system.
+--     // 3. Compute matching score for each criminal based on:
+--     //    - Geospatial proximity (theft coordinates vs criminal last known location)
+--     //    - Category matching (electronics, vehicle, etc. matching past offenses)
+--     //    - Text similarity / tag alignment (e.g. hair color, height, scars)
+--     // 4. Save results to the 'matchresults' collection (upsert based on complaintId + criminalId).
+--   });
+--
+-- 2. Stolen Item Recovery Hook (Pre-Save on StolenItem status change)
+-- --------------------------------------------------------------------------
+-- PostgreSQL Trigger: BEFORE UPDATE ON stolen_items
+-- MongoDB/Mongoose Equivalent: Mongoose Pre-Save / Pre-Update Middleware
+-- Location: server/models/StolenItem.js
+--
+-- Logic:
+--   schema.pre('save', function(next) {
+--     if (this.isModified('status') && this.status === 'recovered') {
+--       this.recoveredDate = new Date();
+--     }
+--     next();
+--   });
+--
+-- 3. Automatic Complaint Resolution (Post-Save on StolenItem status change)
+-- --------------------------------------------------------------------------
+-- PostgreSQL Trigger: AFTER UPDATE ON stolen_items
+-- MongoDB/Mongoose Equivalent: Mongoose Post-Save / Post-Update Middleware
+-- Location: server/models/StolenItem.js
+--
+-- Logic:
+--   schema.post('save', async function(doc) {
+--     if (doc.status === 'recovered') {
+--       // Check if all items linked to the same complaint are recovered.
+--       const StolenItem = mongoose.model('StolenItem');
+--       const unrecoveredItemsCount = await StolenItem.countDocuments({
+--         complaintId: doc.complaintId,
+--         status: 'stolen'
+--       });
+--       
+--       if (unrecoveredItemsCount === 0) {
+--         // Update parent Complaint status to 'resolved'
+--         const Complaint = mongoose.model('Complaint');
+--         await Complaint.findByIdAndUpdate(doc.complaintId, { status: 'resolved' });
+--       }
+--     }
+--   });

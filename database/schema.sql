@@ -1,0 +1,113 @@
+-- ==========================================
+-- MongoDB Database Schema Documentation
+-- ==========================================
+-- This file documents the MongoDB collections, fields, data types, and indexes
+-- used in the Police Theft Management System. Mongoose models are implemented
+-- in the server/models/ directory.
+
+-- 1. Users Collection ('users')
+-- {
+--   _id: ObjectId,
+--   username: { type: String, unique: true, required: true },
+--   email: { type: String, unique: true, required: true },
+--   passwordHash: { type: String, required: true },
+--   role: { type: String, enum: ['admin', 'officer', 'citizen'], default: 'officer' },
+--   badgeNumber: { type: String, sparse: true },
+--   createdAt: Date
+-- }
+-- INDEXES:
+-- - { username: 1 } (Unique)
+-- - { email: 1 } (Unique)
+
+-- 2. Criminals Collection ('criminals')
+-- {
+--   _id: ObjectId,
+--   name: { type: String, required: true },
+--   aliases: { type: String },
+--   dateOfBirth: Date,
+--   gender: { type: String, enum: ['male', 'female', 'other'] },
+--   physicalFeatures: {
+--     height: Number,      -- in cm
+--     weight: Number,      -- in kg
+--     hairColor: String,
+--     eyeColor: String,
+--     scars: String,
+--     tattoos: String
+--   },
+--   lastKnownLocation: { type: String },
+--   location: {
+--     type: { type: String, enum: ['Point'], default: 'Point' },
+--     coordinates: { type: [Number] } -- [longitude, latitude]
+--   },
+--   photoUrl: { type: String },
+--   status: { type: String, enum: ['active', 'incarcerated', 'deceased'], default: 'active' },
+--   createdAt: Date
+-- }
+-- INDEXES:
+-- - { name: 1 }
+-- - { location: '2dsphere' } (For geospatial matching searches)
+
+-- 3. Complaints Collection ('complaints')
+-- {
+--   _id: ObjectId,
+--   complaintNumber: { type: String, unique: true, required: true },
+--   title: { type: String, required: true },
+--   description: { type: String, required: true },
+--   category: { type: String, enum: ['vehicle', 'electronics', 'jewelry', 'cash', 'other'], required: true },
+--   theftDate: { type: Date, required: true },
+--   theftLocation: { type: String, required: true },
+--   location: {
+--     type: { type: String, enum: ['Point'], default: 'Point' },
+--     coordinates: { type: [Number], required: true } -- [longitude, latitude]
+--   },
+--   status: { type: String, enum: ['pending', 'investigating', 'resolved', 'closed'], default: 'pending' },
+--   reportedBy: { type: ObjectId, ref: 'User' },
+--   reporterName: { type: String, required: true },
+--   reporterContact: { type: String },
+--   createdAt: Date
+-- }
+-- INDEXES:
+-- - { complaintNumber: 1 } (Unique)
+-- - { location: '2dsphere' } (For geospatial matching)
+
+-- 4. Stolen Items Collection ('stolenitems')
+-- {
+--   _id: ObjectId,
+--   complaintId: { type: ObjectId, ref: 'Complaint', required: true },
+--   itemName: { type: String, required: true },
+--   category: { type: String, enum: ['vehicle', 'electronics', 'jewelry', 'cash', 'other'], required: true },
+--   description: { type: String },
+--   serialNumber: { type: String },
+--   estimatedValue: { type: Number },
+--   qrCodeToken: { type: String, unique: true, required: true },
+--   status: { type: String, enum: ['stolen', 'recovered'], default: 'stolen' },
+--   recoveredDate: Date,
+--   recoveryLocation: String,
+--   createdAt: Date
+-- }
+-- INDEXES:
+-- - { qrCodeToken: 1 } (Unique)
+-- - { complaintId: 1 }
+
+-- 5. Match Results Collection ('matchresults')
+-- {
+--   _id: ObjectId,
+--   complaintId: { type: ObjectId, ref: 'Complaint', required: true },
+--   criminalId: { type: ObjectId, ref: 'Criminal', required: true },
+--   matchScore: { type: Number, min: 0, max: 100, required: true },
+--   matchReason: { type: String, required: true },
+--   status: { type: String, enum: ['pending', 'verified', 'dismissed'], default: 'pending' },
+--   createdAt: Date
+-- }
+-- INDEXES:
+-- - { complaintId: 1, criminalId: 1 } (Unique compound index)
+-- - { matchScore: -1 }
+
+-- 6. Verifications Collection ('verifications')
+-- {
+--   _id: ObjectId,
+--   matchResultId: { type: ObjectId, ref: 'MatchResult', required: true },
+--   verifiedBy: { type: ObjectId, ref: 'User' },
+--   verificationNotes: { type: String },
+--   verificationDate: { type: Date, default: Date.now }
+-- }

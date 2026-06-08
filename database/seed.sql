@@ -1,0 +1,73 @@
+-- ==========================================
+-- MongoDB Database Seed Data Reference
+-- ==========================================
+-- This file lists the seed data structure that is programmatically populated
+-- using the server seed script (or node database/seed.js).
+--
+-- Default Users:
+-- ------------------------------------------
+-- 1. admin / admin@police.gov
+--    Password: password123 (bcrypt hash: $2a$10$gYgMbe.Wf.2r71s1rL6bNuP/B.xV9c55bQ7r6m/79H0LdE9r3q4t.)
+--    Role: admin
+--    Badge: BADGE-001
+--
+-- 2. officer1 / officer1@police.gov
+--    Password: password123 (bcrypt hash: $2a$10$gYgMbe.Wf.2r71s1rL6bNuP/B.xV9c55bQ7r6m/79H0LdE9r3q4t.)
+--    Role: officer
+--    Badge: BADGE-102
+--
+-- Sample Criminals:
+-- ------------------------------------------
+-- 1. Marcus Vane ("Slick Marcus", "Shadow")
+--    DOB: 1988-04-12, Male
+--    Features: Height 178cm, Weight 70kg, Black hair, Brown eyes, Scar on left jaw, Scorpion neck tattoo.
+--    Last Known Location: 123 Downtown Alley, Cityville
+--    Coordinates: [77.594562, 12.971598]
+--    Status: active
+--
+-- 2. Sarah Jenkins ("Cat Burglar", "Whisper")
+--    DOB: 1995-09-22, Female
+--    Features: Height 165cm, Weight 55kg, Blonde hair, Blue eyes, Scar: none, Butterfly right wrist tattoo.
+--    Last Known Location: 45 Harbor View, Cityville
+--    Coordinates: [77.610000, 12.925000]
+--    Status: active
+--
+-- 3. Raymond Holt ("Iron Fist")
+--    DOB: 1979-12-05, Male
+--    Features: Height 190cm, Weight 105kg, Bald, Brown eyes, Burn scar on right shoulder, Anchor bicep tattoo.
+--    Last Known Location: 99 Industrial Park, Cityville
+--    Coordinates: [77.550000, 13.010000]
+--    Status: incarcerated
+--
+-- Sample Complaints & Stolen Items:
+-- ------------------------------------------
+-- 1. COMP-2026-001: "Stolen Luxury Sedan" (vehicle)
+--    Theft Location: 12 Main Street, Cityville
+--    Coordinates: [77.596000, 12.973000]
+--    Stolen Item: "BMW 5 Series" (VIN-BMW52023XYZ89)
+--    Estimated Value: $55,000.00
+--    QR Code Token: QR-ITEM-BMW5-9831
+--    Status: stolen
+--
+-- 2. COMP-2026-002: "High-end Laptop Theft" (electronics)
+--    Theft Location: Star Cafe, Downtown
+--    Coordinates: [77.594000, 12.971000]
+--    Stolen Item: "Apple MacBook Pro 16" (C02F2345Q05D)
+--    Estimated Value: $2,499.00
+--    QR Code Token: QR-ITEM-MBP16-1029
+--    Status: stolen
+--
+-- 3. COMP-2026-003: "Diamond Necklace Snatched" (jewelry)
+--    Theft Location: Market Square, Cityville
+--    Coordinates: [77.600000, 12.980000]
+--    Stolen Item: "18k Gold Diamond Necklace" (CERT-DIA-99238)
+--    Estimated Value: $8,500.00
+--    QR Code Token: QR-ITEM-DIA-5512
+--    Status: stolen
+--
+-- Run MongoDB Seeding:
+-- ------------------------------------------
+-- Run the programmatic seeder using:
+--   node database/seed.js
+-- Or run:
+--   npm run seed (from the server directory)

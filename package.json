@@ -1,0 +1,15 @@
+{
+  "name": "police-theft-management-system-root",
+  "version": "1.0.0",
+  "description": "Root scripts to manage Police Theft Management System client and server",
+  "scripts": {
+    "install:server": "npm install --prefix server",
+    "install:client": "npm install --prefix client",
+    "install:all": "npm run install:server && npm run install:client",
+    "seed": "npm run seed --prefix server",
+    "server": "npm start --prefix server",
+    "server:dev": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "npm run server:dev & npm run client"
+  }
+}

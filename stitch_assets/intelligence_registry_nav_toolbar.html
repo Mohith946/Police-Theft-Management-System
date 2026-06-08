@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Criminal Intelligence Database | TMS Dossier System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f4f6f8;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        /* Dossier Folder Effect */
+        .dossier-tab {
+            clip-path: polygon(0 0, 80% 0, 100% 100%, 0% 100%);
+        }
+        .typewriter-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .paper-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+        }
+        .glass-toolbar {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#74777d",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#0b1d2d",
+                        "secondary-fixed": "#d3e4fe",
+                        "surface-container": "#efedef",
+                        "on-surface-variant": "#44474c",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#e1c29b",
+                        "outline-variant": "#c4c6cd",
+                        "surface-dim": "#dbd9db",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "on-secondary-container": "#54647a",
+                        "primary": "#041627",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface": "#fbf9fa",
+                        "on-tertiary-fixed": "#281802",
+                        "secondary": "#505f76",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#303032",
+                        "on-surface": "#1b1c1d",
+                        "surface-container-low": "#f5f3f4",
+                        "on-background": "#1b1c1d",
+                        "on-tertiary-fixed-variant": "#584326",
+                        "on-primary-fixed-variant": "#38485a",
+                        "tertiary-fixed": "#feddb5",
+                        "primary-fixed-dim": "#b7c8de",
+                        "inverse-on-surface": "#f2f0f2",
+                        "tertiary-container": "#38260b",
+                        "primary-container": "#1a2b3c",
+                        "secondary-container": "#d0e1fb",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b7c8de",
+                        "surface-container-high": "#e9e7e9",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "primary-fixed": "#d2e4fb",
+                        "surface-variant": "#e4e2e3",
+                        "on-primary-container": "#8192a7",
+                        "tertiary": "#211200",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#fbf9fa",
+                        "surface-container-highest": "#e4e2e3",
+                        "surface-tint": "#4f6073",
+                        "background": "#fbf9fa",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#a88c69",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "3xl": "64px",
+                        "2xl": "48px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "xl": "32px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "code-sm": ["JetBrains Mono"],
+                        "title-lg": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "code-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-body-md text-on-background bg-background">
+<!-- SLEEK TOP HEADER -->
+<header class="flex justify-between items-center h-20 px-xl bg-surface border-b border-outline-variant sticky top-0 z-40 shadow-sm">
+<div class="flex items-center gap-xl">
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-black text-primary leading-tight">TMS Intelligence</span>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Police Precinct 01</p>
+</div>
+<nav class="hidden xl:flex items-center gap-xs ml-xl">
+<a class="flex items-center gap-xs px-md py-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-xs px-md py-2 bg-primary/5 text-primary rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Criminals</span>
+</a>
+<a class="flex items-center gap-xs px-md py-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="description">description</span>
+<span class="font-label-md text-label-md">Complaints</span>
+</a>
+<a class="flex items-center gap-xs px-md py-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Stolen</span>
+</a>
+<a class="flex items-center gap-xs px-md py-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+<span class="font-label-md text-label-md">Recovered</span>
+</a>
+<a class="flex items-center gap-xs px-md py-2 text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all rounded-lg font-bold" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="assessment">assessment</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+</nav>
+</div>
+<div class="flex items-center gap-lg">
+<div class="relative w-64 hidden md:block">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full py-2 pl-xl pr-md focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-body-md text-[13px]" placeholder="Search Registry..." type="text"/>
+</div>
+<div class="h-8 w-px bg-outline-variant mx-xs"></div>
+<button class="material-symbols-outlined p-xs hover:bg-surface-container rounded-full text-on-surface-variant" data-icon="notifications">notifications</button>
+<div class="flex items-center gap-md ml-xs cursor-pointer hover:bg-surface-container-low p-1 rounded-full transition-all">
+<img alt="Officer" class="w-8 h-8 rounded-full bg-surface-container border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdLNRalv7QjoK_wizBDsAuuv0GgiE4L4TY0o_SnugHIty6ngylqt9QfAdju0ZoG8DIfGUO0AZwyvdKq5iiZnfRDYggStU3JW1lkxDL57iCGwwraBR5_kgnTQtIyrGo0sQqEU0N59UGstsruSaCB216r2uUburbWJoFfWF2jqruovC4srLcwIR3CaX_Kem0x4IbDrwdkVITsVoZoj-SBevn_RhrS-qDTlp_eI0iyD2_yAP4z7TVPaUSg2WxcqDF8FfRtumegXcKyasw"/>
+<div class="hidden sm:block">
+<p class="font-label-md text-[11px] text-primary truncate leading-none">Sgt. Miller, J.</p>
+<p class="text-[9px] text-on-surface-variant uppercase tracking-widest leading-none mt-1">Duty Officer</p>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT -->
+<main class="p-xl min-h-[calc(100vh-80px)] max-w-[1600px] mx-auto pb-32">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl border-b-2 border-primary/10 pb-xl">
+<div>
+<nav class="flex text-[10px] uppercase tracking-[0.25em] text-on-surface-variant mb-xs font-bold">
+<span>Central Intelligence</span>
+<span class="mx-xs">/</span>
+<span class="text-primary">Master Registry</span>
+</nav>
+<h2 class="font-display-lg text-display-lg text-primary tracking-tight">Investigative Dossiers <span class="text-on-surface-variant font-normal opacity-50 text-2xl">| v.4.20.9</span></h2>
+</div>
+<div class="flex gap-md">
+<button class="flex items-center gap-xs border-2 border-primary text-primary px-lg py-sm rounded-lg hover:bg-primary hover:text-on-primary transition-all font-bold">
+<span class="material-symbols-outlined text-sm" data-icon="file_open">file_open</span>
+<span class="font-label-md text-label-md">Archive Access</span>
+</button>
+<button class="flex items-center gap-xs bg-primary text-on-primary px-lg py-sm rounded-lg hover:shadow-xl transition-all shadow-sm">
+<span class="material-symbols-outlined text-sm" data-icon="create_new_folder">create_new_folder</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">New Case File</span>
+</button>
+</div>
+</div>
+<!-- Filtering Sub-Header -->
+<div class="bg-surface-container-low border border-outline-variant p-md mb-xl flex items-center gap-lg shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] rounded-lg">
+<div class="flex items-center gap-md">
+<span class="text-[10px] uppercase font-black text-on-surface-variant tracking-widest">Status:</span>
+<div class="flex gap-1">
+<button class="px-md py-1 text-[11px] font-bold rounded-md bg-white border border-outline-variant shadow-sm text-primary">All Entries</button>
+<button class="px-md py-1 text-[11px] font-bold rounded-md text-on-surface-variant hover:bg-white hover:border-outline-variant transition-all">At Large</button>
+<button class="px-md py-1 text-[11px] font-bold rounded-md text-on-surface-variant hover:bg-white hover:border-outline-variant transition-all">Detained</button>
+</div>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-sm">
+<span class="text-[10px] uppercase font-black text-on-surface-variant tracking-widest">Sort:</span>
+<select class="bg-transparent border-none text-[11px] font-bold text-primary focus:ring-0 cursor-pointer">
+<option>Risk Assessment (High-Low)</option>
+<option>Last Sighting (Recent)</option>
+<option>Alphabetical</option>
+</select>
+</div>
+<div class="ml-auto flex items-center gap-xl bg-white px-lg py-1 border border-outline-variant/50 rounded-lg shadow-sm">
+<div class="text-right">
+<p class="text-[9px] uppercase font-bold text-on-surface-variant leading-none">Subjects Tracked</p>
+<p class="font-code-sm text-headline-sm text-primary font-black tabular-nums">1,284</p>
+</div>
+<div class="text-right border-l border-outline-variant pl-xl">
+<p class="text-[9px] uppercase font-bold text-error leading-none">Active Warrants</p>
+<p class="font-code-sm text-headline-sm text-error font-black tabular-nums">42</p>
+</div>
+</div>
+</div>
+<!-- Results Grid -->
+<div class="bento-grid mb-2xl">
+<!-- Dossier File 1 -->
+<div class="col-span-12 lg:col-span-4 flex flex-col group relative">
+<div class="h-8 w-40 bg-error/20 dossier-tab rounded-t-lg ml-md border-t border-l border-r border-error/30 flex items-center px-md">
+<span class="text-[9px] font-black text-error/80 uppercase tracking-[0.3em]">PRIORITY_1</span>
+</div>
+<div class="bg-white border-2 border-error/40 rounded-xl p-lg shadow-xl relative paper-texture transition-transform group-hover:-translate-y-1">
+<!-- Mechanical Stamp Overlay -->
+<div class="absolute top-4 right-4 border-4 border-error/20 rounded-lg px-2 py-1 rotate-12 pointer-events-none">
+<span class="text-error/30 font-black text-3xl uppercase typewriter-font">WARRANT</span>
+</div>
+<div class="flex gap-lg mb-lg">
+<div class="shrink-0 relative">
+<img class="w-32 h-40 object-cover rounded shadow-[0_4px_10px_rgba(0,0,0,0.3)] border-2 border-white grayscale contrast-125" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL7aOSYX1BBu6-q4u3Z49G1uN4P4e5_02Yeal-ky8z44x8ulApFk9GRcd_n5VDJ3AnZXzy_M0Z0b6wtz2b_oDwtUyvA1asmHLAhTl6hzOT3z3UhimjPfPjRlD4N-LBVy_hbY4qIl0aRWC0pR9RxmehWE1V3FyeJj8vVwRYmh5kJCFGJdhMqFLuWhXxdol5puENo_qeKlmZiUnybit68iUC33NF72NWcDZ2xq2WzvBGymyojYJZR-IJOwfZVk5kaMCyPPCFN6meQW2u"/>
+<div class="absolute bottom-0 left-0 w-full bg-black/60 backdrop-blur-sm p-1">
+<p class="text-[8px] text-white/80 font-code-sm text-center">CAM_ID: SEC_4_BRG</p>
+</div>
+</div>
+<div class="flex-grow">
+<div class="mb-md">
+<span class="typewriter-font text-[10px] text-error font-black bg-error/10 px-1">#WNT-0922-ALPHA</span>
+<h3 class="font-display-lg text-headline-md text-primary mt-1">MARCUS VANE</h3>
+<p class="font-code-sm text-[10px] text-on-surface-variant">ALIAS: "THE GHOST"</p>
+</div>
+<div class="space-y-2">
+<div class="flex flex-col border-b border-outline-variant/30 pb-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Last Sighting:</span>
+<span class="text-[11px] font-bold text-primary">2024-05-24 12:44 (SECTOR 4)</span>
+</div>
+<div class="flex flex-col border-b border-outline-variant/30 pb-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Distinguishing Marks:</span>
+<span class="text-[11px] font-bold text-primary">Snake tattoo, left forearm. Scar on brow.</span>
+</div>
+<div class="flex justify-between items-center pt-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Risk Tier:</span>
+<span class="bg-error text-white text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-widest typewriter-font">Extreme</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-[#fdfcf0] p-md rounded border border-tertiary-fixed-dim/40 mb-lg shadow-inner relative">
+<span class="absolute -top-2 left-4 bg-white px-2 text-[9px] font-black uppercase text-secondary">Investigative Log</span>
+<p class="typewriter-font text-[11px] text-secondary leading-relaxed italic">
+                        "Subject utilized encrypted scrambler during escape. High mobility noted. Do not engage without level-4 backup."
+                    </p>
+<p class="text-[9px] text-right mt-2 font-bold text-outline-variant uppercase tracking-widest border-t border-dotted border-outline-variant pt-1">— SGT. MILLER, J.</p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/40 pt-lg">
+<div class="flex gap-1">
+<span class="bg-primary/5 border border-primary/20 px-xs py-base rounded text-[9px] font-black text-primary uppercase">Grand Larceny</span>
+</div>
+<button class="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-xs hover:opacity-60 transition-opacity">
+                        Full Dossier
+                        <span class="material-symbols-outlined text-sm" data-icon="open_in_full">open_in_full</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Dossier File 2 -->
+<div class="col-span-12 lg:col-span-4 flex flex-col group relative">
+<div class="h-8 w-40 bg-tertiary/10 dossier-tab rounded-t-lg ml-md border-t border-l border-r border-tertiary/20 flex items-center px-md">
+<span class="text-[9px] font-black text-tertiary/70 uppercase tracking-[0.3em]">SURVEILLANCE_B</span>
+</div>
+<div class="bg-white border-2 border-tertiary/30 rounded-xl p-lg shadow-xl relative paper-texture transition-transform group-hover:-translate-y-1">
+<div class="flex gap-lg mb-lg">
+<div class="shrink-0 relative">
+<img class="w-32 h-40 object-cover rounded shadow-lg border-2 border-white grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5jEmBlZSZKt_r_HuGdMy38DxR2KY1SQNYp98jIAuUUs2rOWwvgexukoG5UTLvN-by6CxfFd1RPRPdlZpdnG4X9q8J7j3vDaQuSlBBJZwZddjfbJR7LyQ_47nc8H8fruyUGDC7B6N4KXaePIu8-MJQBvjYy4SWkMsdVhNmzQcspuofPi2wJfFTHqM_dwdQGnWFXPLrfok_Zvym6i2pXRkxKdwK3Efl0p0voLv_PdOoN7e7WunIx7YGqkUq3Fl3o7LTxiNH5RuXF2aa"/>
+</div>
+<div class="flex-grow">
+<div class="mb-md">
+<span class="typewriter-font text-[10px] text-tertiary font-black bg-tertiary/5 px-1">#PRB-4221-BETA</span>
+<h3 class="font-display-lg text-headline-md text-primary mt-1">LEO ROSSI</h3>
+<p class="font-code-sm text-[10px] text-on-surface-variant">ALIAS: "VOLT"</p>
+</div>
+<div class="space-y-2">
+<div class="flex flex-col border-b border-outline-variant/30 pb-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Last Sighting:</span>
+<span class="text-[11px] font-bold text-primary">2024-05-23 09:12 (SECTOR B)</span>
+</div>
+<div class="flex flex-col border-b border-outline-variant/30 pb-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Distinguishing Marks:</span>
+<span class="text-[11px] font-bold text-primary">Surgical scar on right hand. Glasses.</span>
+</div>
+<div class="flex justify-between items-center pt-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Risk Tier:</span>
+<span class="bg-tertiary text-white text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-widest typewriter-font">Elevated</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-[#f4f7f8] p-md rounded border border-outline-variant/30 mb-lg relative">
+<span class="absolute -top-2 left-4 bg-white px-2 text-[9px] font-black uppercase text-secondary">Activity Snippet</span>
+<p class="typewriter-font text-[11px] text-secondary leading-relaxed italic">
+                        "Daily check-in at industrial park verified. Forensic team monitoring abnormal data spikes at residence."
+                    </p>
+<p class="text-[9px] text-right mt-2 font-bold text-outline-variant uppercase tracking-widest border-t border-dotted border-outline-variant pt-1">— DET. CHEN, K.</p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/40 pt-lg">
+<div class="flex gap-1">
+<span class="bg-primary/5 border border-primary/20 px-xs py-base rounded text-[9px] font-black text-primary uppercase">Cyber Fraud</span>
+</div>
+<button class="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-xs hover:opacity-60 transition-opacity">
+                        Full Dossier
+                        <span class="material-symbols-outlined text-sm" data-icon="open_in_full">open_in_full</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Dossier File 3 (Archive Style) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col group relative">
+<div class="h-8 w-40 bg-outline-variant/10 dossier-tab rounded-t-lg ml-md border-t border-l border-r border-outline-variant/20 flex items-center px-md">
+<span class="text-[9px] font-black text-on-surface-variant/70 uppercase tracking-[0.3em]">ARCHIVED_C</span>
+</div>
+<div class="bg-surface-container-low border-2 border-outline-variant/20 rounded-xl p-lg shadow-lg relative paper-texture opacity-80 group-hover:opacity-100 transition-all">
+<div class="flex gap-lg mb-lg">
+<div class="shrink-0 relative">
+<img class="w-32 h-40 object-cover rounded shadow-lg border-2 border-white grayscale opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj32Wzhob_hylm59yCFi0ELhl3CWVpxpBMZXMzJVzFkcYCxjjk7ofQFNqBzEKJbTeZWTuvGcYhxKW3sX2pGl43HAOY4X253SLWQHgpuRdvMyDYZUywhk8GWV7XAyaqsDJGG-wUsEQKeogUZ2Qg-Sa7awoaup8FEIHepVbmqbxoKMTOb5ftmaKwFUnA_jGUeWqPpEocgjUESGYu67F3ZdWv2hLvH_HDazMMjsyXb1MmCLUr0NVWIQchOgBI5BqfJrbPOW9zwFwgyD5K"/>
+</div>
+<div class="flex-grow">
+<div class="mb-md">
+<span class="typewriter-font text-[10px] text-on-surface-variant font-black bg-surface-container px-1">#ARC-4029-GAMMA</span>
+<h3 class="font-display-lg text-headline-md text-secondary mt-1">SARAH CHEN</h3>
+<p class="font-code-sm text-[10px] text-on-surface-variant">STATUS: INACTIVE</p>
+</div>
+<div class="space-y-2">
+<div class="flex flex-col border-b border-outline-variant/30 pb-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Last Sighting:</span>
+<span class="text-[11px] font-bold text-primary">2023-11-20 (SECTOR 12)</span>
+</div>
+<div class="flex flex-col border-b border-outline-variant/30 pb-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Closure Reason:</span>
+<span class="text-[11px] font-bold text-primary">Fines paid. Clean record since relocation.</span>
+</div>
+<div class="flex justify-between items-center pt-1">
+<span class="text-[8px] uppercase font-black text-on-surface-variant">Risk Tier:</span>
+<span class="bg-outline-variant text-white text-[9px] px-2 py-0.5 rounded font-black uppercase tracking-widest typewriter-font">Negligible</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white/50 p-md rounded border border-outline-variant/20 mb-lg italic text-on-surface-variant">
+<p class="typewriter-font text-[11px] leading-relaxed">
+                        "Subject has not re-offended within the probation window. Case closed and moved to long-term storage."
+                    </p>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/20 pt-lg">
+<span class="bg-surface-container-highest px-xs py-base rounded text-[9px] font-black text-on-surface-variant uppercase">Petty Larceny</span>
+<button class="text-[10px] font-black uppercase tracking-widest text-on-surface-variant flex items-center gap-xs">
+                        View Archive
+                        <span class="material-symbols-outlined text-sm" data-icon="inventory_2">inventory_2</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Geospatial Heatmap -->
+<div class="col-span-12 lg:col-span-8 bg-primary rounded-xl p-xl flex flex-col relative overflow-hidden h-[480px] shadow-2xl">
+<div class="z-10 relative flex flex-col h-full">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<h3 class="font-display-lg text-headline-sm text-on-primary mb-base tracking-tight flex items-center gap-md">
+<span class="material-symbols-outlined text-error animate-pulse" data-icon="radar">radar</span>
+                            Geospatial Incident Clustering
+                        </h3>
+<p class="font-body-md text-sm text-on-primary-container opacity-70">Strategic Command View | Real-time Sector Analysis</p>
+</div>
+<div class="bg-error/20 border border-error/40 px-md py-base rounded-lg text-[10px] font-black text-on-primary uppercase tracking-[0.3em] backdrop-blur-md">
+                        Live Data: Active
+                    </div>
+</div>
+<div class="grid grid-cols-3 gap-lg mt-4">
+<div class="bg-primary-container/30 p-lg rounded-lg border border-white/10 backdrop-blur-md">
+<p class="text-[9px] uppercase font-black text-on-primary-container mb-base tracking-[0.25em]">Core Sector Alpha</p>
+<div class="flex items-baseline gap-xs">
+<p class="font-display-lg text-4xl text-on-primary tabular-nums">12</p>
+<span class="text-[9px] font-bold text-error uppercase">High Density</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 mt-md rounded-full overflow-hidden">
+<div class="bg-error h-full w-[85%] shadow-[0_0_10px_#ba1a1a]"></div>
+</div>
+<p class="text-[8px] text-on-primary-container/60 mt-xs font-code-sm">LAT: 40.7128° N | LONG: 74.0060° W</p>
+</div>
+<div class="bg-primary-container/30 p-lg rounded-lg border border-white/10 backdrop-blur-md">
+<p class="text-[9px] uppercase font-black text-on-primary-container mb-base tracking-[0.25em]">Ind. Sector Beta</p>
+<div class="flex items-baseline gap-xs">
+<p class="font-display-lg text-4xl text-on-primary tabular-nums">04</p>
+<span class="text-[9px] font-bold text-tertiary-fixed uppercase">Stable</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 mt-md rounded-full overflow-hidden">
+<div class="bg-tertiary-fixed h-full w-[30%]"></div>
+</div>
+<p class="text-[8px] text-on-primary-container/60 mt-xs font-code-sm">LAT: 40.7831° N | LONG: 73.9712° W</p>
+</div>
+<div class="bg-primary-container/30 p-lg rounded-lg border border-white/10 backdrop-blur-md">
+<p class="text-[9px] uppercase font-black text-on-primary-container mb-base tracking-[0.25em]">Residential Gamma</p>
+<div class="flex items-baseline gap-xs">
+<p class="font-display-lg text-4xl text-on-primary tabular-nums">01</p>
+<span class="text-[9px] font-bold text-success-container/50 uppercase">Nominal</span>
+</div>
+<div class="w-full bg-white/5 h-1.5 mt-md rounded-full overflow-hidden">
+<div class="bg-primary-fixed-dim h-full w-[10%]"></div>
+</div>
+<p class="text-[8px] text-on-primary-container/60 mt-xs font-code-sm">LAT: 40.7306° N | LONG: 73.9352° W</p>
+</div>
+</div>
+<div class="mt-auto flex justify-between items-end">
+<div class="typewriter-font text-[10px] text-on-primary-container/40 p-md border border-white/5 rounded">
+                        SYSTEM_AUTH: TM_AUTO_GEN<br/>
+                        CYCLES: 1,422 COMPLETED<br/>
+                        TIMESTAMP: 2024-05-24T14:42:12Z
+                    </div>
+<button class="bg-on-primary text-primary px-xl py-md rounded-lg font-black uppercase text-[11px] tracking-[0.2em] hover:bg-primary-fixed transition-all flex items-center gap-md shadow-2xl ring-4 ring-white/10">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+                        Open Strategic Interface
+                    </button>
+</div>
+</div>
+<!-- Technical Overlay Pattern -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+<div class="absolute inset-0 bg-gradient-to-tr from-primary via-transparent to-primary/30 pointer-events-none"></div>
+<div class="absolute top-0 right-0 w-64 h-64 bg-error/10 blur-[100px] pointer-events-none"></div>
+</div>
+<!-- Priority Notifications -->
+<div class="col-span-12 lg:col-span-4 bg-white border-2 border-primary/10 rounded-xl p-xl flex flex-col gap-lg shadow-xl relative overflow-hidden paper-texture">
+<div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-error via-primary to-tertiary"></div>
+<div class="flex justify-between items-center">
+<h3 class="font-title-lg text-headline-sm text-primary flex items-center gap-sm font-black">
+<span class="material-symbols-outlined text-primary" data-icon="notification_important">notification_important</span>
+                    System Briefs
+                </h3>
+<span class="bg-primary/5 text-primary text-[9px] font-black px-2 py-1 rounded border border-primary/20">3 UNREAD</span>
+</div>
+<div class="flex flex-col gap-md flex-grow overflow-y-auto pr-xs">
+<!-- Alert 1 -->
+<div class="group/alert bg-error/5 p-md rounded-lg border-l-4 border-error flex flex-col gap-base transition-all hover:bg-error/10 cursor-pointer">
+<div class="flex justify-between items-start">
+<span class="text-[9px] font-black text-error uppercase tracking-widest typewriter-font">#ANPR_MATCH</span>
+<span class="text-[8px] text-on-surface-variant font-bold">12:44 PM</span>
+</div>
+<p class="text-[13px] text-primary leading-tight font-black">Marcus Vane Spotted: Sector 4 Bridge</p>
+<p class="text-[10px] text-on-surface-variant font-medium">Plate: #B-2291-K / Vehicle: Black Sedan (M5)</p>
+<div class="flex gap-2 mt-1">
+<button class="text-[9px] font-black text-error underline uppercase">Dispatch Unit</button>
+<button class="text-[9px] font-black text-on-surface-variant underline uppercase">Dismiss</button>
+</div>
+</div>
+<!-- Alert 2 -->
+<div class="group/alert bg-surface-container-low p-md rounded-lg border-l-4 border-secondary flex flex-col gap-base opacity-70 hover:opacity-100 transition-all cursor-pointer">
+<div class="flex justify-between items-start">
+<span class="text-[9px] font-black text-secondary uppercase tracking-widest typewriter-font">#DATABASE_SYNC</span>
+<span class="text-[8px] text-on-surface-variant font-bold">10:15 AM</span>
+</div>
+<p class="text-[13px] text-primary leading-tight font-black">Interpol Master Refresh Complete</p>
+<p class="text-[10px] text-on-surface-variant font-medium">124 high-priority cross-references added to global watchlists.</p>
+</div>
+<!-- Alert 3 -->
+<div class="group/alert bg-tertiary/5 p-md rounded-lg border-l-4 border-tertiary flex flex-col gap-base transition-all hover:bg-tertiary/10 cursor-pointer">
+<div class="flex justify-between items-start">
+<span class="text-[9px] font-black text-tertiary uppercase tracking-widest typewriter-font">#JUDICIAL_ALERT</span>
+<span class="text-[8px] text-on-surface-variant font-bold">08:00 AM</span>
+</div>
+<p class="text-[13px] text-primary leading-tight font-black">Rossi Probation Hearing: 09:00 Tomorrow</p>
+<p class="text-[10px] text-on-surface-variant font-medium">Duty Officer appearance required for testimony. File #4221 ready.</p>
+</div>
+</div>
+<button class="mt-auto w-full border-2 border-primary text-primary font-black py-md rounded-lg hover:bg-primary hover:text-on-primary transition-all uppercase text-[10px] tracking-[0.25em]">
+                Clear Priority Feed
+            </button>
+</div>
+</div>
+</main>
+<!-- FLOATING INTERACTIVE TOOLBAR (Glassmorphism) -->
+<div class="fixed bottom-lg left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-md">
+<div class="glass-toolbar rounded-full py-2 px-2 shadow-2xl flex items-center justify-between gap-md border border-white/40">
+<div class="flex items-center gap-1">
+<button class="flex items-center gap-xs px-lg py-2.5 bg-primary text-on-primary rounded-full hover:scale-105 transition-all shadow-lg active:scale-95 group">
+<span class="material-symbols-outlined text-sm" data-icon="post_add">post_add</span>
+<span class="font-label-md text-[11px] uppercase tracking-[0.15em]">New Case</span>
+</button>
+<button class="p-2.5 text-on-surface-variant hover:bg-white/40 hover:text-primary rounded-full transition-all flex items-center gap-2 group">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+<span class="font-label-md text-[10px] uppercase font-black hidden group-hover:block transition-all">Quick Search</span>
+</button>
+</div>
+<div class="flex items-center gap-lg pr-lg">
+<div class="flex flex-col items-center">
+<div class="flex items-center gap-1.5">
+<div class="w-1.5 h-1.5 rounded-full bg-success-container shadow-[0_0_8px_rgba(34,197,94,0.6)] animate-pulse bg-green-500"></div>
+<span class="text-[9px] font-black text-primary uppercase tracking-widest">Network Sync</span>
+</div>
+<span class="text-[7px] text-on-surface-variant uppercase font-bold">Latency: 14ms</span>
+</div>
+<div class="h-8 w-px bg-on-surface-variant/20"></div>
+<button class="flex items-center gap-xs p-2 text-on-surface-variant hover:text-primary transition-all" title="System Settings">
+<span class="material-symbols-outlined text-sm" data-icon="settings">settings</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Subtle interactive feedback for toolbar buttons
+        const glassButtons = document.querySelectorAll('.glass-toolbar button');
+        glassButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.add('scale-95');
+                setTimeout(() => btn.classList.remove('scale-95'), 100);
+            });
+        });
+    });
+</script>
+</body></html>

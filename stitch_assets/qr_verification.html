@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TMS Intelligence | Specialized QR Scanner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline": "#74777d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed": "#0b1d2d",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface-container": "#efedef",
+                    "on-surface-variant": "#44474c",
+                    "error-container": "#ffdad6",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#e1c29b",
+                    "outline-variant": "#c4c6cd",
+                    "surface-dim": "#dbd9db",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-secondary-container": "#54647a",
+                    "primary": "#041627",
+                    "on-secondary-fixed": "#0b1c30",
+                    "surface": "#fbf9fa",
+                    "on-tertiary-fixed": "#281802",
+                    "secondary": "#505f76",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#303032",
+                    "on-surface": "#1b1c1d",
+                    "surface-container-low": "#f5f3f4",
+                    "on-background": "#1b1c1d",
+                    "on-tertiary-fixed-variant": "#584326",
+                    "on-primary-fixed-variant": "#38485a",
+                    "tertiary-fixed": "#feddb5",
+                    "primary-fixed-dim": "#b7c8de",
+                    "inverse-on-surface": "#f2f0f2",
+                    "tertiary-container": "#38260b",
+                    "primary-container": "#1a2b3c",
+                    "secondary-container": "#d0e1fb",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#b7c8de",
+                    "surface-container-high": "#e9e7e9",
+                    "on-secondary-fixed-variant": "#38485d",
+                    "primary-fixed": "#d2e4fb",
+                    "surface-variant": "#e4e2e3",
+                    "on-primary-container": "#8192a7",
+                    "tertiary": "#211200",
+                    "on-secondary": "#ffffff",
+                    "surface-bright": "#fbf9fa",
+                    "surface-container-highest": "#e4e2e3",
+                    "surface-tint": "#4f6073",
+                    "background": "#fbf9fa",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#a88c69",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "3xl": "64px",
+                    "2xl": "48px",
+                    "base": "4px",
+                    "xs": "8px",
+                    "sm": "12px",
+                    "xl": "32px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "code-sm": ["JetBrains Mono"],
+                    "title-lg": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "code-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "title-lg": ["18px", {"lineHeight": "26px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(to right, transparent, #ffffff, transparent);
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+            position: absolute;
+            width: 100%;
+            animation: scan-y 4s infinite ease-in-out;
+            z-index: 25;
+        }
+        @keyframes scan-y {
+            0%, 100% { top: 10%; opacity: 0.3; }
+            50% { top: 90%; opacity: 1; }
+        }
+        .noise-bg {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        .digital-tag {
+            background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.02) 5px, rgba(0,0,0,0.02) 10px);
+        }
+        .tech-border {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+        }
+        .flicker-anim {
+            animation: flicker 2s infinite;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            95% { opacity: 1; }
+            96% { opacity: 0.8; }
+            97% { opacity: 1; }
+            98% { opacity: 0.9; }
+            99% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- Sidebar -->
+<aside class="bg-primary h-screen w-64 fixed left-0 top-0 border-r border-outline-variant flex flex-col p-lg z-50">
+<div class="mb-3xl">
+<h1 class="font-headline-sm text-headline-sm font-bold text-on-primary">Theft Management</h1>
+<p class="text-on-primary-fixed-variant text-body-md opacity-80">Police Precinct 01</p>
+</div>
+<nav class="space-y-sm">
+<a class="flex items-center gap-md p-md text-on-primary-fixed-variant hover:text-on-primary hover:bg-primary-fixed-variant transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-primary-fixed-variant hover:text-on-primary hover:bg-primary-fixed-variant transition-all" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md">Criminals</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-primary-fixed-variant hover:text-on-primary hover:bg-primary-fixed-variant transition-all" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-body-md">Complaints</span>
+</a>
+<a class="bg-primary-container text-on-primary-container font-bold rounded-lg flex items-center gap-md p-md active:scale-95 transform transition-all" href="#">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<span class="font-body-md">Field Verification</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-primary-fixed-variant hover:text-on-primary hover:bg-primary-fixed-variant transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md">Evidence Log</span>
+</a>
+<a class="flex items-center gap-md p-md text-on-primary-fixed-variant hover:text-on-primary hover:bg-primary-fixed-variant transition-all" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-body-md">Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-on-primary-fixed-variant flex items-center gap-md">
+<img class="w-10 h-10 object-contain grayscale invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKEAIo5kN2yNO4lAIUn6nVDwLpOPg8PIdxk6oxPC8_vDRDavAlR89KC4hlyf6wSqWRYNluxoQ9_6SNr25jDZ4ArzWCMbcHCwKWXKhMRA8uo3uFj_LCgUoONFMpm3IVDTd9keVHFOF1Dv1zQYYep6N1CJ_HAxhvVqc5kjJ36g3YNIQB7fTealrXz4rTo6hPjw4PfnRYvNSsQMIRoGEstQU6kRoQVehMJqHNVcEHTdBBJDxlKtB3qbzK-kHkzgX9gkFPQZlfsC3szimt"/>
+<div>
+<p class="text-on-primary font-bold text-label-md">UNIT 402</p>
+<p class="text-on-primary-fixed-variant text-label-md">Duty Officer</p>
+</div>
+</div>
+</aside>
+<!-- Top Navigation -->
+<header class="bg-surface docked full-width top-0 sticky z-40 flex justify-between items-center h-16 ml-64 px-xl border-b border-outline-variant">
+<div class="flex items-center gap-xl">
+<div class="font-headline-md text-headline-md font-black text-primary tracking-tighter">TMS_INTEL.v4.1</div>
+<div class="flex items-center gap-sm bg-surface-container-low px-md py-1.5 rounded border border-outline-variant">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+</span>
+<span class="text-label-md font-code-sm text-primary uppercase tracking-widest" id="live-timestamp">LIVE // 12:45:08</span>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">settings_input_antenna</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">shield</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-sm"></div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">account_circle</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 p-xl h-[calc(100vh-64px)] overflow-y-auto">
+<div class="grid grid-cols-12 gap-xl max-w-[1500px] mx-auto h-full">
+<!-- Left Column: Tactical Scanner View -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-lg h-full min-h-[600px]">
+<div class="flex items-end justify-between px-xs">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary tracking-tight leading-none uppercase">Scanner Utility</h2>
+<p class="text-code-sm text-on-surface-variant mt-xs">OPERATIONAL_MODE: SCAN_AND_VERIFY</p>
+</div>
+<div class="flex gap-xs font-code-sm text-[11px] text-right">
+<span class="text-on-surface-variant uppercase">Enc:</span>
+<span class="text-primary font-bold">AES-256-GCM</span>
+</div>
+</div>
+<!-- Rugged Viewport -->
+<div class="relative flex-1 bg-black rounded-lg overflow-hidden border-[6px] border-primary/10 shadow-2xl group">
+<div class="absolute inset-0 noise-bg z-10"></div>
+<img class="w-full h-full object-cover opacity-60 grayscale brightness-75 transition-all duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABX9HiAbwx8T5s2bocsFrdll9SRQsl-pjaMLQn-YjCESaWcTDRbPXplHTDBZ_q2VNZ0WjV_SjCB-yeh7-t1n16cikhLEOlmqZXly-1QjwR52eMEY97CUFd-jCqArmR5gkAU6kIawO5lECLA8-GRLT6hUBxmJWn30j1InomQispuzmmSbsWLJPRyR1J_rhdnBk6FHM-m2KjEKlr-F1Iw2FbvNmoevtd9_CsFXVgUHw498jUXUsPdVaPDHylO6BMf8uCJQ3c992wKE1U"/>
+<div class="scan-line"></div>
+<!-- HUD Overlays -->
+<div class="absolute inset-0 z-30 pointer-events-none">
+<!-- Corner Brackets -->
+<div class="absolute top-12 left-12 w-16 h-16 border-t-2 border-l-2 border-white/40"></div>
+<div class="absolute top-12 right-12 w-16 h-16 border-t-2 border-r-2 border-white/40"></div>
+<div class="absolute bottom-12 left-12 w-16 h-16 border-b-2 border-l-2 border-white/40"></div>
+<div class="absolute bottom-12 right-12 w-16 h-16 border-b-2 border-r-2 border-white/40"></div>
+<!-- Center Focus Point -->
+<div class="absolute inset-0 flex items-center justify-center opacity-40">
+<div class="w-6 h-[1px] bg-white"></div>
+<div class="h-6 w-[1px] bg-white absolute"></div>
+<div class="w-40 h-40 border border-white/20 rounded-sm"></div>
+</div>
+<!-- Telemetry Data -->
+<div class="absolute top-8 left-8 flex flex-col gap-xs font-code-sm text-[11px] text-white/80">
+<div class="bg-black/60 backdrop-blur-md px-md py-xs rounded-sm border border-white/10 flicker-anim">
+<span class="text-white/40 block mb-0.5 uppercase tracking-tighter">Coordinates</span>
+                            40.7128° N, 74.0060° W
+                        </div>
+<div class="bg-black/60 backdrop-blur-md px-md py-xs rounded-sm border border-white/10">
+<span class="text-white/40 block mb-0.5 uppercase tracking-tighter">Hardware_ID</span>
+                            UNIT_P01_A4
+                        </div>
+</div>
+<div class="absolute top-8 right-8 flex flex-col items-end gap-xs font-code-sm text-[11px] text-white/80">
+<div class="bg-black/60 backdrop-blur-md px-md py-xs rounded-sm border border-white/10 flex gap-md">
+<span>LUM: 450.4 LX</span>
+<span class="text-white/30">|</span>
+<span>ISO: 800</span>
+</div>
+<div class="bg-black/60 backdrop-blur-md px-md py-xs rounded-sm border border-white/10">
+                            FOC: 0.85m - INF
+                        </div>
+<div class="bg-black/60 backdrop-blur-md px-md py-xs rounded-sm border border-white/10 uppercase">
+                            Batt: 84% // Temp: 32°C
+                        </div>
+</div>
+</div>
+<!-- Rugged Action Buttons -->
+<div class="absolute bottom-8 left-0 right-0 z-40 flex justify-center items-center gap-lg">
+<button class="bg-primary/80 hover:bg-primary text-white w-12 h-12 rounded-lg border border-white/20 flex items-center justify-center transition-all active:scale-90 backdrop-blur-md">
+<span class="material-symbols-outlined text-[20px]">flashlight_on</span>
+</button>
+<button class="bg-white text-primary px-2xl py-md rounded-lg font-bold flex items-center gap-md shadow-2xl transition-all active:scale-95 uppercase tracking-[0.1em] text-label-md tech-border border-b-4 border-black/10" onclick="simulateScan()">
+<span class="material-symbols-outlined font-bold">qr_code_scanner</span> EXECUTE SCAN
+                    </button>
+<button class="bg-primary/80 hover:bg-primary text-white w-12 h-12 rounded-lg border border-white/20 flex items-center justify-center transition-all active:scale-90 backdrop-blur-md">
+<span class="material-symbols-outlined text-[20px]">zoom_in</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Column: Verification & Logic -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-lg h-full">
+<!-- Digital Tag Format Asset Data -->
+<div class="bg-white border-2 border-primary/10 rounded-xl overflow-hidden shadow-sm flex flex-col h-full digital-tag">
+<div class="bg-primary px-lg py-sm flex justify-between items-center text-white">
+<span class="text-[10px] font-code-sm tracking-[0.3em] uppercase">VERIFIED_ASSET_METADATA</span>
+<span class="material-symbols-outlined text-[14px] opacity-60">fingerprint</span>
+</div>
+<div class="p-lg flex-1 flex flex-col gap-lg">
+<!-- Main Identity -->
+<div class="flex justify-between items-start">
+<div class="space-y-base">
+<span class="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest block">System Reference ID</span>
+<h3 class="font-code-sm text-headline-sm text-primary font-bold tracking-tight bg-primary/5 px-sm -ml-sm inline-block rounded">QR_NYPD_7782X-001</h3>
+</div>
+<div class="p-xs bg-white border border-outline-variant rounded shadow-inner">
+<img class="w-14 h-14" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxL9aNsQcH8mCT0H1ZY-2_87TfqWVVbCRUygVF0dTH-UTeN1OPqv31m00WiD2NiFyPzkS_0dmKRVmAaP31AP1TaX4obYyDFj-R-WWnWjFG8ofuNhZ4BQlpmxY-3Z6wUw7Yuu8MxS0PasUgDck9v88Wi5OIBwpQi05AMG6nM9X_8VLQtg-4uBRdW3ORU4PGF8iJ4Uh8YG8WbUxpSOVCl01LN4vkf4bxoZK8UR7BB8szu1DSLHE02PrYHT7DMjdk14TmsgSEHQkX5hxc"/>
+</div>
+</div>
+<!-- Functional Grid -->
+<div class="grid grid-cols-2 gap-md font-code-sm">
+<div class="col-span-2 border-y border-outline-variant/20 py-md">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold block mb-xs">Asset Class &amp; Description</span>
+<p class="text-body-lg text-primary font-bold">Apple MacBook Pro 16" (Space Gray)</p>
+<p class="text-[12px] text-on-surface-variant mt-0.5">S/N: C02XG792689M // ELC-MOB-01</p>
+</div>
+<div class="space-y-xs">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold block">Incident Status</span>
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+<span class="font-bold text-green-700 text-[13px]">VERIFIED_MATCH</span>
+</div>
+</div>
+<div class="space-y-xs">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold block">Case Reference</span>
+<span class="font-bold text-primary text-[13px]">#NY-2023-9901</span>
+</div>
+<div class="space-y-xs">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold block">Last Scanned</span>
+<span class="text-[12px] text-primary">OCT 12, 14:22</span>
+</div>
+<div class="space-y-xs">
+<span class="text-[10px] uppercase text-on-surface-variant font-bold block">Reporting Party</span>
+<span class="text-[12px] text-primary font-bold">JANE D. (+1 212)</span>
+</div>
+</div>
+<!-- Evidence Attachment Area -->
+<div class="mt-auto pt-md">
+<div class="border-2 border-dashed border-outline-variant bg-white/50 p-lg rounded-lg flex flex-col items-center justify-center text-center gap-md group cursor-pointer hover:border-primary hover:bg-primary/[0.02] transition-all duration-300">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-[32px]">photo_camera</span>
+<div>
+<p class="font-bold text-primary text-[12px] uppercase tracking-widest">Attach Field Evidence</p>
+<p class="text-[10px] text-on-surface-variant font-code-sm">FORMATS: JPEG, RAW, PNG // MAX 25MB</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Field Commands Section -->
+<div class="bg-surface-container-high border-t border-outline-variant p-lg space-y-md">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Field Commands</span>
+<span class="text-[10px] font-code-sm text-on-surface-variant">PROTOCOL_v4.1</span>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<button class="bg-white border border-outline text-primary font-bold py-md rounded text-[11px] hover:bg-surface-dim transition-all uppercase tracking-widest active:scale-95 shadow-sm">
+                            Log as Found
+                        </button>
+<button class="bg-primary text-white font-bold py-md rounded text-[11px] hover:bg-primary-container transition-all uppercase tracking-widest active:scale-95 shadow-md shadow-primary/20">
+                            Initiate Recovery
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Notification Toast -->
+<div class="fixed bottom-xl right-xl bg-inverse-surface text-inverse-on-surface px-xl py-md rounded-lg shadow-2xl flex items-center gap-md translate-y-24 opacity-0 transition-all duration-500 z-[100] font-code-sm border border-white/10" id="toast">
+<span class="material-symbols-outlined text-green-400">check_circle</span>
+<div>
+<p class="font-bold uppercase tracking-tight">System Match: Confirmed</p>
+<p class="text-[11px] opacity-70">Asset authenticated in National Central Repository</p>
+</div>
+</div>
+<script>
+    function updateTimestamp() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        document.getElementById('live-timestamp').textContent = `LIVE // ${timeStr}`;
+    }
+    
+    setInterval(updateTimestamp, 1000);
+    updateTimestamp();
+
+    function simulateScan() {
+        const scannerImg = document.querySelector('.group-hover\\:scale-105');
+        if(scannerImg) scannerImg.classList.add('brightness-125');
+        
+        // Visual feedback
+        setTimeout(() => {
+            if(scannerImg) scannerImg.classList.remove('brightness-125');
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 4000);
+        }, 800);
+    }
+
+    // Nav active state logic
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            document.querySelectorAll('nav a').forEach(l => {
+                l.classList.remove('bg-primary-container', 'text-on-primary-container', 'font-bold');
+                l.classList.add('text-on-primary-fixed-variant');
+            });
+            link.classList.add('bg-primary-container', 'text-on-primary-container', 'font-bold');
+            link.classList.remove('text-on-primary-fixed-variant');
+        });
+    });
+</script>
+</body></html>
