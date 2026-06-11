@@ -76,23 +76,28 @@ const register = async (req, res) => {
  */
 const login = async (req, res) => {
   try {
-    const { email, password, accessCode } = req.body;
+    const { email, password } = req.body;
 
     // Enforce email domain restriction
     if (!email || !email.endsWith('@police.gov')) {
       return sendError(res, 'Access restricted to official @police.gov email addresses.', 403);
     }
 
-    // Validate precinct access passcode
-    const precinctAccessCode = process.env.PRECINCT_ACCESS_CODE || 'SHIELD-SECURE-2026';
-    if (accessCode !== precinctAccessCode) {
-      return sendError(res, 'Invalid precinct access passcode', 403);
-    }
-
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       return sendError(res, 'Invalid credentials', 401);
+    }
+
+    // Check account status approval
+    if (user.status !== 'approved') {
+      return res.status(403).json({
+        success: false,
+        status: user.status,
+        message: user.status === 'denied' 
+          ? 'Access Denied: Your account has been rejected by an administrator.'
+          : 'Access Denied: Your account is pending administrator approval.'
+      });
     }
 
     // Check if password matches
@@ -118,6 +123,99 @@ const login = async (req, res) => {
 };
 
 /**
+ * @desc    Google OAuth login & auto-provisioning
+ * @route   POST /api/auth/google-login
+ * @access  Public
+ */
+const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return sendError(res, 'Google ID token is required', 400);
+    }
+
+    // Verify token with Google's endpoint using native fetch
+    const ticket = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
+    if (!ticket.ok) {
+      const errorData = await ticket.json().catch(() => ({}));
+      return sendError(res, errorData.error_description || 'Invalid Google token', 400);
+    }
+
+    const payload = await ticket.json();
+    const googleClientId = process.env.GOOGLE_CLIENT_ID || '1023024125198-fv94ng719e75v08ot46rig8hkgd4tqnj.apps.googleusercontent.com';
+
+    // Verify audience matches our client ID
+    if (payload.aud !== googleClientId) {
+      return sendError(res, 'Google token audience mismatch', 400);
+    }
+
+    const { email, name } = payload;
+    if (!email) {
+      return sendError(res, 'Email not provided by Google account', 400);
+    }
+
+    // Find user by email
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Auto-provision user as 'officer'
+      // Generate unique username based on name or email
+      let baseUsername = name ? name.toLowerCase().replace(/[^a-z0-9]/g, '') : email.split('@')[0];
+      if (!baseUsername) baseUsername = 'officer';
+      
+      let username = baseUsername;
+      let counter = 1;
+      while (await User.findOne({ username })) {
+        username = `${baseUsername}${counter}`;
+        counter++;
+      }
+
+      // Generate random badge number
+      const badgeNumber = `BADGE-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      // Generate random secure password string (min 6 characters)
+      const randomPassword = Math.random().toString(36).substring(2, 12);
+
+      user = await User.create({
+        username,
+        email,
+        passwordHash: randomPassword,
+        role: 'officer',
+        badgeNumber
+      });
+    }
+
+    // Check account status approval
+    if (user.status !== 'approved') {
+      return res.status(403).json({
+        success: false,
+        status: user.status,
+        message: user.status === 'denied' 
+          ? 'Access Denied: Your account has been rejected by an administrator.'
+          : 'Access Denied: Your account is pending administrator approval.'
+      });
+    }
+
+    // Generate JWT token
+    const localToken = generateToken(user._id);
+
+    return sendSuccess(res, {
+      token: localToken,
+      user: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        badgeNumber: user.badgeNumber
+      }
+    }, 'Google authentication successful');
+  } catch (error) {
+    console.error('Google login controller error:', error);
+    return sendError(res, error.message, 500);
+  }
+};
+
+/**
  * @desc    Get current user profile
  * @route   GET /api/auth/me
  * @access  Private
@@ -132,12 +230,6 @@ const getMe = async (req, res) => {
     console.error('Get profile error:', error);
     return sendError(res, error.message, 500);
   }
-};
-
-module.exports = {
-  register,
-  login,
-  getMe
 };
 
 /**
@@ -221,11 +313,44 @@ const deleteUser = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Update user status (approve/deny access)
+ * @route   PUT /api/auth/users/:id/status
+ * @access  Private (Admin only)
+ */
+const updateUserStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!status || !['pending', 'approved', 'denied'].includes(status)) {
+      return sendError(res, 'Invalid status specified', 400);
+    }
+
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return sendError(res, 'User not found', 404);
+    }
+
+    // Prevent changing own status
+    if (user._id.toString() === req.user._id.toString()) {
+      return sendError(res, 'Cannot change status of your own account', 400);
+    }
+
+    user.status = status;
+    await user.save();
+    return sendSuccess(res, user, `User status updated to ${status} successfully`);
+  } catch (error) {
+    console.error('Update status error:', error);
+    return sendError(res, error.message, 500);
+  }
+};
+
 module.exports = {
   register,
   login,
+  googleLogin,
   getMe,
   getUsers,
   updateUserRole,
+  updateUserStatus,
   deleteUser
 };

@@ -23,3 +23,4 @@ const startServer = async () => {
 startServer().catch(err => {
   console.error('Failed to start the server:', err);
 });
+// reload server

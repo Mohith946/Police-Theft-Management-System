@@ -66,7 +66,7 @@ const MatchScoreCard = ({ match, onStatusUpdate }) => {
             {Math.round(matchScore)}%
           </div>
           <div className="text-left flex flex-col">
-            <h4 className="text-sm font-bold text-slate-900 m-0">Suspect Match Alert</h4>
+            <h4 className="text-sm font-bold text-white m-0 font-heading">Suspect Match Alert</h4>
             <p className="text-slate-400 text-[10px] m-0">Score computed automatically</p>
           </div>
         </div>
@@ -81,13 +81,13 @@ const MatchScoreCard = ({ match, onStatusUpdate }) => {
       </div>
 
       {/* Grid with suspect & case info */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2 border-t border-slate-100 pt-4 text-xs">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2 border-t border-white/5 pt-4 text-xs">
         {/* Suspect profile details */}
         <div>
-          <h5 className="text-[10px] font-bold uppercase tracking-wider mb-2 text-primary">Suspect Profile</h5>
-          <p className="font-bold text-slate-900 m-0 text-sm">{criminal.name}</p>
-          {criminal.aliases && <p className="text-slate-500 text-[11px] mt-0.5 m-0">Aliases: {criminal.aliases}</p>}
-          <div className="mt-2 text-slate-500 flex flex-col gap-1">
+          <h5 className="text-[10px] font-bold uppercase tracking-wider mb-2 text-primary-light">Suspect Profile</h5>
+          <p className="font-bold text-white m-0 text-sm">{criminal.name}</p>
+          {criminal.aliases && <p className="text-slate-400 text-[11px] mt-0.5 m-0 font-medium">Aliases: {criminal.aliases}</p>}
+          <div className="mt-2 text-slate-400 flex flex-col gap-1 font-medium">
             {criminal.physicalFeatures?.height && <span>Height: {criminal.physicalFeatures.height} cm</span>}
             {criminal.physicalFeatures?.hairColor && <span>Hair: {criminal.physicalFeatures.hairColor}</span>}
             {criminal.physicalFeatures?.tattoos && criminal.physicalFeatures.tattoos !== 'none' && (
@@ -99,11 +99,11 @@ const MatchScoreCard = ({ match, onStatusUpdate }) => {
 
         {/* Crime incident details */}
         <div>
-          <h5 className="text-[10px] font-bold uppercase tracking-wider mb-2 text-indigo-500">Theft Incident</h5>
-          <p className="font-bold text-slate-900 m-0 text-sm">{complaint.title}</p>
-          <p className="text-slate-500 text-[11px] font-mono mt-0.5 m-0">{complaint.complaintNumber}</p>
-          <div className="mt-2 text-slate-500 flex flex-col gap-1">
-            <span>Category: <strong className="capitalize text-slate-700">{complaint.category}</strong></span>
+          <h5 className="text-[10px] font-bold uppercase tracking-wider mb-2 text-primary-light">Theft Incident</h5>
+          <p className="font-bold text-white m-0 text-sm">{complaint.title}</p>
+          <p className="text-slate-400 text-[11px] font-mono mt-0.5 m-0">{complaint.complaintNumber}</p>
+          <div className="mt-2 text-slate-400 flex flex-col gap-1 font-medium">
+            <span>Category: <strong className="capitalize text-slate-200">{complaint.category}</strong></span>
             <span>Theft Location: {complaint.theftLocation}</span>
             {complaint.theftDate && <span>Date: {new Date(complaint.theftDate).toLocaleDateString()}</span>}
           </div>
@@ -111,10 +111,10 @@ const MatchScoreCard = ({ match, onStatusUpdate }) => {
       </div>
 
       {/* Expanded Match Reasons list */}
-      <div className="border-t border-slate-100 pt-3">
+      <div className="border-t border-white/5 pt-3">
         <button 
           onClick={() => setExpanded(!expanded)} 
-          className="bg-transparent border-none text-primary text-xs cursor-pointer flex items-center gap-1 font-semibold p-0 hover:text-indigo-700 transition-all"
+          className="bg-transparent border-none text-primary-light text-xs cursor-pointer flex items-center gap-1 font-semibold p-0 hover:text-white transition-all"
         >
           {expanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           <span>{expanded ? 'Hide match explanation' : 'Show match explanation'}</span>
@@ -123,7 +123,7 @@ const MatchScoreCard = ({ match, onStatusUpdate }) => {
         {expanded && (
           <ul className="list-none mt-2 pl-1.5 flex flex-col gap-1.5">
             {reasonsList.map((reason, index) => (
-              <li key={index} className="text-xs text-slate-500 flex items-start gap-1.5">
+              <li key={index} className="text-xs text-slate-400 font-medium flex items-start gap-1.5">
                 <span style={{ color: scoreColor }} className="mt-0.5 shrink-0">•</span>
                 <span>{reason}</span>
               </li>
@@ -134,17 +134,17 @@ const MatchScoreCard = ({ match, onStatusUpdate }) => {
 
       {/* Actions */}
       {status === 'pending' && !showVerifyForm && (
-        <div className="flex gap-3 mt-2 border-t border-slate-100 pt-4">
+        <div className="flex gap-3 mt-2 border-t border-white/5 pt-4">
           <button 
             onClick={() => setShowVerifyForm(true)} 
-            className="btn btn-primary py-2 px-4 text-xs"
+            className="btn btn-primary py-2 px-4 text-xs font-semibold"
           >
             <Check size={14} />
             <span>Verify Connection</span>
           </button>
           <button 
             onClick={handleDismiss} 
-            className="btn btn-secondary py-2 px-4 text-xs text-danger border-red-200/60 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+            className="btn btn-secondary py-2 px-4 text-xs text-danger border-red-500/20 hover:bg-red-950/20 hover:text-red-400 hover:border-red-500/30"
           >
             <X size={14} />
             <span>Dismiss Alert</span>
@@ -154,7 +154,7 @@ const MatchScoreCard = ({ match, onStatusUpdate }) => {
 
       {/* Verification notes form */}
       {showVerifyForm && (
-        <form onSubmit={handleVerify} className="flex flex-col gap-3 mt-2 border-t border-slate-100 pt-4">
+        <form onSubmit={handleVerify} className="flex flex-col gap-3 mt-2 border-t border-white/5 pt-4">
           <div>
             <label className="form-label">Verification Logs & Notes</label>
             <textarea
@@ -170,14 +170,14 @@ const MatchScoreCard = ({ match, onStatusUpdate }) => {
           <div className="flex gap-2">
             <button 
               type="submit" 
-              className="btn btn-primary py-1.5 px-4 text-xs" 
+              className="btn btn-primary py-1.5 px-4 text-xs font-semibold" 
               disabled={submitting || !notes.trim()}
             >
               <span>{submitting ? 'Saving...' : 'Submit Verification'}</span>
             </button>
             <button 
               type="button" 
-              className="btn btn-secondary py-1.5 px-4 text-xs" 
+              className="btn btn-secondary py-1.5 px-4 text-xs font-semibold" 
               onClick={() => { setShowVerifyForm(false); setNotes(''); }}
             >
               <span>Cancel</span>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sahara PD - Incident Intake</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Eb+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#d47070",
+                    "surface-container-high": "#ece6dc",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dcd6cc",
+                    "secondary": "#78706a",
+                    "on-error": "#ffffff",
+                    "error": "#c0392b",
+                    "inverse-on-surface": "#faf5ee",
+                    "on-primary-container": "#fbe8d8",
+                    "surface-tint": "#c2652a",
+                    "on-primary-fixed-variant": "#8a4518",
+                    "primary-fixed": "#fbe8d8",
+                    "secondary-fixed": "#eae2da",
+                    "inverse-primary": "#f0a878",
+                    "on-error-container": "#7a1a10",
+                    "surface-container-highest": "#e6e0d6",
+                    "primary-container": "#e08850",
+                    "primary": "#c2652a",
+                    "on-tertiary-container": "#3a2020",
+                    "surface": "#faf5ee",
+                    "on-secondary-container": "#605850",
+                    "primary-fixed-dim": "#f0a878",
+                    "outline": "#9a9088",
+                    "on-tertiary-fixed-variant": "#6e3030",
+                    "on-secondary-fixed-variant": "#504840",
+                    "surface-bright": "#faf5ee",
+                    "on-primary-fixed": "#401a08",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#cec6be",
+                    "tertiary": "#8c3c3c",
+                    "tertiary-fixed-dim": "#e8a0a0",
+                    "on-tertiary-fixed": "#2e1515",
+                    "background": "#faf5ee",
+                    "on-secondary-fixed": "#2a2420",
+                    "inverse-surface": "#3a302a",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#3a302a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#3a302a",
+                    "tertiary-fixed": "#fce0e0",
+                    "secondary-container": "#eae2da",
+                    "error-container": "#fce4e0",
+                    "on-surface-variant": "#605850",
+                    "outline-variant": "#d8d0c8",
+                    "surface-container-low": "#f6f0e8",
+                    "surface-container": "#f2ece4",
+                    "surface-variant": "#ece6dc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Eb Garamond"],
+                    "display": ["Eb Garamond"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Manrope', sans-serif; }
+        h1, h2, h3 { font-family: 'Eb Garamond', serif; }
+        
+        /* Custom form styling to mimic paper */
+        .form-section {
+            border-bottom: 1px solid #d8d0c8;
+            padding-bottom: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .form-section:last-of-type {
+            border-bottom: none;
+        }
+        .input-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #605850;
+            margin-bottom: 0.35rem;
+            display: block;
+        }
+        .input-field {
+            width: 100%;
+            background-color: #ffffff;
+            border: 1px solid #d8d0c8;
+            border-radius: 4px;
+            padding: 0.6rem 0.75rem;
+            font-size: 0.95rem;
+            color: #3a302a;
+            transition: border-color 0.2s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #c2652a;
+            box-shadow: 0 0 0 2px rgba(194, 101, 42, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center w-full px-6 py-3 bg-surface border-b border-outline-variant fixed top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="font-headline text-2xl font-bold text-primary dark:text-primary-fixed-dim">Sahara PD</span>
+<div class="hidden md:flex gap-6">
+<a class="text-on-surface-variant font-medium hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer" href="#">Records</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer" href="#">Complaints</a>
+<a class="text-on-surface-variant font-medium hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer" href="#">Evidence</a>
+<a class="text-on-surface-variant font-medium hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 cursor-pointer" href="#">Reports</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 text-sm font-semibold text-primary border border-outline-variant rounded hover:bg-surface-container-low transition-all">Export Data</button>
+<button class="px-4 py-2 text-sm font-semibold bg-primary text-on-primary rounded hover:opacity-90 transition-all shadow-sm">New Record</button>
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-outline-variant">
+<img alt="Officer Profile" data-alt="A professional headshot of a mature police officer with a focused yet approachable expression. He is wearing a dark, crisp uniform with subtle insignia visible on the collar. The background is a soft-focus office environment with warm, neutral tones. The lighting is bright and clear, emphasizing a sense of integrity and reliability consistent with an official departmental profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDa7ag8LR0a4YQUFw0iLDOO3fJYdbiJ9tFVThZAUM_BOYP4GOnLq8KhKMBMJTN9w2RGV4hpURieHgsu63ik6GOmJ1iCbPz7aU-GjuOzNrVVXBzP-B6cnDOW6jmgQG_jfUvS13WOddI54mNFQciD-SHbihUDBpZzfPNNquzY_Af1SyGhm9lT6TRp34M2vi4or2bOXS03tj3hUSu6JLTVLDzkJENN74AZ0sd0BGOQGDGWD52931cmEdo7u0QzwbmGlSKYjdoZYnqxApId"/>
+</div>
+</div>
+</nav>
+<div class="flex pt-16 h-[calc(100vh-64px)] overflow-hidden">
+<!-- SideNavBar (Suppressed for focused entry, showing only essential navigation) -->
+<aside class="hidden lg:flex flex-col h-full py-6 px-4 gap-4 bg-surface-container-low border-r border-outline-variant w-64">
+<div class="mb-4">
+<h3 class="font-headline text-lg font-bold text-on-surface">Main Operations</h3>
+<p class="font-body font-semibold uppercase tracking-wider text-[10px] text-on-surface-variant">Precision &amp; Integrity</p>
+</div>
+<nav class="space-y-1">
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 bg-primary-container text-on-primary-container rounded-lg px-4 py-2 cursor-pointer">
+<span class="material-symbols-outlined">folder_shared</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Active Cases</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Archive</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Personnel</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Settings</span>
+</div>
+</nav>
+<div class="mt-auto">
+<button class="w-full bg-tertiary text-white font-bold py-3 px-4 rounded flex items-center justify-center gap-2 uppercase tracking-widest text-[10px] hover:bg-tertiary-container transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+                    Emergency Alert
+                </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-background p-8 lg:p-12 scroll-smooth">
+<div class="max-w-4xl mx-auto flex flex-col gap-8 md:flex-row items-start">
+<!-- The Form (Paper Style) -->
+<div class="flex-1 bg-surface-container-lowest p-10 md:p-14 border border-outline-variant shadow-[0_2px_16px_rgba(58,48,42,0.04)] rounded-sm">
+<header class="mb-10 text-center">
+<h2 class="text-4xl font-headline italic mb-2">Complaint Registration</h2>
+<p class="text-sm font-body text-secondary uppercase tracking-[0.2em]">Official Intake Document — Form 402-B</p>
+</header>
+<form class="space-y-12" id="complaintForm">
+<!-- Section: Complainant Information -->
+<section class="form-section">
+<h3 class="text-xl font-headline font-semibold mb-6 flex items-center gap-3">
+<span class="bg-primary/10 text-primary w-8 h-8 rounded-full flex items-center justify-center text-sm font-body">01</span>
+                                Complainant Information
+                            </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="input-group">
+<label for="comp_name">Full Legal Name</label>
+<input class="input-field" id="comp_name" placeholder="Last, First Middle" type="text"/>
+</div>
+<div class="input-group">
+<label for="comp_dob">Date of Birth</label>
+<input class="input-field" id="comp_dob" type="date"/>
+</div>
+<div class="input-group">
+<label for="comp_phone">Contact Phone</label>
+<input class="input-field" id="comp_phone" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+<div class="input-group">
+<label for="comp_id">Govt Issued ID #</label>
+<input class="input-field" id="comp_id" placeholder="DL, Passport, etc." type="text"/>
+</div>
+<div class="input-group md:col-span-2">
+<label for="comp_address">Current Residential Address</label>
+<input class="input-field" id="comp_address" placeholder="Street Address, City, State, Zip" type="text"/>
+</div>
+</div>
+</section>
+<!-- Section: Incident Details -->
+<section class="form-section">
+<h3 class="text-xl font-headline font-semibold mb-6 flex items-center gap-3">
+<span class="bg-primary/10 text-primary w-8 h-8 rounded-full flex items-center justify-center text-sm font-body">02</span>
+                                Incident Details
+                            </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+<div class="input-group">
+<label for="inc_date">Date of Incident</label>
+<input class="input-field" id="inc_date" type="date"/>
+</div>
+<div class="input-group">
+<label for="inc_time">Time (Approx)</label>
+<input class="input-field" id="inc_time" type="time"/>
+</div>
+<div class="input-group">
+<label for="inc_type">Incident Type</label>
+<select class="input-field" id="inc_type">
+<option value="">Select Category...</option>
+<option value="theft">Larceny / Theft</option>
+<option value="vandalism">Vandalism</option>
+<option value="assault">Assault</option>
+<option value="fraud">Fraud / Identity</option>
+<option value="other">Other / Civil</option>
+</select>
+</div>
+</div>
+<div class="input-group mb-6">
+<label for="inc_location">Location Description</label>
+<input class="input-field" id="inc_location" placeholder="Intersection, Business Name, or Specific Address" type="text"/>
+</div>
+<div class="input-group">
+<label for="inc_narrative">Narrative Summary</label>
+<textarea class="input-field resize-none" id="inc_narrative" placeholder="Provide a chronological account of the incident..." rows="5"></textarea>
+</div>
+</section>
+<!-- Section: Property Inventory -->
+<section class="form-section">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-headline font-semibold flex items-center gap-3">
+<span class="bg-primary/10 text-primary w-8 h-8 rounded-full flex items-center justify-center text-sm font-body">03</span>
+                                    Property Inventory
+                                </h3>
+<button class="text-xs font-bold text-primary hover:underline flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                                    ADD ITEM
+                                </button>
+</div>
+<div class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-surface rounded border border-dashed border-outline">
+<div class="md:col-span-2">
+<label class="text-[10px] font-bold text-secondary uppercase mb-1 block">Description &amp; Serial #</label>
+<input class="input-field text-sm" placeholder="e.g. Apple iPhone 14 Pro, Black" type="text"/>
+</div>
+<div>
+<label class="text-[10px] font-bold text-secondary uppercase mb-1 block">Estimated Value</label>
+<input class="input-field text-sm" placeholder="$0.00" type="text"/>
+</div>
+<div>
+<label class="text-[10px] font-bold text-secondary uppercase mb-1 block">Status</label>
+<select class="input-field text-sm">
+<option>Stolen</option>
+<option>Damaged</option>
+<option>Lost</option>
+<option>Recovered</option>
+</select>
+</div>
+</div>
+<p class="text-[11px] text-secondary-fixed-dim italic">Attach photographs of property in the 'Evidence' tab after submitting this record.</p>
+</div>
+</section>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-outline-variant">
+<button class="flex-1 px-6 py-4 bg-surface text-secondary font-bold uppercase tracking-widest text-xs border border-outline-variant rounded hover:bg-surface-container transition-all" type="button">
+                                Save as Draft
+                            </button>
+<button class="flex-[2] px-6 py-4 bg-primary text-white font-bold uppercase tracking-widest text-xs rounded hover:opacity-95 transition-all shadow-md flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-sm">send</span>
+                                Submit Official Record
+                            </button>
+</div>
+</form>
+</div>
+<!-- Supervisor Tips Sidebar -->
+<aside class="w-full md:w-64 lg:w-72 flex flex-col gap-6 sticky top-0">
+<div class="bg-surface-container-high p-6 rounded-lg border border-outline-variant">
+<div class="flex items-center gap-2 mb-4 text-primary">
+<span class="material-symbols-outlined">lightbulb</span>
+<h4 class="font-headline text-lg font-bold">Supervisor Tips</h4>
+</div>
+<ul class="space-y-4 text-xs font-body leading-relaxed text-on-surface-variant">
+<li class="flex gap-2">
+<span class="text-primary font-bold">•</span>
+<span>Ensure all **Property Serial Numbers** are cross-referenced with the national stolen goods database (NCIC).</span>
+</li>
+<li class="flex gap-2">
+<span class="text-primary font-bold">•</span>
+<span>Verify **Complainant ID** against live DMV records if the individual is not currently in our local system.</span>
+</li>
+<li class="flex gap-2">
+<span class="text-primary font-bold">•</span>
+<span>**Narrative Detail:** Use objective observations. Avoid adjectives that imply guilt without corroborating evidence.</span>
+</li>
+<li class="flex gap-2">
+<span class="text-primary font-bold">•</span>
+<span>If the value exceeds $1,500, a secondary detective review is automatically flagged upon submission.</span>
+</li>
+</ul>
+</div>
+<div class="bg-white p-6 rounded-lg border border-outline-variant">
+<h4 class="font-headline text-lg font-bold mb-3">Quick Attachments</h4>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 p-3 bg-surface rounded cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-secondary">image</span>
+<span class="text-[11px] font-bold text-on-surface uppercase">Scene Photo</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface rounded cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-secondary">mic</span>
+<span class="text-[11px] font-bold text-on-surface uppercase">Audio Clip</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-surface rounded cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-secondary">map</span>
+<span class="text-[11px] font-bold text-on-surface uppercase">GIS Marker</span>
+</div>
+</div>
+</div>
+<div class="relative rounded-lg overflow-hidden h-40 border border-outline-variant">
+<img alt="Officer writing" class="w-full h-full object-cover grayscale opacity-40" data-alt="A close-up, high-angle shot of a hand using a luxury fountain pen to write on thick, cream-colored paper. The environment is a clean, minimalist wooden desk with soft morning sunlight casting long shadows. The color palette is dominated by warm wood tones, linen whites, and deep sienna ink. The overall mood is one of focused, disciplined administrative work within a professional legal or law enforcement context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQs1lmMz80bYdKH5CuoQ3mnVln-pqi0LfqgvJUFFWjMR5Qz_11P7kaLNHnKevKQ5Qj7q9131put0u3YihGML5ffOAxnCL3yUDyGMgVVLu2eyW5sA8bFQ09Ntq6eUZZsZrnkH3tYxy3_1CU7rbF7Oi2oaS6ZCcxFSNzSL1MY2XPfraYLWWXGpI3p7Ap2Rl4ffTVCS51Vxzg7Gqor0BWZgB5r3czcbCo_aj5XNKV_TSjZMYHSiCG2N-rd0CjlDHAKUXRwn4KFHzgJ-_g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent flex items-end p-4">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Documenting Sahara</span>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+<!-- Micro-interaction for form validation/state -->
+<script>
+        document.getElementById('complaintForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Validating...';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Submission Complete';
+                btn.classList.remove('bg-primary');
+                btn.classList.add('bg-green-700');
+                
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('bg-green-700');
+                    btn.classList.add('bg-primary');
+                    alert('Official Record 402-B has been successfully archived. Incident #Sahara-2023-8819 assigned.');
+                }, 2000);
+            }, 1500);
+        });
+
+        // Simple input highlight logic
+        const inputs = document.querySelectorAll('.input-field');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').style.color = '#c2652a';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label').style.color = '#605850';
+            });
+        });
+    </script>
+</body></html>

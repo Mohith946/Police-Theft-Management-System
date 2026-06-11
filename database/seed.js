@@ -45,6 +45,7 @@ const seedDatabase = async () => {
         passwordHash: passwordHash,
         role: 'admin',
         badgeNumber: 'BADGE-001',
+        status: 'approved',
         createdAt: new Date()
       },
       {
@@ -53,6 +54,7 @@ const seedDatabase = async () => {
         passwordHash: passwordHash,
         role: 'officer',
         badgeNumber: 'BADGE-102',
+        status: 'approved',
         createdAt: new Date()
       },
       {
@@ -61,6 +63,7 @@ const seedDatabase = async () => {
         passwordHash: passwordHash,
         role: 'officer',
         badgeNumber: 'BADGE-205',
+        status: 'approved',
         createdAt: new Date()
       }
     ];

@@ -1,243 +1,254 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 import { 
-  ShieldAlert, 
+  Home, 
   Users, 
-  FileText, 
-  Package, 
-  Scan, 
-  Bell, 
+  Calendar, 
+  Folder, 
   BarChart3, 
-  LogOut,
-  User
+  Settings,
+  ShieldAlert,
+  LogOut
 } from 'lucide-react';
 
 const Sidebar = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   
+  // Stats counts
+  const [activeCasesCount, setActiveCasesCount] = useState(0);
+  const [matchCount, setMatchCount] = useState(0);
+  const [avatarError, setAvatarError] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      const fetchDataCounts = async () => {
+        const isStaff = user.role === 'officer' || user.role === 'admin';
+        
+        try {
+          // Fetch Complaints count
+          const complaintsRes = await axios.get('/api/complaints');
+          if (complaintsRes.data.success) {
+            const unresolved = complaintsRes.data.data.filter(
+              c => c.status === 'pending' || c.status === 'investigating'
+            ).length;
+            setActiveCasesCount(unresolved);
+          }
+        } catch (err) {
+          console.error('Failed to load sidebar complaints count:', err.message);
+        }
+
+        if (isStaff) {
+          try {
+            // Fetch Match Alerts count
+            const matchesRes = await axios.get('/api/matches?status=pending');
+            if (matchesRes.data.success) {
+              setMatchCount(matchesRes.data.data.length);
+            }
+          } catch (err) {
+            console.error('Failed to load sidebar match alerts count:', err.message);
+          }
+        }
+      };
+
+      fetchDataCounts();
+      const interval = setInterval(fetchDataCounts, 30000); // Poll every 30s
+      return () => clearInterval(interval);
+    }
+  }, [user]);
+
   if (!user) return null;
 
   const isOfficerOrAdmin = user.role === 'officer' || user.role === 'admin';
 
-  const getNavLinkStyle = ({ isActive }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.75rem',
-    padding: '0.75rem 1rem',
-    borderRadius: 'var(--radius-sm)',
-    color: isActive ? '#ffffff' : '#8192a7',
-    background: isActive ? '#1a2b3c' : 'transparent',
-    border: isActive ? '1px solid #74777d' : '1px solid transparent',
-    textDecoration: 'none',
-    fontSize: '0.9rem',
-    fontWeight: isActive ? 600 : 500,
-    transition: 'all 0.2s ease'
-  });
+  const handleLogoutClick = (e) => {
+    e.preventDefault();
+    logout();
+    navigate('/login');
+  };
+
+  // Nav link active / inactive classes helper for primary navigation
+  const linkClass = ({ isActive }) => 
+    `flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 no-underline font-body font-semibold ${
+      isActive 
+        ? 'bg-slate-800 text-white' 
+        : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
+    }`;
+
+  // Nav link helper for operations (no icons, indented text)
+  const operationsLinkClass = ({ isActive }) => 
+    `block py-1.5 px-3 pl-[42px] rounded-lg text-sm transition-all duration-150 no-underline font-body font-semibold ${
+      isActive 
+        ? 'text-white bg-slate-800/30' 
+        : 'text-slate-400 hover:text-white hover:bg-slate-800/10'
+    }`;
 
   return (
-    <aside style={{
-      width: '260px',
-      height: '100vh',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      background: 'var(--primary)', // Civic Sentinel Primary Deep Navy
-      borderRight: '1px solid var(--border-color)',
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '2rem 1.5rem',
-      zIndex: 100
-    }}>
-      {/* Brand logo */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        marginBottom: '2.5rem',
-        paddingLeft: '0.5rem'
-      }}>
-        <div style={{
-          background: '#3b82f6', // Safety Blue
-          width: '38px',
-          height: '38px',
-          borderRadius: 'var(--radius-sm)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 4px 10px rgba(59, 130, 246, 0.2)'
-        }}>
-          <ShieldAlert size={20} color="#ffffff" />
+    <aside className="hidden md:flex fixed inset-y-0 left-0 z-50 w-64 flex-col bg-[#111827] border-r border-slate-800">
+      
+      {/* Scrollable interior wrapper */}
+      <div className="flex grow flex-col gap-y-5 overflow-y-auto px-6 pb-4 pt-6 text-white">
+        
+        {/* Brand/Header */}
+        <div className="px-3 py-2 flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg border-2 border-white flex items-center justify-center font-bold font-headline text-lg text-white">
+            P
+          </div>
+          <span className="font-headline font-bold text-xl tracking-wide text-white">POLICE</span>
         </div>
-        <div>
-          <h2 style={{
-            fontSize: '1.15rem',
-            fontWeight: 800,
-            fontFamily: 'var(--font-heading)',
-            letterSpacing: '-0.02em',
-            color: '#ffffff'
-          }}>SHIELD</h2>
-          <p style={{
-            fontSize: '0.65rem',
-            color: '#8192a7',
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            fontWeight: 600
-          }}>Theft Mgmt System</p>
-        </div>
-      </div>
 
-      {/* Navigation links */}
-      <nav style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.35rem',
-        flex: 1
-      }}>
-        <NavLink 
-          to="/" 
-          style={getNavLinkStyle}
-        >
-          <BarChart3 size={18} />
-          <span>Dashboard</span>
-        </NavLink>
-
-        <NavLink 
-          to="/complaints" 
-          style={getNavLinkStyle}
-        >
-          <FileText size={18} />
-          <span>Complaints</span>
-        </NavLink>
-
-        {isOfficerOrAdmin && (
-          <>
-            <NavLink 
-              to="/criminals" 
-              style={getNavLinkStyle}
-            >
-              <Users size={18} />
-              <span>Criminal Registry</span>
-            </NavLink>
-
-            <NavLink 
-              to="/stolen-items" 
-              style={getNavLinkStyle}
-            >
-              <Package size={18} />
-              <span>Stolen Items</span>
-            </NavLink>
-
-            <NavLink 
-              to="/qr-scanner" 
-              style={getNavLinkStyle}
-            >
-              <Scan size={18} />
-              <span>QR Recovery Scanner</span>
-            </NavLink>
-
-            <NavLink 
-              to="/match-results" 
-              style={getNavLinkStyle}
-            >
-              <Bell size={18} />
-              <span>Match Alerts</span>
-            </NavLink>
+        {/* Navigation Section */}
+        <nav className="flex flex-1 flex-col">
+          <ul role="list" className="flex flex-1 flex-col gap-y-7 list-none p-0 m-0">
             
-            <NavLink 
-              to="/reports" 
-              style={getNavLinkStyle}
-            >
-              <BarChart3 size={18} />
-              <span>Analytical Reports</span>
-            </NavLink>
-          </>
-        )}
+            {/* Primary Navigation Links */}
+            <li>
+              <ul className="space-y-1 list-none p-0 m-0">
+                {/* Dashboard */}
+                <li>
+                  <NavLink to="/" end className={linkClass}>
+                    <div className="flex items-center gap-3">
+                      <Home size={18} className="shrink-0" />
+                      <span>Dashboard</span>
+                    </div>
+                  </NavLink>
+                </li>
 
-        {user.role === 'admin' && (
-          <NavLink 
-            to="/users" 
-            style={getNavLinkStyle}
-          >
-            <Users size={18} />
-            <span>Manage Access</span>
-          </NavLink>
-        )}
-      </nav>
+                {/* Suspects - Staff only */}
+                {isOfficerOrAdmin && (
+                  <li>
+                    <NavLink to="/criminals" className={linkClass}>
+                      <div className="flex items-center gap-3">
+                        <Users size={18} className="shrink-0" />
+                        <span>Suspects</span>
+                      </div>
+                    </NavLink>
+                  </li>
+                )}
 
-      {/* User profile footer */}
-      <div style={{
-        borderTop: '1px solid rgba(255, 255, 255, 0.15)',
-        paddingTop: '1.5rem',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem'
-      }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem'
-        }}>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.08)',
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: '1px solid rgba(255, 255, 255, 0.15)'
-          }}>
-            <User size={18} color="#8192a7" />
-          </div>
-          <div style={{ overflow: 'hidden' }}>
-            <h4 style={{
-              fontSize: '0.85rem',
-              color: '#ffffff',
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-              overflow: 'hidden'
-            }}>{user.username}</h4>
-            <p style={{
-              fontSize: '0.7rem',
-              color: '#8192a7',
-              textTransform: 'uppercase',
-              fontWeight: 600,
-              letterSpacing: '0.05em'
-            }}>
-              {user.role} {user.badgeNumber ? `(${user.badgeNumber})` : ''}
-            </p>
-          </div>
-        </div>
+                {/* Cases - Show badge if unresolved cases exist */}
+                <li>
+                  <NavLink to="/complaints" className={linkClass}>
+                    <div className="flex items-center gap-3">
+                      <Calendar size={18} className="shrink-0" />
+                      <span>Cases</span>
+                    </div>
+                    {activeCasesCount > 0 && (
+                      <span className="bg-slate-800 text-slate-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-slate-700/50">
+                        {activeCasesCount}
+                      </span>
+                    )}
+                  </NavLink>
+                </li>
 
-        <button 
-          onClick={logout}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            width: '100%',
-            padding: '0.75rem 1rem',
-            background: 'rgba(186, 26, 26, 0.15)',
-            border: '1px solid rgba(186, 26, 26, 0.25)',
-            borderRadius: 'var(--radius-sm)',
-            color: '#ffdad6',
-            cursor: 'pointer',
-            fontSize: '0.9rem',
-            fontWeight: 600,
-            transition: 'all 0.2s ease',
-            justifyContent: 'center'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(186, 26, 26, 0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(186, 26, 26, 0.15)';
-          }}
-        >
-          <LogOut size={16} />
-          <span>Sign Out</span>
-        </button>
+                {/* Evidence Locker - Staff only */}
+                {isOfficerOrAdmin && (
+                  <li>
+                    <NavLink to="/stolen-items" className={linkClass}>
+                      <div className="flex items-center gap-3">
+                        <Folder size={18} className="shrink-0" />
+                        <span>Evidence Locker</span>
+                      </div>
+                    </NavLink>
+                  </li>
+                )}
+
+                {/* Match Alarms - Staff only */}
+                {isOfficerOrAdmin && (
+                  <li>
+                    <NavLink to="/match-results" className={linkClass}>
+                      <div className="flex items-center gap-3">
+                        <BarChart3 size={18} className="shrink-0" />
+                        <span>Match Alarms</span>
+                      </div>
+                      {matchCount > 0 && (
+                        <span className="bg-red-500/10 text-red-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-red-500/20">
+                          {matchCount}
+                        </span>
+                      )}
+                    </NavLink>
+                  </li>
+                )}
+
+                {/* User Access - Admin only */}
+                {user.role === 'admin' && (
+                  <li>
+                    <NavLink to="/users" className={linkClass}>
+                      <div className="flex items-center gap-3">
+                        <ShieldAlert size={18} className="shrink-0" />
+                        <span>User Access</span>
+                      </div>
+                    </NavLink>
+                  </li>
+                )}
+              </ul>
+            </li>
+
+            {/* Operations Section */}
+            <li>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 px-3 mb-2">
+                Operations
+              </div>
+              <ul className="space-y-1 list-none p-0 m-0">
+                {/* QR Scanner - Staff only */}
+                {isOfficerOrAdmin && (
+                  <li>
+                    <NavLink to="/qr-scanner" className={operationsLinkClass}>
+                      QR Scanner
+                    </NavLink>
+                  </li>
+                )}
+
+                {/* Analytical Reports - Staff only */}
+                {isOfficerOrAdmin && (
+                  <li>
+                    <NavLink to="/reports" className={operationsLinkClass}>
+                      Analytical Reports
+                    </NavLink>
+                  </li>
+                )}
+              </ul>
+            </li>
+
+            {/* Bottom Profile Footer Section */}
+            <li className="mt-auto pt-4 border-t border-slate-800">
+              <div className="flex items-center">
+                <div className="flex items-center gap-3.5 min-w-0">
+                  {/* Round Avatar Image / Initial Fallback */}
+                  {!avatarError ? (
+                    <img 
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                      onError={() => setAvatarError(true)}
+                      className="w-10 h-10 rounded-full bg-slate-800 object-cover shrink-0"
+                      alt={user.username}
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-sm font-bold shrink-0 text-slate-300">
+                      {user.username ? user.username.slice(0, 2).toUpperCase() : 'US'}
+                    </div>
+                  )}
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-extrabold truncate text-white leading-tight">
+                      {user.username}
+                    </span>
+                    <a 
+                      href="#logout" 
+                      onClick={handleLogoutClick} 
+                      className="px-2.5 py-1 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer flex items-center gap-1.5 mt-2"
+                    >
+                      <LogOut size={11} className="shrink-0" />
+                      <span>Sign Out</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+          </ul>
+        </nav>
+
       </div>
     </aside>
   );

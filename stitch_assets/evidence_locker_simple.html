@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sahara PD | Evidence Locker</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#d47070",
+                    "surface-container-high": "#ece6dc",
+                    "on-secondary": "#ffffff",
+                    "surface-dim": "#dcd6cc",
+                    "secondary": "#78706a",
+                    "on-error": "#ffffff",
+                    "error": "#c0392b",
+                    "inverse-on-surface": "#faf5ee",
+                    "on-primary-container": "#fbe8d8",
+                    "surface-tint": "#c2652a",
+                    "on-primary-fixed-variant": "#8a4518",
+                    "primary-fixed": "#fbe8d8",
+                    "secondary-fixed": "#eae2da",
+                    "inverse-primary": "#f0a878",
+                    "on-error-container": "#7a1a10",
+                    "surface-container-highest": "#e6e0d6",
+                    "primary-container": "#e08850",
+                    "primary": "#c2652a",
+                    "on-tertiary-container": "#3a2020",
+                    "surface": "#faf5ee",
+                    "on-secondary-container": "#605850",
+                    "primary-fixed-dim": "#f0a878",
+                    "outline": "#9a9088",
+                    "on-tertiary-fixed-variant": "#6e3030",
+                    "on-secondary-fixed-variant": "#504840",
+                    "surface-bright": "#faf5ee",
+                    "on-primary-fixed": "#401a08",
+                    "on-primary": "#ffffff",
+                    "secondary-fixed-dim": "#cec6be",
+                    "tertiary": "#8c3c3c",
+                    "tertiary-fixed-dim": "#e8a0a0",
+                    "on-tertiary-fixed": "#2e1515",
+                    "background": "#faf5ee",
+                    "on-secondary-fixed": "#2a2420",
+                    "inverse-surface": "#3a302a",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#3a302a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#3a302a",
+                    "tertiary-fixed": "#fce0e0",
+                    "secondary-container": "#eae2da",
+                    "error-container": "#fce4e0",
+                    "on-surface-variant": "#605850",
+                    "outline-variant": "#d8d0c8",
+                    "surface-container-low": "#f6f0e8",
+                    "surface-container": "#f2ece4",
+                    "surface-variant": "#ece6dc"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["EB Garamond"],
+                    "display": ["EB Garamond"],
+                    "body": ["Manrope"],
+                    "label": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .font-headline { font-family: 'EB Garamond', serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #d8d0c8; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface flex flex-col md:flex-row h-screen overflow-hidden">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="hidden md:flex flex-col h-full py-6 px-4 gap-4 bg-surface-container-low border-r border-outline-variant w-64">
+<div class="mb-6 px-2">
+<h1 class="font-headline text-lg font-bold text-on-surface">Main Operations</h1>
+<p class="font-body font-semibold uppercase tracking-wider text-xs text-on-surface-variant">Precision &amp; Integrity</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="folder_shared">folder_shared</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Active Cases</span>
+</a>
+<a class="flex items-center gap-3 bg-primary-container text-on-primary-container rounded-lg px-4 py-2 cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Archive</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Personnel</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-bold transition-transform active:scale-95 shadow-sm">
+                Emergency Alert
+            </button>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- TopNavBar (Authority: JSON) -->
+<header class="flex justify-between items-center w-full px-6 py-3 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-8">
+<span class="font-headline text-2xl font-bold text-primary">Sahara PD</span>
+<nav class="hidden lg:flex gap-6">
+<a class="text-on-surface-variant font-medium hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 rounded cursor-pointer" href="#">Records</a>
+<a class="text-on-surface-variant font-medium hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 rounded cursor-pointer" href="#">Complaints</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer" href="#">Evidence</a>
+<a class="text-on-surface-variant font-medium hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 rounded cursor-pointer" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container text-sm rounded-full border-none focus:ring-1 focus:ring-primary w-64" placeholder="Search locker..." type="text"/>
+</div>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg font-semibold text-sm transition-opacity active:opacity-80 cursor-pointer">New Record</button>
+<div class="w-10 h-10 rounded-full bg-secondary-container overflow-hidden border border-outline-variant">
+<img alt="Officer Profile" data-alt="A close-up portrait of a professional male police officer in a modern, warm-toned beige uniform. The lighting is soft and golden, reflecting a professional and calm demeanor. He is set against a blurred background of a minimalist architectural office with warm wood textures and clean lines, embodying a high-end, contemporary law enforcement aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzI4OitIr7E4tyvoImDfrdIg-7XaqwHBXpbKhzRiSX4XCVktxf8ELaZicn_vAwAzflZYfEiZijkrVIimnIAIAfn4RxOc3uj9fnXSOoLZdzPtoircz2LIxZglTPcCvBUpqG4Pm7BPJnJxwigRizDnRHo5fqat9Z6w_S9bchq2s9FHHTYoQPVsjyc0zgnlA6pwLd3TEub0U65nGUO7FeSUGgZgpOM5JQe2QImFuV-VCRzH3RHI7ekQyWhJD1pOaIloMoqFuGYUcbuGB-"/>
+</div>
+</div>
+</header>
+<!-- Canvas Body -->
+<div class="flex-1 overflow-y-auto p-6 flex flex-col gap-8">
+<!-- Hero Title -->
+<section>
+<h2 class="font-headline text-4xl font-bold text-on-surface tracking-tight">Evidence Locker</h2>
+<p class="font-body text-on-surface-variant max-w-2xl mt-2 italic">Secured repository for civilian property and criminal evidence. All entries must be logged with verified chain of custody.</p>
+</section>
+<!-- Layout Grid: Two Columns for Table and Form -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+<!-- Evidence Table Section (8 Cols) -->
+<section class="xl:col-span-8 bg-surface-container-lowest rounded-xl shadow-[0_2px_16px_rgba(58,48,42,0.04)] overflow-hidden border border-outline-variant/60">
+<div class="p-6 border-b border-outline-variant/60 flex justify-between items-center bg-surface-container-low/30">
+<h3 class="font-body font-bold text-lg text-on-surface">Recent Submissions</h3>
+<div class="flex gap-2">
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-lg transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 font-body font-bold text-xs uppercase tracking-widest text-on-surface-variant border-b border-outline-variant/40">Evidence ID</th>
+<th class="px-6 py-4 font-body font-bold text-xs uppercase tracking-widest text-on-surface-variant border-b border-outline-variant/40">Category</th>
+<th class="px-6 py-4 font-body font-bold text-xs uppercase tracking-widest text-on-surface-variant border-b border-outline-variant/40">Serial Number</th>
+<th class="px-6 py-4 font-body font-bold text-xs uppercase tracking-widest text-on-surface-variant border-b border-outline-variant/40">Storage Location</th>
+<th class="px-6 py-4 font-body font-bold text-xs uppercase tracking-widest text-on-surface-variant border-b border-outline-variant/40 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-5 text-sm font-bold text-primary">#EVD-99210</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">laptop</span> Electronics
+                                        </span>
+</td>
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">SN-A99B-88X2</td>
+<td class="px-6 py-5 text-sm">Locker A, Shelf 4</td>
+<td class="px-6 py-5 text-right"><span class="text-xs font-bold uppercase tracking-tighter text-tertiary">Secured</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-5 text-sm font-bold text-primary">#EVD-99184</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">diamond</span> Jewelry
+                                        </span>
+</td>
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">N/A - Gold Inlay</td>
+<td class="px-6 py-5 text-sm">Vault B, Safe 02</td>
+<td class="px-6 py-5 text-right"><span class="text-xs font-bold uppercase tracking-tighter text-tertiary">Secured</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-5 text-sm font-bold text-primary">#EVD-99152</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">directions_car</span> Vehicle Parts
+                                        </span>
+</td>
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">VN-9201-992</td>
+<td class="px-6 py-5 text-sm">Impound Area 2</td>
+<td class="px-6 py-5 text-right"><span class="text-xs font-bold uppercase tracking-tighter text-secondary">Transit</span></td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-5 text-sm font-bold text-primary">#EVD-99140</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-semibold">
+<span class="material-symbols-outlined text-[16px]">payments</span> Currency
+                                        </span>
+</td>
+<td class="px-6 py-5 font-mono text-xs text-on-surface-variant">Unmarked Cash</td>
+<td class="px-6 py-5 text-sm">Locker C, Drawer 1</td>
+<td class="px-6 py-5 text-right"><span class="text-xs font-bold uppercase tracking-tighter text-tertiary">Secured</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-container-low/20 border-t border-outline-variant/60 flex justify-center">
+<button class="text-primary font-bold text-sm hover:underline">View All 428 Evidence Records</button>
+</div>
+</section>
+<!-- Form Panel Section (4 Cols) -->
+<section class="xl:col-span-4 flex flex-col gap-6">
+<!-- Form Card -->
+<div class="bg-surface-container rounded-xl p-8 border border-outline-variant/60 shadow-[0_2px_16px_rgba(58,48,42,0.04)]">
+<h3 class="font-headline text-2xl font-bold mb-6 text-on-surface">Add New Evidence</h3>
+<form class="space-y-4">
+<div>
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1.5">Evidence Category</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary transition-all">
+<option>Electronics</option>
+<option>Jewelry</option>
+<option>Vehicle Parts</option>
+<option>Currency</option>
+<option>Firearms</option>
+<option>Other / Miscellaneous</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1.5">Serial Number</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary" placeholder="Enter manufacturer serial..." type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1.5">Storage Location</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary" placeholder="e.g. Locker B, Shelf 2" type="text"/>
+</div>
+<div class="pt-2">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-1.5">Brief Description</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary" placeholder="Identify markings, condition, and status..." rows="3"></textarea>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-lg font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[20px]">add_circle</span> Register Item
+                            </button>
+</form>
+</div>
+<!-- Informational Card -->
+<div class="bg-tertiary-container text-on-tertiary-container p-6 rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="font-headline text-xl font-bold mb-2">Protocol Reminder</h4>
+<p class="text-sm opacity-90 leading-relaxed">All biological or high-value items must be double-bagged and signed off by a supervisor before locker placement.</p>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-9xl opacity-10 group-hover:scale-110 transition-transform">priority_high</span>
+</div>
+</section>
+</div>
+</div>
+<!-- Mobile Bottom NavBar (Authority: Platform Rule) -->
+<nav class="md:hidden grid grid-cols-5 h-16 bg-surface border-t-0 shadow-[0_-4px_16px_rgba(58,48,42,0.06)]">
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-bold uppercase">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">folder_shared</span>
+<span class="text-[10px] font-bold uppercase">Cases</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="text-[10px] font-bold uppercase">Evidence</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">groups</span>
+<span class="text-[10px] font-bold uppercase">Team</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase">Config</span>
+</button>
+</nav>
+</main>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+
+        // Search Bar Focus Effect
+        const searchInput = document.querySelector('input[type="text"]');
+        if (searchInput) {
+            searchInput.addEventListener('focus', () => {
+                searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+            });
+            searchInput.addEventListener('blur', () => {
+                searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+            });
+        }
+    </script>
+</body></html>

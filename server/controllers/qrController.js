@@ -77,7 +77,7 @@ const scanQRCode = async (req, res) => {
 
       const complaint = await Complaint.findOne({ qrCodeToken: token })
         .populate('reportedBy', 'username email');
-      
+
       if (!complaint) {
         return sendError(res, 'No complaint found matching this QR code token', 404);
       }
@@ -93,12 +93,12 @@ const scanQRCode = async (req, res) => {
       const matchesWithHistory = [];
       for (const match of matches) {
         if (match.criminalId) {
-          const history = await MatchResult.find({ 
+          const history = await MatchResult.find({
             criminalId: match.criminalId._id,
             complaintId: { $ne: complaint._id } // exclude current case
           })
-          .populate('complaintId', 'complaintNumber title category status')
-          .sort({ createdAt: -1 });
+            .populate('complaintId', 'complaintNumber title category status')
+            .sort({ createdAt: -1 });
 
           matchesWithHistory.push({
             match,
@@ -116,7 +116,29 @@ const scanQRCode = async (req, res) => {
       }, 'Complaint QR Code scanned successfully');
     }
 
-    // 2. Fallback to StolenItem QR token
+    // 2. Check if this is a Criminal QR token
+    if (token.startsWith('QR-CRIM-')) {
+      const Criminal = require('../models/Criminal');
+      const MatchResult = require('../models/MatchResult');
+
+      const criminal = await Criminal.findOne({ qrCodeToken: token });
+      if (!criminal) {
+        return sendError(res, 'No criminal profile found matching this QR code token', 404);
+      }
+
+      // Retrieve criminal's caseload/history
+      const history = await MatchResult.find({ criminalId: criminal._id })
+        .populate('complaintId', 'complaintNumber title category status')
+        .sort({ createdAt: -1 });
+
+      return sendSuccess(res, {
+        type: 'criminal',
+        criminal,
+        history
+      }, 'Criminal QR Code scanned successfully');
+    }
+
+    // 3. Fallback to StolenItem QR token
     const item = await StolenItem.findOne({ qrCodeToken: token })
       .populate('complaintId');
 
@@ -138,7 +160,7 @@ const scanQRCode = async (req, res) => {
       item.recoveryLocation = recoveryLocation;
       item.recoveredDate = new Date();
       await item.save(); // Triggers Mongoose post-save hooks to resolve complaint if applicable
-      
+
       return sendSuccess(res, item, 'Item scanned and marked as RECOVERED successfully');
     }
 
@@ -149,8 +171,42 @@ const scanQRCode = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Get QR code image data URL for a criminal
+ * @route   GET /api/qr/generate/criminal/:criminalId
+ * @access  Private
+ */
+const generateCriminalQRCode = async (req, res) => {
+  try {
+    const Criminal = require('../models/Criminal');
+    const criminal = await Criminal.findById(req.params.criminalId);
+    if (!criminal) {
+      return sendError(res, 'Criminal record not found', 404);
+    }
+
+    if (!criminal.qrCodeToken) {
+      criminal.qrCodeToken = qrService.generateCriminalToken();
+      await criminal.save();
+    }
+
+    // Generate the Base64 QR code image using its unique token
+    const qrCodeDataURL = await qrService.generateQRCodeDataURL(criminal.qrCodeToken);
+
+    return sendSuccess(res, {
+      criminalId: criminal._id,
+      name: criminal.name,
+      qrCodeToken: criminal.qrCodeToken,
+      qrCodeDataURL
+    }, 'Criminal QR Code data URL generated successfully');
+  } catch (error) {
+    console.error('Criminal QR code generation error:', error);
+    return sendError(res, error.message, 500);
+  }
+};
+
 module.exports = {
   generateItemQRCode,
   generateComplaintQRCode,
+  generateCriminalQRCode,
   scanQRCode
 };

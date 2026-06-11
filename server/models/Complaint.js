@@ -52,6 +52,14 @@ const ComplaintSchema = new mongoose.Schema({
     unique: true,
     sparse: true
   },
+  scenePhotos: {
+    type: [String],
+    default: []
+  },
+  audioStatement: {
+    type: String,
+    default: null
+  },
   createdAt: {
     type: Date,
     default: Date.now

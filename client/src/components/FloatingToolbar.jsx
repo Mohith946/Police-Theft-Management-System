@@ -32,12 +32,12 @@ const FloatingToolbar = () => {
   const linkClass = ({ isActive }) =>
     `flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 no-underline relative active:scale-95 ` +
     (isActive
-      ? 'bg-primary text-white shadow-xs'
-      : 'bg-transparent text-slate-500 hover:text-slate-900');
+      ? 'bg-gradient-to-r from-primary to-primary-light text-white shadow-md shadow-indigo-500/15'
+      : 'bg-transparent text-slate-400 hover:text-white hover:bg-white/5');
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-full flex justify-center px-4">
-      <div className="bg-white/85 backdrop-blur-md border border-slate-200/60 rounded-full p-1.5 flex items-center gap-1 shadow-lg shadow-indigo-500/5 pointer-events-auto max-w-full overflow-x-auto">
+      <div className="bg-slate-950/85 backdrop-blur-lg border border-white/5 rounded-full p-1.5 flex items-center gap-1 shadow-2xl pointer-events-auto max-w-full overflow-x-auto">
         
         {/* Alerts Link */}
         <NavLink to="/match-results" className={linkClass}>
@@ -49,8 +49,8 @@ const FloatingToolbar = () => {
             </span>
           )}
         </NavLink>
-
-        <div className="w-px h-4 bg-slate-200 mx-1" />
+ 
+        <div className="w-px h-4 bg-white/10 mx-1" />
 
         {/* QR Scanner Link */}
         <NavLink to="/qr-scanner" className={linkClass}>
@@ -58,7 +58,7 @@ const FloatingToolbar = () => {
           <span>Scanner</span>
         </NavLink>
 
-        <div className="w-px h-4 bg-slate-200 mx-1" />
+        <div className="w-px h-4 bg-white/10 mx-1" />
 
         {/* Reports Link */}
         <NavLink to="/reports" className={linkClass}>
@@ -68,7 +68,7 @@ const FloatingToolbar = () => {
 
         {user.role === 'admin' && (
           <>
-            <div className="w-px h-4 bg-slate-200 mx-1" />
+            <div className="w-px h-4 bg-white/10 mx-1" />
             {/* Manage Access Link */}
             <NavLink to="/users" className={linkClass}>
               <ShieldCheck size={15} />

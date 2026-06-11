@@ -84,28 +84,27 @@ const Reports = () => {
     <div className="flex flex-col gap-6">
       {/* Page Header */}
       <div className="mb-4">
-        <h2 className="text-xl font-bold text-slate-900 font-heading m-0">Caseload Trend Analysis</h2>
-        <p className="text-slate-500 text-xs mt-0.5 m-0">System diagnostics, category breakdowns, recovery indicators, and financial statistics</p>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 font-heading tracking-tight m-0">Caseload Trend Analysis</h1>
       </div>
 
       {/* Financial Valuation Summary Card */}
-      <div className="glass-panel p-6 md:p-8 mb-2 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-br from-blue-50/50 to-emerald-50/50 border-blue-100">
+      <div className="glass-panel p-6 md:p-8 mb-2 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-br from-indigo-950/20 to-emerald-950/20">
         <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Total Valued Stolen Property
           </span>
-          <h3 className="text-3xl font-extrabold text-danger m-0 mt-1">
+          <h3 className="text-3xl font-extrabold text-danger m-0 mt-1 font-heading">
             ₹{financialStats.stolenValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </h3>
           <p className="text-[11px] text-slate-400 m-0 mt-1">
             Aggregate valuation from open pending claims
           </p>
         </div>
-        <div className="flex flex-col gap-1 border-t md:border-t-0 md:border-l border-slate-200/60 pt-6 md:pt-0 md:pl-8">
-          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+        <div className="flex flex-col gap-1 border-t md:border-t-0 md:border-l border-white/10 pt-6 md:pt-0 md:pl-8">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
             Total Value Recovered by Officers
           </span>
-          <h3 className="text-3xl font-extrabold text-success m-0 mt-1">
+          <h3 className="text-3xl font-extrabold text-success m-0 mt-1 font-heading">
             ₹{financialStats.recoveredValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </h3>
           <p className="text-[11px] text-success font-semibold flex items-center gap-1 m-0 mt-1">
@@ -120,18 +119,18 @@ const Reports = () => {
         
         {/* Recovery indicators chart */}
         <div className="glass-panel p-6 min-h-[340px]">
-          <h3 className="text-sm font-bold text-slate-900 mb-5 font-heading m-0">
+          <h3 className="text-sm font-bold text-white mb-5 font-heading m-0">
             Open vs Recovered Items by Category
           </h3>
           <div className="w-full h-[260px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={recoveryData}>
-                <XAxis dataKey="category" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} allowDecimals={false} />
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', borderRadius: 'var(--radius-sm)', color: 'var(--text-primary)' }} />
-                <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: 11 }} />
-                <Bar dataKey="Stolen" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Recovered" fill="#10b981" radius={[4, 4, 0, 0]} />
+                <XAxis dataKey="category" stroke="#64748b" fontSize={11} tickLine={false} />
+                <YAxis stroke="#64748b" fontSize={11} tickLine={false} allowDecimals={false} />
+                <Tooltip contentStyle={{ background: '#0d121e', borderColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px', color: '#ffffff' }} />
+                <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: 11, color: '#94a3b8' }} />
+                <Bar dataKey="Stolen" fill="var(--color-danger)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Recovered" fill="var(--color-success)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -139,7 +138,7 @@ const Reports = () => {
 
         {/* Categories pie chart */}
         <div className="glass-panel p-6 min-h-[340px] flex flex-col">
-          <h3 className="text-sm font-bold text-slate-900 mb-5 font-heading m-0">
+          <h3 className="text-sm font-bold text-white mb-5 font-heading m-0">
             Thefts Classification Spread
           </h3>
           <div className="w-full h-[220px] flex-1">
@@ -159,7 +158,7 @@ const Reports = () => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip contentStyle={{ background: 'var(--bg-card)', borderColor: 'var(--border-color)', borderRadius: 'var(--radius-sm)', color: 'var(--text-primary)' }} />
+                <Tooltip contentStyle={{ background: '#0d121e', borderColor: 'rgba(255, 255, 255, 0.08)', borderRadius: '8px', color: '#ffffff' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>

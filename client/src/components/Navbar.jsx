@@ -15,6 +15,8 @@ const Navbar = () => {
   useEffect(() => {
     const fetchDataCounts = async () => {
       if (user) {
+        const isStaff = user.role === 'officer' || user.role === 'admin';
+        
         try {
           // Fetch Complaints count
           const complaintsRes = await axios.get('/api/complaints');
@@ -24,14 +26,20 @@ const Navbar = () => {
             ).length;
             setActiveCasesCount(unresolved);
           }
-
-          // Fetch Match Alerts count
-          const matchesRes = await axios.get('/api/matches?status=pending');
-          if (matchesRes.data.success) {
-            setMatchCount(matchesRes.data.data.length);
-          }
         } catch (err) {
-          console.error('Failed to load navbar statistics:', err.message);
+          console.error('Failed to load navbar complaints count:', err.message);
+        }
+
+        if (isStaff) {
+          try {
+            // Fetch Match Alerts count
+            const matchesRes = await axios.get('/api/matches?status=pending');
+            if (matchesRes.data.success) {
+              setMatchCount(matchesRes.data.data.length);
+            }
+          } catch (err) {
+            console.error('Failed to load navbar match alerts count:', err.message);
+          }
         }
       }
     };
@@ -62,28 +70,28 @@ const Navbar = () => {
   const navLinkClass = ({ isActive }) =>
     `px-5 py-2 rounded-full font-semibold text-xs transition-all duration-200 flex items-center gap-1.5 no-underline ` +
     (isActive
-      ? 'bg-primary text-white shadow-xs'
-      : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900');
+      ? 'bg-gradient-to-r from-primary to-primary-light text-white shadow-md shadow-indigo-500/15'
+      : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white');
 
   const userInitials = user.username ? user.username.slice(0, 2).toUpperCase() : 'US';
 
   return (
-    <header className="h-20 bg-white/75 backdrop-blur-md sticky top-0 z-50 px-10 flex items-center justify-between border-b border-slate-200/50 shadow-xs">
+    <header className="h-20 bg-slate-950/30 backdrop-blur-lg sticky top-0 z-50 px-10 flex items-center justify-between border-b border-white/5 shadow-lg">
       
       {/* Brand Logo & Title (Left) */}
       <div className="flex items-center">
         <Link to="/" className="flex items-center gap-2.5 no-underline">
-          <div className="bg-primary w-9 h-9 rounded-lg flex items-center justify-center">
+          <div className="bg-gradient-to-br from-primary to-primary-light w-9 h-9 rounded-lg flex items-center justify-center">
             <Shield size={18} className="text-white" />
           </div>
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight font-heading m-0">
-            Shield
+          <h1 className="text-xl font-extrabold text-white tracking-tight font-heading m-0">
+            SHIELD
           </h1>
         </Link>
       </div>
 
-      {/* Navigation Pills (Center) */}
-      <nav className="flex items-center gap-2.5">
+      {/* Navigation Pills (Center) - Hidden on desktop since sidebar is active */}
+      <nav className="md:hidden flex items-center gap-2.5">
         <NavLink to="/" className={navLinkClass}>
           <span>Dashboard</span>
         </NavLink>
@@ -111,7 +119,7 @@ const Navbar = () => {
         {/* Quick Action (Solid Indigo Circle) */}
         <Link 
           to="/complaints/add" 
-          className="bg-primary hover:bg-indigo-700 w-9.5 h-9.5 rounded-full flex items-center justify-center transition-all duration-200 no-underline shadow-sm active:scale-95"
+          className="bg-gradient-to-r from-primary to-primary-light hover:brightness-110 hover:shadow-indigo-500/20 w-9.5 h-9.5 rounded-full flex items-center justify-center transition-all duration-200 no-underline shadow-sm active:scale-95"
           title="File New Theft Report"
         >
           <Plus size={18} className="text-white" />
@@ -119,7 +127,7 @@ const Navbar = () => {
 
         {/* Search Circular Button */}
         <button 
-          className="bg-white/40 hover:bg-slate-50 border border-slate-200/60 w-9.5 h-9.5 rounded-full flex items-center justify-center cursor-pointer text-slate-600 transition-all duration-200 active:scale-95"
+          className="bg-white/5 hover:bg-white/10 border border-white/5 w-9.5 h-9.5 rounded-full flex items-center justify-center cursor-pointer text-slate-300 transition-all duration-200 active:scale-95"
           onClick={() => navigate('/')}
           title="Search Console"
         >
@@ -129,37 +137,37 @@ const Navbar = () => {
         {/* Alerts Notification Button */}
         <Link 
           to="/match-results" 
-          className="bg-white/40 hover:bg-slate-50 border border-slate-200/60 w-9.5 h-9.5 rounded-full flex items-center justify-center cursor-pointer text-slate-600 relative no-underline transition-all duration-200 active:scale-95"
+          className="bg-white/5 hover:bg-white/10 border border-white/5 w-9.5 h-9.5 rounded-full flex items-center justify-center cursor-pointer text-slate-300 relative no-underline transition-all duration-200 active:scale-95"
           title="Match Alerts"
         >
           <Bell size={16} />
           {matchCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
+            <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-[#070a13]">
               {matchCount}
             </span>
           )}
         </Link>
 
         {/* Divider */}
-        <div className="w-px h-6 bg-slate-200 mx-1" />
+        <div className="w-px h-6 bg-white/10 mx-1" />
 
         {/* Profile Dropdown */}
         <div ref={dropdownRef} className="relative">
           <div 
             onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="flex items-center gap-2 cursor-pointer p-1 rounded-lg select-none hover:bg-slate-50 transition-all duration-200"
+            className="flex items-center gap-2 cursor-pointer p-1 rounded-lg select-none hover:bg-white/5 transition-all duration-200"
           >
             {/* Avatar image / initials */}
-            <div className="w-9.5 h-9.5 rounded-full bg-indigo-50 text-primary border border-indigo-100/80 flex items-center justify-center text-xs font-bold">
+            <div className="w-9.5 h-9.5 rounded-full bg-primary/10 text-primary-light border border-primary/20 flex items-center justify-center text-xs font-bold">
               {userInitials}
             </div>
 
             {/* Name and Role */}
             <div className="text-left flex flex-col">
-              <span className="text-xs font-bold text-slate-900 leading-tight">
+              <span className="text-xs font-bold text-white leading-tight">
                 {user.username}
               </span>
-              <span className="text-[10px] text-slate-500 capitalize leading-tight">
+              <span className="text-[10px] text-slate-400 capitalize leading-tight">
                 {user.role}
               </span>
             </div>
@@ -176,10 +184,10 @@ const Navbar = () => {
 
           {/* Dropdown Menu */}
           {dropdownOpen && (
-            <div className="absolute top-full right-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-lg w-36 p-1 flex flex-col z-[1010]">
+            <div className="absolute top-full right-0 mt-2 bg-slate-900/90 border border-white/5 rounded-xl shadow-xl w-36 p-1 flex flex-col z-[1010] backdrop-blur-md">
               <button
                 onClick={handleLogoutClick}
-                className="flex items-center gap-2 p-2.5 bg-transparent border-none rounded-lg text-red-500 text-xs font-semibold cursor-pointer text-left w-full hover:bg-red-50 transition-all duration-200"
+                className="flex items-center gap-2 p-2.5 bg-transparent border-none rounded-lg text-red-400 text-xs font-semibold cursor-pointer text-left w-full hover:bg-red-500/10 transition-all duration-200"
               >
                 <LogOut size={14} />
                 <span>Sign Out</span>

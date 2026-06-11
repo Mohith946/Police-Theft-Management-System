@@ -78,6 +78,8 @@ const createComplaint = async (req, res) => {
       theftLocation,
       reporterName,
       reporterContact,
+      scenePhotos,
+      audioStatement,
       items // Array of items: [{ itemName, description, serialNumber, estimatedValue }]
     } = req.body;
 
@@ -93,6 +95,58 @@ const createComplaint = async (req, res) => {
     // Generate unique complaint QR token
     const complaintToken = generateComplaintToken();
 
+    // Handle scenePhotos: upload base64 files to Uploadthing
+    const uploadedPhotoUrls = [];
+    if (scenePhotos && Array.isArray(scenePhotos) && scenePhotos.length > 0) {
+      try {
+        const { UTApi } = require('uploadthing/server');
+        const utapi = new UTApi({
+          token: process.env.UPLOADTHING_TOKEN
+        });
+
+        for (let i = 0; i < scenePhotos.length; i++) {
+          const photo = scenePhotos[i];
+          if (photo.startsWith('data:image/')) {
+            try {
+              const matches = photo.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
+              if (matches && matches.length >= 3) {
+                const ext = matches[1];
+                const base64Data = matches[2];
+                const buffer = Buffer.from(base64Data, 'base64');
+                
+                const filename = `complaint_photo_${Date.now()}_${i}.${ext}`;
+                const file = new File([buffer], filename, { type: `image/${ext}` });
+                
+                console.log(`[UploadThing] Uploading ${filename} to Uploadthing...`);
+                const uploadResponse = await utapi.uploadFiles([file]);
+                
+                if (uploadResponse && uploadResponse[0] && uploadResponse[0].data) {
+                  const url = uploadResponse[0].data.ufsUrl || uploadResponse[0].data.url;
+                  console.log(`[UploadThing] Uploaded successfully: ${url}`);
+                  uploadedPhotoUrls.push(url);
+                } else {
+                  console.error(`[UploadThing Error] Failed upload for index ${i}:`, uploadResponse[0]?.error);
+                  uploadedPhotoUrls.push(photo);
+                }
+              } else {
+                uploadedPhotoUrls.push(photo);
+              }
+            } catch (err) {
+              console.error(`[UploadThing Error] Exception on photo index ${i}:`, err);
+              uploadedPhotoUrls.push(photo);
+            }
+          } else {
+            uploadedPhotoUrls.push(photo);
+          }
+        }
+      } catch (err) {
+        console.error('[UploadThing Init Error] Failed to initialize UTApi or upload files:', err);
+        uploadedPhotoUrls.push(...scenePhotos);
+      }
+    } else {
+      uploadedPhotoUrls.push(...(scenePhotos || []));
+    }
+
     // Create the complaint
     const complaint = await Complaint.create({
       complaintNumber,
@@ -105,6 +159,8 @@ const createComplaint = async (req, res) => {
       reporterName,
       reporterContact: reporterContact || '',
       qrCodeToken: complaintToken,
+      scenePhotos: uploadedPhotoUrls,
+      audioStatement: audioStatement || null,
       status: 'pending'
     });
 
@@ -147,7 +203,7 @@ const updateComplaint = async (req, res) => {
       return sendError(res, 'Complaint record not found', 404);
     }
 
-    const { title, description, category, theftDate, theftLocation, status } = req.body;
+    const { title, description, category, theftDate, theftLocation, status, caughtSuspect } = req.body;
 
     if (title) complaint.title = title;
     if (description) complaint.description = description;
@@ -157,6 +213,42 @@ const updateComplaint = async (req, res) => {
     if (status) complaint.status = status;
 
     await complaint.save();
+
+    // If status is resolved and caughtSuspect details are provided, create the Criminal record
+    if (status === 'resolved' && caughtSuspect && caughtSuspect.name) {
+      const Criminal = require('../models/Criminal');
+      const MatchResult = require('../models/MatchResult');
+
+      const { name, aliases, gender, lastKnownLocation, physicalFeatures } = caughtSuspect;
+
+      const criminal = await Criminal.create({
+        name,
+        aliases: aliases || '',
+        gender: gender || 'other',
+        lastKnownLocation: lastKnownLocation || complaint.theftLocation,
+        physicalFeatures: {
+          height: physicalFeatures?.height ? parseInt(physicalFeatures.height) : undefined,
+          weight: physicalFeatures?.weight ? parseInt(physicalFeatures.weight) : undefined,
+          hairColor: physicalFeatures?.hairColor || 'unknown',
+          eyeColor: physicalFeatures?.eyeColor || 'unknown',
+          scars: physicalFeatures?.scars || 'none',
+          tattoos: physicalFeatures?.tattoos || 'none'
+        },
+        status: 'incarcerated' // caught!
+      });
+
+      // Create a verified MatchResult to connect this criminal and complaint case
+      await MatchResult.findOneAndUpdate(
+        { complaintId: complaint._id, criminalId: criminal._id },
+        {
+          matchScore: 100,
+          matchReason: 'Perpetrator caught and arrested during active case investigation.',
+          status: 'verified'
+        },
+        { upsert: true, new: true }
+      );
+    }
+
     return sendSuccess(res, complaint, 'Complaint updated successfully');
   } catch (error) {
     console.error('Update complaint error:', error);

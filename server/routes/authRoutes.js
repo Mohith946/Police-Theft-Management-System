@@ -3,9 +3,11 @@ const router = express.Router();
 const { 
   register, 
   login, 
+  googleLogin,
   getMe,
   getUsers,
   updateUserRole,
+  updateUserStatus,
   deleteUser
 } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
@@ -16,6 +18,7 @@ router.post('/register', protect, authorize('admin'), register);
 
 // Route for login
 router.post('/login', login);
+router.post('/google-login', googleLogin);
 
 // Route for getting current user info
 router.get('/me', protect, getMe);
@@ -26,6 +29,9 @@ router.route('/users')
 
 router.route('/users/:id/role')
   .put(protect, authorize('admin'), updateUserRole);
+
+router.route('/users/:id/status')
+  .put(protect, authorize('admin'), updateUserStatus);
 
 router.route('/users/:id')
   .delete(protect, authorize('admin'), deleteUser);

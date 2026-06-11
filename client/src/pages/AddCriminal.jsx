@@ -87,18 +87,18 @@ const AddCriminal = () => {
       {/* Navigation Header */}
       <button 
         onClick={() => navigate(-1)} 
-        className="bg-transparent border-none text-slate-500 cursor-pointer flex items-center gap-1.5 text-xs mb-4 p-0 hover:text-slate-900 transition-all duration-200"
+        className="bg-transparent border-none text-slate-400 cursor-pointer flex items-center gap-1.5 text-xs mb-4 p-0 hover:text-white transition-all duration-200"
       >
         <ArrowLeft size={16} />
         <span>Return to registry</span>
       </button>
 
-      <h2 className="text-xl font-bold text-slate-950 mb-6 font-heading">
+      <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 font-heading tracking-tight mb-6 m-0">
         Create Suspect Profile
-      </h2>
+      </h1>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-3.5 text-danger text-xs text-center mb-6">
+        <div className="bg-red-950/30 border border-red-500/20 rounded-xl p-3.5 text-danger text-xs text-center mb-6">
           {error}
         </div>
       )}
@@ -106,7 +106,7 @@ const AddCriminal = () => {
       <form onSubmit={handleSubmit} className="glass-panel p-6 md:p-8">
         {/* Profile photo upload */}
         <div className="flex gap-6 flex-wrap mb-6 items-center">
-          <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-dashed border-slate-200 flex items-center justify-center bg-slate-50 relative shadow-inner">
+          <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-dashed border-white/10 flex items-center justify-center bg-white/2 relative shadow-inner">
             {photoPreview ? (
               <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
             ) : (
@@ -125,17 +125,17 @@ const AddCriminal = () => {
               className="hidden"
               id="photo-upload-input"
             />
-            <label htmlFor="photo-upload-input" className="btn btn-secondary py-1.5 px-3.5 text-xs cursor-pointer">
+            <label htmlFor="photo-upload-input" className="btn btn-secondary py-1.5 px-3.5 text-xs cursor-pointer font-semibold">
               Select Image File
             </label>
-            <p className="text-slate-400 text-[10px] mt-1.5">
+            <p className="text-slate-400 text-[10px] mt-1.5 font-medium">
               Allowed formats: JPG, PNG, WEBP. Max size: 5MB.
             </p>
           </div>
         </div>
 
         {/* Section 1: Basic Information */}
-        <h3 className="text-sm font-bold text-primary border-b border-slate-200/60 pb-2 mb-5 font-heading">
+        <h3 className="text-sm font-bold text-primary-light border-b border-white/5 pb-2 mb-5 font-heading">
           1. Identity Details
         </h3>
         
@@ -181,7 +181,7 @@ const AddCriminal = () => {
         </div>
 
         {/* Section 2: Physical Description */}
-        <h3 className="text-sm font-bold text-primary border-b border-slate-200/60 pb-2 mb-5 font-heading mt-6">
+        <h3 className="text-sm font-bold text-primary-light border-b border-white/5 pb-2 mb-5 font-heading mt-6">
           2. Physical Features
         </h3>
 
@@ -260,7 +260,7 @@ const AddCriminal = () => {
         </div>
 
         {/* Section 3: Geolocation */}
-        <h3 className="text-sm font-bold text-primary border-b border-slate-200/60 pb-2 mb-5 font-heading mt-6">
+        <h3 className="text-sm font-bold text-primary-light border-b border-white/5 pb-2 mb-5 font-heading mt-6">
           3. Operating Region & Coordinates
         </h3>
 
@@ -280,7 +280,7 @@ const AddCriminal = () => {
 
         <button 
           type="submit" 
-          className="btn btn-primary w-full py-3 text-sm flex justify-center items-center gap-2 mt-2"
+          className="btn btn-primary w-full py-3 text-sm flex justify-center items-center gap-2 mt-2 font-semibold"
           disabled={submitting} 
         >
           <Save size={18} />

@@ -36,6 +36,11 @@ const CriminalSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  qrCodeToken: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
   status: {
     type: String,
     enum: ['active', 'incarcerated', 'deceased'],
@@ -45,6 +50,15 @@ const CriminalSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+CriminalSchema.pre('save', function(next) {
+  if (!this.qrCodeToken) {
+    const crypto = require('crypto');
+    const randomBytes = crypto.randomBytes(8).toString('hex');
+    this.qrCodeToken = `QR-CRIM-${Date.now()}-${randomBytes.toUpperCase()}`;
+  }
+  next();
 });
 
 CriminalSchema.index({ status: 1 });

@@ -38,8 +38,14 @@ const generateComplaintToken = () => {
   return `QR-COMP-${Date.now()}-${randomBytes.toUpperCase()}`;
 };
 
+const generateCriminalToken = () => {
+  const randomBytes = crypto.randomBytes(8).toString('hex');
+  return `QR-CRIM-${Date.now()}-${randomBytes.toUpperCase()}`;
+};
+
 module.exports = {
   generateUniqueToken,
   generateComplaintToken,
+  generateCriminalToken,
   generateQRCodeDataURL
 };

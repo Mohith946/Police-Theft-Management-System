@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sahara PD - Police Theft Management System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Eb+Garamond:wght@400;500;600;700;800&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#d47070",
+                      "surface-container-high": "#ece6dc",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#dcd6cc",
+                      "secondary": "#78706a",
+                      "on-error": "#ffffff",
+                      "error": "#c0392b",
+                      "inverse-on-surface": "#faf5ee",
+                      "on-primary-container": "#fbe8d8",
+                      "surface-tint": "#c2652a",
+                      "on-primary-fixed-variant": "#8a4518",
+                      "primary-fixed": "#fbe8d8",
+                      "secondary-fixed": "#eae2da",
+                      "inverse-primary": "#f0a878",
+                      "on-error-container": "#7a1a10",
+                      "surface-container-highest": "#e6e0d6",
+                      "primary-container": "#e08850",
+                      "primary": "#c2652a",
+                      "on-tertiary-container": "#3a2020",
+                      "surface": "#faf5ee",
+                      "on-secondary-container": "#605850",
+                      "primary-fixed-dim": "#f0a878",
+                      "outline": "#9a9088",
+                      "on-tertiary-fixed-variant": "#6e3030",
+                      "on-secondary-fixed-variant": "#504840",
+                      "surface-bright": "#faf5ee",
+                      "on-primary-fixed": "#401a08",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed-dim": "#cec6be",
+                      "tertiary": "#8c3c3c",
+                      "tertiary-fixed-dim": "#e8a0a0",
+                      "on-tertiary-fixed": "#2e1515",
+                      "background": "#faf5ee",
+                      "on-secondary-fixed": "#2a2420",
+                      "inverse-surface": "#3a302a",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#3a302a",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#3a302a",
+                      "tertiary-fixed": "#fce0e0",
+                      "secondary-container": "#eae2da",
+                      "error-container": "#fce4e0",
+                      "on-surface-variant": "#605850",
+                      "outline-variant": "#d8d0c8",
+                      "surface-container-low": "#f6f0e8",
+                      "surface-container": "#f2ece4",
+                      "surface-variant": "#ece6dc"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.8rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Eb Garamond", "serif"],
+                      "display": ["Eb Garamond", "serif"],
+                      "body": ["Manrope", "sans-serif"],
+                      "label": ["Manrope", "sans-serif"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            background-color: #faf5ee;
+            color: #3a302a;
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .card-shadow {
+            box-shadow: 0 2px 16px rgba(58, 48, 42, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-6 py-3 border-b border-outline-variant bg-surface sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="font-headline text-2xl font-bold text-primary dark:text-primary-fixed-dim">Sahara PD</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body text-sm cursor-pointer" href="#">Records</a>
+<a class="text-on-surface-variant font-medium font-body text-sm hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 rounded cursor-pointer" href="#">Complaints</a>
+<a class="text-on-surface-variant font-medium font-body text-sm hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 rounded cursor-pointer" href="#">Evidence</a>
+<a class="text-on-surface-variant font-medium font-body text-sm hover:text-primary hover:bg-surface-container-low transition-colors px-2 py-1 rounded cursor-pointer" href="#">Reports</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 border border-outline-variant text-on-surface font-body text-sm font-semibold rounded-lg hover:bg-surface-container transition-all active:opacity-80">Export Data</button>
+<button class="px-4 py-2 bg-primary text-on-primary font-body text-sm font-semibold rounded-lg hover:bg-surface-tint transition-all active:opacity-80">New Record</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="Officer Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGpKKGOFt3I0Ezq1ZY2lRNu-qldDmuoyXKjb1geegFQ0MtrQxQEML7bLtZguuMXB5SqHirgCzDoE1m4DhenASDi8lyQUkhu3rJ6jG6RJfg5jfRzcYF3pnQt4y_qucdBrgDoBo__hz5ZCWjbD_iwDKESUx48TNBp0-cdz402sRC7NT8NhQ_f2qv-yg5Zbzr7cWSqY-mnfnuiivInbtVrqL87qKpS76h0aGgtLdKR7uMriazk8V5eRYuYqjidYbzuDF98QQlIOzH67Xz"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full w-64 border-r border-outline-variant bg-surface-container-low py-6 px-4 gap-4 overflow-y-auto">
+<div class="flex flex-col gap-1 mb-6 px-2">
+<span class="font-headline text-lg font-bold text-on-surface">Main Operations</span>
+<span class="font-body font-semibold uppercase tracking-wider text-[10px] text-on-surface-variant">Precision &amp; Integrity</span>
+</div>
+<nav class="flex flex-col gap-2">
+<div class="flex items-center gap-3 bg-primary-container text-on-primary-container rounded-lg px-4 py-2 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Dashboard</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="folder_shared">folder_shared</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Active Cases</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Archive</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Personnel</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:bg-secondary-container hover:text-on-secondary-container transition-all cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body font-semibold uppercase tracking-wider text-xs">Settings</span>
+</div>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline-variant">
+<button class="w-full flex items-center justify-center gap-2 py-3 bg-tertiary text-on-tertiary rounded-lg font-body font-bold text-xs uppercase tracking-widest hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span>
+                    Emergency Alert
+                </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto p-8 space-y-8">
+<!-- Dashboard Header -->
+<div class="flex flex-col gap-1">
+<h1 class="font-headline text-4xl text-on-surface">Theft Management Overview</h1>
+<p class="font-body text-on-surface-variant max-w-2xl">A summary of ongoing investigations, recent incident reports, and district-wide statistics for the Sahara Precinct.</p>
+</div>
+<!-- Active Cases Summary Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg card-shadow flex flex-col gap-2">
+<span class="font-body text-xs font-bold uppercase tracking-wider text-on-surface-variant">Active Investigations</span>
+<div class="flex items-end justify-between">
+<span class="font-headline text-4xl font-bold text-primary">142</span>
+<span class="text-tertiary font-bold text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span>
+                            +12%
+                        </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg card-shadow flex flex-col gap-2">
+<span class="font-body text-xs font-bold uppercase tracking-wider text-on-surface-variant">Unresolved Reports</span>
+<div class="flex items-end justify-between">
+<span class="font-headline text-4xl font-bold text-on-surface">28</span>
+<span class="text-secondary font-bold text-xs">Awaiting Entry</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg card-shadow flex flex-col gap-2">
+<span class="font-body text-xs font-bold uppercase tracking-wider text-on-surface-variant">Recovered Assets</span>
+<div class="flex items-end justify-between">
+<span class="font-headline text-4xl font-bold text-on-surface">54</span>
+<span class="text-on-primary-fixed-variant font-bold text-xs">Month-to-Date</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-6 rounded-lg card-shadow flex flex-col gap-2">
+<span class="font-body text-xs font-bold uppercase tracking-wider text-on-surface-variant">Avg Resolution Time</span>
+<div class="flex items-end justify-between">
+<span class="font-headline text-4xl font-bold text-on-surface">8.4<span class="text-lg">d</span></span>
+<span class="text-on-secondary-fixed-variant font-bold text-xs">District Avg</span>
+</div>
+</div>
+</div>
+<!-- Main Layout: Cases & Widgets -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Recent Incidents -->
+<div class="lg:col-span-2 space-y-6">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden card-shadow">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="font-headline text-xl font-bold">Recent Incident Reports</h2>
+<button class="text-primary font-body text-sm font-bold hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container border-b border-outline-variant font-body text-xs uppercase tracking-wider text-on-surface-variant">
+<tr>
+<th class="px-6 py-3 font-semibold">Case ID</th>
+<th class="px-6 py-3 font-semibold">Incident Type</th>
+<th class="px-6 py-3 font-semibold">Location</th>
+<th class="px-6 py-3 font-semibold">Reported</th>
+<th class="px-6 py-3 font-semibold text-right">Status</th>
+</tr>
+</thead>
+<tbody class="font-body text-sm divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold text-primary">CAS-2024-8812</td>
+<td class="px-6 py-4">Commercial Burglary</td>
+<td class="px-6 py-4 text-on-surface-variant">Oak St. Commercial Plaza</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 14, 02:30</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 bg-primary-container text-on-primary-container text-[10px] font-bold uppercase rounded">Active</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold text-primary">CAS-2024-8815</td>
+<td class="px-6 py-4">Grand Theft Auto</td>
+<td class="px-6 py-4 text-on-surface-variant">Central Heights Garage</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 13, 21:15</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant text-[10px] font-bold uppercase rounded">Pending</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold text-primary">CAS-2024-8798</td>
+<td class="px-6 py-4">Shoplifting (Felony)</td>
+<td class="px-6 py-4 text-on-surface-variant">Vanguard Retail Hub</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 13, 14:05</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant text-[10px] font-bold uppercase rounded">Pending</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold text-primary">CAS-2024-8762</td>
+<td class="px-6 py-4">Petty Theft</td>
+<td class="px-6 py-4 text-on-surface-variant">Riverside Park</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 12, 11:45</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase rounded">Closed</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="px-6 py-4 font-bold text-primary">CAS-2024-8744</td>
+<td class="px-6 py-4">Bicycle Theft</td>
+<td class="px-6 py-4 text-on-surface-variant">Union Station West</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 12, 09:20</td>
+<td class="px-6 py-4 text-right">
+<span class="px-2 py-1 bg-primary-container text-on-primary-container text-[10px] font-bold uppercase rounded">Active</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Map/Location Placeholder Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden card-shadow">
+<div class="px-6 py-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h2 class="font-headline text-xl font-bold">Precinct Hotspots</h2>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-secondary cursor-pointer" data-icon="filter_list">filter_list</span>
+<span class="material-symbols-outlined text-secondary cursor-pointer" data-icon="fullscreen">fullscreen</span>
+</div>
+</div>
+<div class="h-64 bg-surface-container relative">
+<img alt="City Map View" class="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700" data-alt="A detailed, warm-toned cartographic street map of a sprawling urban metropolitan district at dusk. The map features golden-lit main arteries and soft warm linen secondary streets, maintaining a minimalist and elegant design consistent with a luxury editorial aesthetic. Sparse burnt sienna markers indicate high-activity zones, while the overall mood is disciplined, archival, and sophisticated with a sun-baked desert-inspired palette." data-location="Los Angeles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOyYFi5gwSwdm8Q5bBcAsAcb-xm_BMJ6Z_PA1Ns0ur-kjdAnoCwx78wczN2KPsv2qgRiGfqdT--2htQ7xLpdQlPPQHYsVE-N-qFIP4C1DfTF_NJmHtX7nHo0eobqODw3egBy5YZUzD7Ile1-hlT6WhQs74HP82nTDQ8ExvETrHmGjOrAzbuzog9Ed8A1uMsWWMS8VfJ4AkHAvTtTi9DXNVrly_dg3yReLZ1nhoDMJeJXbL4dvVAizYVDzTOcdVq0diybPZIHPP5hST"/>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="bg-surface/90 backdrop-blur-sm border border-outline-variant px-4 py-2 rounded-lg card-shadow">
+<span class="font-body text-sm font-bold text-on-surface">Interactive Precinct Map - Restricted Access</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Widgets -->
+<div class="space-y-6">
+<!-- Quick Access: Stolen Item Database -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden card-shadow">
+<div class="px-6 py-4 border-b border-outline-variant bg-surface-container-low">
+<h2 class="font-headline text-xl font-bold">Stolen Item Database</h2>
+</div>
+<div class="p-6 space-y-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container border border-outline-variant rounded-lg text-sm font-body focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Serial Number, Brand, or ID..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1.5 bg-surface-variant text-on-surface-variant text-xs font-bold rounded-lg hover:bg-secondary-container transition-all">Electronics</button>
+<button class="px-3 py-1.5 bg-surface-variant text-on-surface-variant text-xs font-bold rounded-lg hover:bg-secondary-container transition-all">Vehicles</button>
+<button class="px-3 py-1.5 bg-surface-variant text-on-surface-variant text-xs font-bold rounded-lg hover:bg-secondary-container transition-all">Jewelry</button>
+<button class="px-3 py-1.5 bg-surface-variant text-on-surface-variant text-xs font-bold rounded-lg hover:bg-secondary-container transition-all">Art</button>
+</div>
+<div class="space-y-3 pt-2">
+<div class="flex items-center gap-3 p-3 border border-outline-variant rounded-lg hover:border-primary transition-all cursor-pointer">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="watch">watch</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Rolex Submariner</span>
+<span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider">SN: 4421-XL-88</span>
+</div>
+</div>
+<div class="flex items-center gap-3 p-3 border border-outline-variant rounded-lg hover:border-primary transition-all cursor-pointer">
+<div class="w-10 h-10 bg-surface-container flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="laptop">laptop</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold">MacBook Pro 16"</span>
+<span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-wider">SN: C02DW9...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Precinct Statistics Widget -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg overflow-hidden card-shadow">
+<div class="px-6 py-4 border-b border-outline-variant bg-surface-container-low">
+<h2 class="font-headline text-xl font-bold">Precinct Statistics</h2>
+</div>
+<div class="p-6 space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-wider">
+<span>Clearance Rate</span>
+<span class="text-primary">68%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[68%]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-wider">
+<span>Evidence Processing</span>
+<span class="text-primary">92%</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%]"></div>
+</div>
+</div>
+<div class="pt-2 border-t border-outline-variant">
+<div class="flex flex-col gap-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="local_police">local_police</span>
+<div>
+<p class="text-sm font-bold">Patrol Sector Alpha</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Highest Recovery Month</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-on-surface" data-icon="groups_2">groups_2</span>
+<div>
+<p class="text-sm font-bold">Investigative Unit B</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Lead Team for Theft/Fraud</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Archive Shortcut -->
+<div class="bg-inverse-surface text-inverse-on-surface p-6 rounded-lg space-y-4 shadow-xl">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="history">history</span>
+<h3 class="font-headline text-lg">Case Archives</h3>
+</div>
+<p class="font-body text-xs opacity-80 leading-relaxed">Access historical records for theft and burglary cases dating back to 2018. Requires Supervisor Level-2 clearance.</p>
+<button class="w-full py-2 border border-primary-fixed text-primary-fixed rounded font-body text-xs font-bold uppercase tracking-widest hover:bg-primary-fixed hover:text-on-primary-fixed transition-all">Access Archive</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Floating Action Button Logic - Suppressed per rules for Dashboard if not strictly aligned, but we keep the New Record CTA in Header -->
+<script>
+        // Simple interactivity for demonstration
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', () => {
+                const caseId = row.querySelector('td:first-child')?.innerText;
+                if(caseId) {
+                    console.log(`Accessing Case: ${caseId}`);
+                    // Mock interaction
+                    alert(`Loading full report for ${caseId}...`);
+                }
+            });
+        });
+
+        // Hover effect for map interaction simulation
+        const mapContainer = document.querySelector('[data-location]');
+        if(mapContainer) {
+            mapContainer.parentElement.addEventListener('mouseenter', () => {
+                mapContainer.style.filter = 'grayscale(0)';
+            });
+            mapContainer.parentElement.addEventListener('mouseleave', () => {
+                mapContainer.style.filter = 'grayscale(100%)';
+            });
+        }
+    </script>
+</body></html>

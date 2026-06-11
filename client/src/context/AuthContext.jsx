@@ -46,9 +46,9 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   // Login handler
-  const login = async (email, password, accessCode) => {
+  const login = async (email, password) => {
     try {
-      const response = await axios.post('/api/auth/login', { email, password, accessCode });
+      const response = await axios.post('/api/auth/login', { email, password });
       if (response.data.success) {
         const userData = response.data.data;
         localStorage.setItem('token', userData.token);
@@ -66,7 +66,11 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error('Login error:', err);
       const errMsg = err.response?.data?.message || 'Invalid email or password';
-      return { success: false, message: errMsg };
+      return { 
+        success: false, 
+        message: errMsg,
+        status: err.response?.data?.status
+      };
     }
   };
 
@@ -111,11 +115,41 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  // Google Login handler
+  const googleLogin = async (tokenString) => {
+    try {
+      const response = await axios.post('/api/auth/google-login', { token: tokenString });
+      if (response.data.success) {
+        const userData = response.data.data;
+        localStorage.setItem('token', userData.token);
+        setToken(userData.token);
+        setUser({
+          _id: userData.user._id,
+          username: userData.user.username,
+          email: userData.user.email,
+          role: userData.user.role,
+          badgeNumber: userData.user.badgeNumber || null
+        });
+        return { success: true };
+      }
+      return { success: false, message: response.data.message || 'Google Login failed' };
+    } catch (err) {
+      console.error('Google login error:', err);
+      const errMsg = err.response?.data?.message || 'Google authentication failed';
+      return { 
+        success: false, 
+        message: errMsg,
+        status: err.response?.data?.status
+      };
+    }
+  };
+
   const value = {
     user,
     token,
     loading,
     login,
+    googleLogin,
     register,
     logout,
     isAuthenticated: !!user
