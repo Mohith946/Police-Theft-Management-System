@@ -255,7 +255,7 @@ const Dashboard = () => {
                 className="w-full h-full border-0"
                 loading="lazy"
                 allowFullScreen
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCsZa8S3TaCS5er4Y9QdNxr3sLSsbTNAWI&q=Cityville"
+                src="https://maps.google.com/maps?q=Cityville&t=&z=13&ie=UTF8&iwloc=&output=embed"
               ></iframe>
               <div className="absolute top-3 left-3 pointer-events-none">
                 <div className="bg-white/95 px-3 py-1.5 rounded-lg shadow-[0_4px_12px_rgba(0,0,0,0.08)]">
