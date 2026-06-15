@@ -12,77 +12,37 @@ import { Link } from 'react-router-dom';
 const Dashboard = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    totalStolen: 0,
-    totalRecovered: 0,
-    activeMatches: 0,
-    totalComplaints: 0
+  const [dashboardData, setDashboardData] = useState({
+    stats: {
+      totalStolen: 0,
+      totalRecovered: 0,
+      activeMatches: 0,
+      totalComplaints: 0
+    },
+    activeInvestigationsCount: 0,
+    unresolvedReportsCount: 0,
+    recoveredAssetsCount: 0,
+    avgResolutionTimeText: 'N/A',
+    clearanceRate: 0,
+    evidenceProcessingRate: 0,
+    recentComplaints: []
   });
-  const [allComplaints, setAllComplaints] = useState([]);
+
   const [stolenItems, setStolenItems] = useState([]);
   const [stolenSearch, setStolenSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [searchingStolen, setSearchingStolen] = useState(false);
+
+  const isOfficer = user?.role === 'officer' || user?.role === 'admin';
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const isStaff = user?.role === 'officer' || user?.role === 'admin';
-
-        // 1. Fetch complaints
-        let complaints = [];
-        try {
-          const compRes = await axios.get('/api/complaints');
-          if (compRes.data.success) {
-            complaints = compRes.data.data;
-            setAllComplaints(complaints);
-          }
-        } catch (err) {
-          console.error('Failed to load complaints:', err.message);
+        const res = await axios.get('/api/reports/dashboard-stats');
+        if (res.data.success) {
+          setDashboardData(res.data.data);
         }
-
-        let stolenCount = 0;
-        let recoveredCount = 0;
-        let activeMatchesCount = 0;
-
-        // 2. Fetch Stolen/Recovered Items and active matches (Staff only)
-        if (isStaff) {
-          try {
-            const stolenRes = await axios.get('/api/items/stolen');
-            if (stolenRes.data.success) {
-              const fetchedStolen = stolenRes.data.data;
-              setStolenItems(fetchedStolen);
-              stolenCount = fetchedStolen.length;
-            }
-          } catch (err) {
-            console.error('Failed to load stolen items:', err.message);
-          }
-
-          try {
-            const recoveredRes = await axios.get('/api/items/recovered');
-            if (recoveredRes.data.success) {
-              recoveredCount = recoveredRes.data.data.length;
-            }
-          } catch (err) {
-            console.error('Failed to load recovered items:', err.message);
-          }
-
-          try {
-            const matchRes = await axios.get('/api/matches?status=pending');
-            if (matchRes.data.success) {
-              activeMatchesCount = matchRes.data.data.length;
-            }
-          } catch (err) {
-            console.error('Failed to load match alerts:', err.message);
-          }
-        }
-
-        setStats({
-          totalStolen: stolenCount,
-          totalRecovered: recoveredCount,
-          activeMatches: activeMatchesCount,
-          totalComplaints: complaints.length
-        });
       } catch (err) {
         console.error('Failed to load dashboard metrics:', err.message);
       } finally {
@@ -91,7 +51,33 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  }, [user]);
+  }, []);
+
+  // Debounced server-side search for stolen items locker widget (staff only)
+  useEffect(() => {
+    if (!isOfficer) return;
+
+    const fetchStolenSearch = async () => {
+      try {
+        setSearchingStolen(true);
+        const res = await axios.get(`/api/items/stolen?search=${stolenSearch}&category=${selectedCategory}`);
+        if (res.data.success) {
+          // slice to top 5 items for display
+          setStolenItems(res.data.data.slice(0, 5));
+        }
+      } catch (err) {
+        console.error('Failed to load filtered stolen items:', err.message);
+      } finally {
+        setSearchingStolen(false);
+      }
+    };
+
+    const delayDebounce = setTimeout(() => {
+      fetchStolenSearch();
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [stolenSearch, selectedCategory, isOfficer]);
 
   if (loading) {
     return (
@@ -101,46 +87,15 @@ const Dashboard = () => {
     );
   }
 
-  const isOfficer = user?.role === 'officer' || user?.role === 'admin';
-
-  // Dynamic Statistics Calculations
-  const activeInvestigationsCount = allComplaints.filter(c => c.status === 'pending' || c.status === 'investigating').length;
-  const unresolvedReportsCount = allComplaints.filter(c => c.status === 'pending').length;
-  const recoveredAssetsCount = stats.totalRecovered;
-
-  // Average Resolution Time Calculation
-  const resolvedCases = allComplaints.filter(c => c.status === 'resolved' || c.status === 'closed');
-  let avgResolutionTimeText = 'N/A';
-  if (resolvedCases.length > 0) {
-    const totalDays = resolvedCases.reduce((sum, c) => {
-      // Mock realistic resolution time based on complaint ID/number, or actual date difference if updatedAt exists
-      // We will fallback to a realistic simulated 5.5 days average or use dates if available
-      const created = new Date(c.createdAt || c.theftDate);
-      const diffTime = 5.2 * 24 * 60 * 60 * 1000; // Visual realism fallback (5.2 days)
-      const diffDays = diffTime / (1000 * 60 * 60 * 24);
-      return sum + diffDays;
-    }, 0);
-    avgResolutionTimeText = (totalDays / resolvedCases.length).toFixed(1) + 'd';
-  }
-
-  // Clearance Rate (Resolved complaints / Total complaints)
-  const resolvedCount = allComplaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
-  const clearanceRate = allComplaints.length > 0 ? Math.round((resolvedCount / allComplaints.length) * 100) : 0;
-
-  // Evidence Processing Rate (Recovered items / Total items)
-  const totalItemsCount = stats.totalStolen + stats.totalRecovered;
-  const evidenceProcessingRate = totalItemsCount > 0 ? Math.round((stats.totalRecovered / totalItemsCount) * 100) : 0;
-
-  // Limit recent reports list to 5 items
-  const recentComplaints = allComplaints.slice(0, 5);
-
-  // Filter stolen items from database
-  const filteredStolenItems = stolenItems.filter(item => {
-    const matchesSearch = item.itemName.toLowerCase().includes(stolenSearch.toLowerCase()) ||
-      (item.serialNumber && item.serialNumber.toLowerCase().includes(stolenSearch.toLowerCase()));
-    const matchesCategory = selectedCategory === '' || item.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const {
+    activeInvestigationsCount,
+    unresolvedReportsCount,
+    recoveredAssetsCount,
+    avgResolutionTimeText,
+    clearanceRate,
+    evidenceProcessingRate,
+    recentComplaints
+  } = dashboardData;
 
   return (
     <div className="flex flex-col gap-8">
@@ -324,10 +279,12 @@ const Dashboard = () => {
                   </div>
 
                   <div className="flex flex-col gap-2.5 pt-2">
-                    {filteredStolenItems.length === 0 ? (
+                    {searchingStolen ? (
+                      <p className="text-xs text-slate-400 text-center py-4">Searching locker...</p>
+                    ) : stolenItems.length === 0 ? (
                       <p className="text-xs text-slate-400 text-center py-4">No matching cataloged items.</p>
                     ) : (
-                      filteredStolenItems.map(item => (
+                      stolenItems.map(item => (
                         <div
                           key={item._id}
                           className="flex items-center gap-3 p-3 mb-2 rounded-lg hover:bg-slate-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.02)] transition-all cursor-pointer"

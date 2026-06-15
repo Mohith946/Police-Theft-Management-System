@@ -8,7 +8,7 @@ const { sendSuccess, sendError } = require('../utils/responseHandler');
  */
 const getStolenItems = async (req, res) => {
   try {
-    const { category, search } = req.query;
+    const { category, search, page, limit } = req.query;
     const query = { status: 'stolen' };
 
     if (category) {
@@ -23,11 +23,34 @@ const getStolenItems = async (req, res) => {
       ];
     }
 
-    const items = await StolenItem.find(query)
-      .sort({ createdAt: -1 })
-      .populate('complaintId', 'complaintNumber title reporterName');
+    if (page || limit) {
+      const pageNum = parseInt(page) || 1;
+      const limitNum = parseInt(limit) || 10;
+      const skip = (pageNum - 1) * limitNum;
 
-    return sendSuccess(res, items, 'Stolen items inventory retrieved successfully');
+      const totalDocs = await StolenItem.countDocuments(query);
+      const totalPages = Math.ceil(totalDocs / limitNum);
+
+      const items = await StolenItem.find(query)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .populate('complaintId', 'complaintNumber title reporterName');
+
+      return sendSuccess(res, {
+        docs: items,
+        totalDocs,
+        totalPages,
+        currentPage: pageNum,
+        limit: limitNum
+      }, 'Stolen items inventory retrieved successfully');
+    } else {
+      const items = await StolenItem.find(query)
+        .sort({ createdAt: -1 })
+        .populate('complaintId', 'complaintNumber title reporterName');
+
+      return sendSuccess(res, items, 'Stolen items inventory retrieved successfully');
+    }
   } catch (error) {
     console.error('Fetch stolen items error:', error);
     return sendError(res, error.message, 500);
@@ -41,18 +64,41 @@ const getStolenItems = async (req, res) => {
  */
 const getRecoveredItems = async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category, page, limit } = req.query;
     const query = { status: 'recovered' };
 
     if (category) {
       query.category = category;
     }
 
-    const items = await StolenItem.find(query)
-      .sort({ recoveredDate: -1 })
-      .populate('complaintId', 'complaintNumber title reporterName');
+    if (page || limit) {
+      const pageNum = parseInt(page) || 1;
+      const limitNum = parseInt(limit) || 10;
+      const skip = (pageNum - 1) * limitNum;
 
-    return sendSuccess(res, items, 'Recovered items inventory retrieved successfully');
+      const totalDocs = await StolenItem.countDocuments(query);
+      const totalPages = Math.ceil(totalDocs / limitNum);
+
+      const items = await StolenItem.find(query)
+        .sort({ recoveredDate: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .populate('complaintId', 'complaintNumber title reporterName');
+
+      return sendSuccess(res, {
+        docs: items,
+        totalDocs,
+        totalPages,
+        currentPage: pageNum,
+        limit: limitNum
+      }, 'Recovered items inventory retrieved successfully');
+    } else {
+      const items = await StolenItem.find(query)
+        .sort({ recoveredDate: -1 })
+        .populate('complaintId', 'complaintNumber title reporterName');
+
+      return sendSuccess(res, items, 'Recovered items inventory retrieved successfully');
+    }
   } catch (error) {
     console.error('Fetch recovered items error:', error);
     return sendError(res, error.message, 500);

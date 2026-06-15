@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+// Simple in-memory user cache with TTL
+const userCache = new Map();
+const CACHE_TTL = 60 * 1000; // 60 seconds TTL
+
 const protect = async (req, res, next) => {
   let token;
 
@@ -15,11 +19,25 @@ const protect = async (req, res, next) => {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key_123456');
 
-      // Get user from the token, exclude password
-      req.user = await User.findById(decoded.id).select('-passwordHash');
-      
-      if (!req.user) {
-        return res.status(401).json({ success: false, message: 'User associated with this token no longer exists' });
+      const now = Date.now();
+      const cached = userCache.get(decoded.id);
+
+      if (cached && (now - cached.timestamp < CACHE_TTL)) {
+        req.user = cached.user;
+      } else {
+        // Get user from the token, exclude password
+        const user = await User.findById(decoded.id).select('-passwordHash');
+        
+        if (!user) {
+          return res.status(401).json({ success: false, message: 'User associated with this token no longer exists' });
+        }
+
+        userCache.set(decoded.id, {
+          user,
+          timestamp: now
+        });
+
+        req.user = user;
       }
 
       next();

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -37,22 +37,6 @@ const Users = lazy(routeImports.Users);
 const AppRoutes = () => {
   const officerRoles = ['officer', 'admin'];
 
-  // Prefetch all route bundles in the background on main thread idle
-  useEffect(() => {
-    const prefetchRoutes = () => {
-      Object.values(routeImports).forEach((importFn) => {
-        importFn().catch((err) => {
-          console.debug('Prefetch route chunk failed:', err);
-        });
-      });
-    };
-
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(prefetchRoutes);
-    } else {
-      setTimeout(prefetchRoutes, 1500);
-    }
-  }, []);
 
   // A sleek, subtle glassmorphic loading fallback centered in viewport
   const PageLoader = () => (

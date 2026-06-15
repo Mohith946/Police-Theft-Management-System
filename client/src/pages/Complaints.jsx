@@ -20,6 +20,12 @@ const Complaints = () => {
   const [search, setSearch] = useState('');
   const [error, setError] = useState('');
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalDocs, setTotalDocs] = useState(0);
+  const [limit] = useState(10);
+
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [resolveForm, setResolveForm] = useState({
     caught: false,
@@ -35,14 +41,26 @@ const Complaints = () => {
     tattoos: ''
   });
 
+  // Reset page when filters change
+  useEffect(() => {
+    if (!id) {
+      setCurrentPage(1);
+    }
+  }, [statusFilter, categoryFilter, search, id]);
+
   // 1. Fetch complaints list
-  const fetchComplaintsList = async () => {
+  const fetchComplaintsList = async (page = 1, searchQuery = '') => {
     try {
       setLoading(true);
       setError('');
-      const response = await axios.get(`/api/complaints?status=${statusFilter}&category=${categoryFilter}`);
+      const response = await axios.get(
+        `/api/complaints?status=${statusFilter}&category=${categoryFilter}&search=${searchQuery}&page=${page}&limit=${limit}`
+      );
       if (response.data.success) {
-        setComplaints(response.data.data);
+        setComplaints(response.data.data.docs);
+        setTotalPages(response.data.data.totalPages);
+        setTotalDocs(response.data.data.totalDocs);
+        setCurrentPage(response.data.data.currentPage);
       }
     } catch (err) {
       console.error('Failed to load complaints:', err.message);
@@ -74,20 +92,14 @@ const Complaints = () => {
     if (id) {
       fetchSingleComplaint(id);
     } else {
-      fetchComplaintsList();
+      const delayDebounce = setTimeout(() => {
+        fetchComplaintsList(currentPage, search);
+      }, 300);
+      return () => clearTimeout(delayDebounce);
     }
-  }, [id, statusFilter, categoryFilter]);
+  }, [id, statusFilter, categoryFilter, currentPage, search]);
 
-  // Client-side simple search filter
-  const filteredComplaints = complaints.filter(comp => {
-    const searchLower = search.toLowerCase();
-    return (
-      comp.complaintNumber.toLowerCase().includes(searchLower) ||
-      comp.title.toLowerCase().includes(searchLower) ||
-      comp.description.toLowerCase().includes(searchLower) ||
-      comp.reporterName.toLowerCase().includes(searchLower)
-    );
-  });
+  const filteredComplaints = complaints;
 
   const handleUpdateStatus = async (newStatus) => {
     if (!window.confirm(`Update case status to ${newStatus.toUpperCase()}?`)) return;
@@ -666,6 +678,29 @@ const Complaints = () => {
               ))}
             </tbody>
           </table>
+          
+          {/* Pagination controls */}
+          <div className="flex justify-between items-center mt-6 px-4">
+            <span className="text-xs text-slate-400 font-medium">
+              Showing page {currentPage} of {totalPages} ({totalDocs} complaints total)
+            </span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="btn btn-secondary py-1 px-3 text-xs disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="btn btn-secondary py-1 px-3 text-xs disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              >
+                Next
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -18,16 +18,47 @@ const getComplaints = async (req, res) => {
       query.reportedBy = req.user._id;
     }
 
-    const { status, category } = req.query;
+    const { status, category, search, page, limit } = req.query;
     if (status) query.status = status;
     if (category) query.category = category;
 
-    // Fetch complaints and populate reporter user details
-    const complaints = await Complaint.find(query)
-      .sort({ createdAt: -1 })
-      .populate('reportedBy', 'username email');
+    if (search) {
+      query.$or = [
+        { complaintNumber: { $regex: search, $options: 'i' } },
+        { title: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { reporterName: { $regex: search, $options: 'i' } }
+      ];
+    }
 
-    return sendSuccess(res, complaints, 'Complaints retrieved successfully');
+    if (page || limit) {
+      const pageNum = parseInt(page) || 1;
+      const limitNum = parseInt(limit) || 10;
+      const skip = (pageNum - 1) * limitNum;
+
+      const totalDocs = await Complaint.countDocuments(query);
+      const totalPages = Math.ceil(totalDocs / limitNum);
+
+      const complaints = await Complaint.find(query)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limitNum)
+        .populate('reportedBy', 'username email');
+
+      return sendSuccess(res, {
+        docs: complaints,
+        totalDocs,
+        totalPages,
+        currentPage: pageNum,
+        limit: limitNum
+      }, 'Complaints retrieved successfully');
+    } else {
+      const complaints = await Complaint.find(query)
+        .sort({ createdAt: -1 })
+        .populate('reportedBy', 'username email');
+
+      return sendSuccess(res, complaints, 'Complaints retrieved successfully');
+    }
   } catch (error) {
     console.error('Fetch complaints error:', error);
     return sendError(res, error.message, 500);

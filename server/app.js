@@ -8,6 +8,7 @@ const complaintRoutes = require('./routes/complaintRoutes');
 const itemRoutes = require('./routes/itemRoutes');
 const qrRoutes = require('./routes/qrRoutes');
 const matchRoutes = require('./routes/matchRoutes');
+const reportsRoutes = require('./routes/reportsRoutes');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/complaints', complaintRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/qr', qrRoutes);
 app.use('/api/matches', matchRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Base route
 app.get('/', (req, res) => {

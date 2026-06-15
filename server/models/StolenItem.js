@@ -54,6 +54,9 @@ const StolenItemSchema = new mongoose.Schema({
 
 StolenItemSchema.index({ complaintId: 1 });
 StolenItemSchema.index({ status: 1 });
+StolenItemSchema.index({ serialNumber: 1 });
+StolenItemSchema.index({ itemName: 1 });
+StolenItemSchema.index({ category: 1, status: 1 });
 
 // Pre-save hook: set recoveredDate when status transitions to 'recovered'
 StolenItemSchema.pre('save', function(next) {

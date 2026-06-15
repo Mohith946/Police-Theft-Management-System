@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode';
 import { Scan, Camera, Upload, CheckCircle, RefreshCw, AlertCircle, User, Sparkles } from 'lucide-react';
 import { formatDate } from '../utils/dateUtils';
 
@@ -18,29 +17,45 @@ const QRScanner = () => {
   // Initialize html5 webcam scanner
   useEffect(() => {
     let scanner = null;
-    if (scanMode === 'camera' && scannerActive && !scanResult) {
-      // Clear container just in case
-      const container = document.getElementById('webcam-scanner-container');
-      if (container) container.innerHTML = '';
+    let isMounted = true;
 
-      scanner = new Html5QrcodeScanner('webcam-scanner-container', {
-        fps: 10,
-        qrbox: { width: 250, height: 250 },
-        aspectRatio: 1.0
-      }, false);
+    const startScanner = async () => {
+      try {
+        const { Html5QrcodeScanner } = await import('html5-qrcode');
+        if (!isMounted) return;
 
-      scanner.render(
-        (decodedText) => {
-          handleTokenScanned(decodedText);
-          scanner.clear();
-        },
-        (error) => {
-          // Silent scan failure check
+        if (scanMode === 'camera' && scannerActive && !scanResult) {
+          // Clear container just in case
+          const container = document.getElementById('webcam-scanner-container');
+          if (container) container.innerHTML = '';
+
+          scanner = new Html5QrcodeScanner('webcam-scanner-container', {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+          }, false);
+
+          scanner.render(
+            (decodedText) => {
+              handleTokenScanned(decodedText);
+              if (scanner) {
+                scanner.clear().catch(err => console.warn('Scanner clear failure', err));
+              }
+            },
+            (error) => {
+              // Silent scan failure check
+            }
+          );
         }
-      );
-    }
+      } catch (err) {
+        console.error('Failed to load html5-qrcode scanner dynamically:', err);
+      }
+    };
+
+    startScanner();
 
     return () => {
+      isMounted = false;
       if (scanner) {
         scanner.clear().catch(err => console.warn('Scanner clear failure', err));
       }
@@ -72,6 +87,7 @@ const QRScanner = () => {
 
     try {
       setScanError('');
+      const { Html5Qrcode } = await import('html5-qrcode');
       const html5QrCode = new Html5Qrcode('file-scanner-dummy');
       const decodedText = await html5QrCode.scanFile(file, true);
       handleTokenScanned(decodedText);

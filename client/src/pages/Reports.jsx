@@ -19,45 +19,13 @@ const Reports = () => {
     const fetchReportData = async () => {
       try {
         setLoading(true);
-        const stolenRes = await axios.get('/api/items/stolen');
-        const recoveredRes = await axios.get('/api/items/recovered');
-
-        const stolen = stolenRes.data.data;
-        const recovered = recoveredRes.data.data;
-
-        // 1. Financial stats
-        const stolVal = stolen.reduce((sum, item) => sum + (item.estimatedValue || 0), 0);
-        const recVal = recovered.reduce((sum, item) => sum + (item.estimatedValue || 0), 0);
-        setFinancialStats({
-          stolenValue: stolVal,
-          recoveredValue: recVal
-        });
-
-        // 2. Categories distribution counter map
-        const catMap = {};
-        stolen.forEach(item => {
-          catMap[item.category] = (catMap[item.category] || { stolen: 0, recovered: 0 });
-          catMap[item.category].stolen += 1;
-        });
-        recovered.forEach(item => {
-          catMap[item.category] = (catMap[item.category] || { stolen: 0, recovered: 0 });
-          catMap[item.category].recovered += 1;
-        });
-
-        // Parse to Recharts format
-        const pieData = Object.keys(catMap).map(cat => ({
-          name: cat.charAt(0).toUpperCase() + cat.slice(1),
-          value: catMap[cat].stolen + catMap[cat].recovered
-        }));
-        setCategoryData(pieData);
-
-        const barData = Object.keys(catMap).map(cat => ({
-          category: cat.charAt(0).toUpperCase() + cat.slice(1),
-          Stolen: catMap[cat].stolen,
-          Recovered: catMap[cat].recovered
-        }));
-        setRecoveryData(barData);
-
+        const res = await axios.get('/api/reports/analytics');
+        if (res.data.success) {
+          const { financialStats, categoryData, recoveryData } = res.data.data;
+          setFinancialStats(financialStats);
+          setCategoryData(categoryData);
+          setRecoveryData(recoveryData);
+        }
       } catch (err) {
         console.error('Failed to aggregate reports metrics:', err);
       } finally {

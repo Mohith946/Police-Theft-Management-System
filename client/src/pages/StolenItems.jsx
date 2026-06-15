@@ -12,6 +12,12 @@ const StolenItems = () => {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalDocs, setTotalDocs] = useState(0);
+  const [limit] = useState(10);
+
   // Recovery modal states
   const [showRecoverModal, setShowRecoverModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -29,12 +35,17 @@ const StolenItems = () => {
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
 
-  const fetchItems = async () => {
+  const fetchItems = async (page = 1, searchQuery = '', catFilter = '') => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/items/stolen?search=${search}&category=${category}`);
+      const response = await axios.get(
+        `/api/items/stolen?search=${searchQuery}&category=${catFilter}&page=${page}&limit=${limit}`
+      );
       if (response.data.success) {
-        setItems(response.data.data);
+        setItems(response.data.data.docs);
+        setTotalPages(response.data.data.totalPages);
+        setTotalDocs(response.data.data.totalDocs);
+        setCurrentPage(response.data.data.currentPage);
       }
     } catch (err) {
       console.error('Failed to load stolen items inventory:', err.message);
@@ -43,13 +54,22 @@ const StolenItems = () => {
     }
   };
 
+  // Reset page when filters change
   useEffect(() => {
-    fetchItems();
-  }, [category]);
+    setCurrentPage(1);
+  }, [category, search]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      fetchItems(currentPage, search, category);
+    }, 300);
+
+    return () => clearTimeout(delayDebounce);
+  }, [currentPage, category, search]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchItems();
+    fetchItems(1, search, category);
   };
 
   const handleOpenRecovery = (item) => {
@@ -203,7 +223,7 @@ const StolenItems = () => {
             <div className="p-5 border-b border-[#d8d0c8]/60 flex justify-between items-center bg-[#f6f0e8]/20">
               <h3 className="font-body font-bold text-base text-[#3a302a] m-0">Recent Submissions</h3>
               <span className="text-xs font-semibold text-[#605850] bg-[#eae2da] px-2.5 py-1 rounded-full">
-                {items.length} Active Stolen Items
+                {totalDocs} Active Stolen Items
               </span>
             </div>
 
@@ -281,6 +301,29 @@ const StolenItems = () => {
                     ))}
                   </tbody>
                 </table>
+                
+                {/* Pagination Controls */}
+                <div className="flex justify-between items-center mt-5 p-4 border-t border-[#d8d0c8]/40 bg-[#f6f0e8]/10">
+                  <span className="text-xs text-[#605850] font-medium">
+                    Showing page {currentPage} of {totalPages} ({totalDocs} items total)
+                  </span>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="btn btn-secondary py-1 px-3 text-xs disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="btn btn-secondary py-1 px-3 text-xs disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
           </div>
