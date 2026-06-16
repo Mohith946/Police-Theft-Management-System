@@ -86,7 +86,7 @@ const Sidebar = () => {
     }`;
 
   return (
-    <aside className="hidden md:flex fixed inset-y-0 left-0 z-50 w-64 flex-col bg-[#111827] border-r border-slate-800">
+    <aside className="hidden lg:flex fixed inset-y-0 left-0 z-50 w-64 flex-col bg-[#111827] border-r border-slate-800">
       
       {/* Scrollable interior wrapper */}
       <div className="flex grow flex-col gap-y-5 overflow-y-auto px-6 pb-4 pt-6 text-white">

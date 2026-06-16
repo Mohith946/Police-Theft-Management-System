@@ -203,6 +203,17 @@ table tr:last-child td {
   border-bottom: none !important;
 }
 
+@media (max-width: 767px) {
+  .custom-table th,
+  table th {
+    padding: 12px 14px !important;
+  }
+  .custom-table td,
+  table td {
+    padding: 12px 14px !important;
+  }
+}
+
 /* Micro-animations */
 @keyframes pulseGlow {
 
@@ -339,7 +350,7 @@ header .absolute.top-full button:hover {
   color: #605850 !important;
 }
 
-.text-white:not(aside):not(aside *):not(button):not(.btn):not(.btn *):not(.bg-red-500):not(.bg-red-500 *):not(.bg-red-600):not(.bg-red-600 *):not(.bg-gradient-to-br *):not(.bg-gradient-to-r *):not(.bg-primary *):not(.rounded-full):not(.rounded-full *):not(.status-badge) {
+.text-white:not(aside):not(aside *):not(button):not(.btn):not(.btn *):not(.bg-red-500):not(.bg-red-500 *):not(.bg-red-600):not(.bg-red-600 *):not(.bg-gradient-to-br *):not(.bg-gradient-to-r *):not(.bg-primary *):not(.rounded-full):not(.rounded-full *):not(.status-badge):not(.mobile-drawer-panel):not(.mobile-drawer-panel *) {
   color: #3a302a !important;
 }
 
@@ -361,6 +372,27 @@ aside div.text-slate-400 {
 
 aside .text-slate-500,
 aside span.text-slate-500 {
+  color: #64748b !important;
+}
+
+/* Mobile Drawer Text Color Fixes */
+.mobile-drawer-panel .text-white,
+.mobile-drawer-panel a.text-white,
+.mobile-drawer-panel span.text-white,
+.mobile-drawer-panel div.text-white,
+.mobile-drawer-panel svg.text-white {
+  color: #ffffff !important;
+}
+
+.mobile-drawer-panel .text-slate-400,
+.mobile-drawer-panel a.text-slate-400,
+.mobile-drawer-panel span.text-slate-400,
+.mobile-drawer-panel div.text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.mobile-drawer-panel .text-slate-500,
+.mobile-drawer-panel span.text-slate-500 {
   color: #64748b !important;
 }
 

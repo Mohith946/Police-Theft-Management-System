@@ -30,9 +30,9 @@ const AppContent = () => {
       <Sidebar />
       
       {/* Content Frame */}
-      <div className="flex-1 flex flex-col min-h-screen md:pl-64 transition-all duration-300">
-        {/* Top Global Header Navigation (Mobile Only) */}
-        <div className="md:hidden">
+      <div className="flex-1 flex flex-col min-h-screen lg:pl-64 transition-all duration-300">
+        {/* Top Global Header Navigation (Mobile & Tablet) */}
+        <div className="lg:hidden">
           <Navbar />
         </div>
         
@@ -43,7 +43,7 @@ const AppContent = () => {
       </div>
 
       {/* Glassmorphic Floating Command Toolbar (mobile shortcut) */}
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <FloatingToolbar />
       </div>
     </div>
