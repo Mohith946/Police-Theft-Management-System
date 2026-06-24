@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   // Set default axios base URL and authorization header
-  axios.defaults.baseURL = ''; // Use Vite server proxy
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
 
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
