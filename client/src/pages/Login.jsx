@@ -44,7 +44,7 @@ const Login = () => {
     const initializeGoogleButton = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
-          client_id: "1023024125198-fv94ng719e75v08ot46rig8hkgd4tqnj.apps.googleusercontent.com",
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || "1023024125198-fv94ng719e75v08ot46rig8hkgd4tqnj.apps.googleusercontent.com",
           callback: handleGoogleCredentialResponse
         });
         window.google.accounts.id.renderButton(
@@ -239,6 +239,13 @@ const Login = () => {
               </div>
 
               <div id="googleBtnDiv" className="w-full flex justify-center"></div>
+
+              <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-left flex gap-2.5">
+                <Info size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                <p className="text-[11px] text-slate-300 leading-normal m-0">
+                  <span className="font-semibold text-amber-400">Google Auth blocked?</span> If you see an <span className="font-mono text-amber-300 text-xs">origin_mismatch</span> error, please use the <strong className="text-white">"Request Access"</strong> option below to submit your details directly to the administrator.
+                </p>
+              </div>
             </>
           )}
 
