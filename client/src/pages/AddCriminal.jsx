@@ -9,7 +9,7 @@ const AddCriminal = () => {
   const [aliases, setAliases] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [gender, setGender] = useState('male');
-  
+
   // Physical features
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
@@ -62,7 +62,7 @@ const AddCriminal = () => {
       formData.append('tattoos', tattoos);
       formData.append('lastKnownLocation', lastKnownLocation);
       formData.append('status', status);
-      
+
       if (photoFile) {
         formData.append('photo', photoFile);
       }
@@ -85,8 +85,8 @@ const AddCriminal = () => {
   return (
     <div className="max-w-3xl mx-auto">
       {/* Navigation Header */}
-      <button 
-        onClick={() => navigate(-1)} 
+      <button
+        onClick={() => navigate(-1)}
         className="bg-transparent border-none text-slate-400 cursor-pointer flex items-center gap-1.5 text-xs mb-4 p-0 hover:text-white transition-all duration-200"
       >
         <ArrowLeft size={16} />
@@ -138,7 +138,7 @@ const AddCriminal = () => {
         <h3 className="text-sm font-bold text-primary-light border-b border-white/5 pb-2 mb-5 font-heading">
           1. Identity Details
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
           <div>
             <label className="form-label">Suspect Name *</label>
@@ -152,7 +152,7 @@ const AddCriminal = () => {
             />
           </div>
           <div>
-            <label className="form-label">Aliases / Street Names</label>
+            <label className="form-label">Aliases *</label>
             <input
               type="text"
               className="form-input"
@@ -278,10 +278,10 @@ const AddCriminal = () => {
           </div>
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="btn btn-primary w-full py-3 text-sm flex justify-center items-center gap-2 mt-2 font-semibold"
-          disabled={submitting} 
+          disabled={submitting}
         >
           <Save size={18} />
           <span>{submitting ? 'Creating suspect profile...' : 'Save Suspect Record'}</span>

@@ -60,10 +60,9 @@ const Dashboard = () => {
     const fetchStolenSearch = async () => {
       try {
         setSearchingStolen(true);
-        const res = await axios.get(`/api/items/stolen?search=${stolenSearch}&category=${selectedCategory}`);
+        const res = await axios.get(`/api/items/stolen?search=${stolenSearch}&category=${selectedCategory}&limit=5`);
         if (res.data.success) {
-          // slice to top 5 items for display
-          setStolenItems(res.data.data.slice(0, 5));
+          setStolenItems(res.data.data.docs || []);
         }
       } catch (err) {
         console.error('Failed to load filtered stolen items:', err.message);

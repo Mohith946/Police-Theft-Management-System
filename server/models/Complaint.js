@@ -68,6 +68,10 @@ const ComplaintSchema = new mongoose.Schema({
 
 ComplaintSchema.index({ reportedBy: 1 });
 ComplaintSchema.index({ status: 1 });
+ComplaintSchema.index({ createdAt: -1 });
+ComplaintSchema.index({ category: 1 });
+ComplaintSchema.index({ status: 1, category: 1, createdAt: -1 });
+ComplaintSchema.index({ reportedBy: 1, createdAt: -1 });
 
 // Post-save trigger to automatically calculate match scores with criminals
 ComplaintSchema.post('save', async function(doc, next) {

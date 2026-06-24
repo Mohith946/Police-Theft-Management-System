@@ -57,6 +57,11 @@ StolenItemSchema.index({ status: 1 });
 StolenItemSchema.index({ serialNumber: 1 });
 StolenItemSchema.index({ itemName: 1 });
 StolenItemSchema.index({ category: 1, status: 1 });
+StolenItemSchema.index({ createdAt: -1 });
+StolenItemSchema.index({ status: 1, createdAt: -1 });
+StolenItemSchema.index({ status: 1, category: 1, createdAt: -1 });
+StolenItemSchema.index({ recoveredDate: -1 });
+StolenItemSchema.index({ status: 1, recoveredDate: -1 });
 
 // Pre-save hook: set recoveredDate when status transitions to 'recovered'
 StolenItemSchema.pre('save', function(next) {

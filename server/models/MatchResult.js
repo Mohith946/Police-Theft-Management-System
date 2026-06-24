@@ -35,5 +35,6 @@ const MatchResultSchema = new mongoose.Schema({
 // Compound unique index to prevent duplicate matches for same complaint-criminal pair
 MatchResultSchema.index({ complaintId: 1, criminalId: 1 }, { unique: true });
 MatchResultSchema.index({ matchScore: -1 });
+MatchResultSchema.index({ status: 1 });
 
 module.exports = mongoose.model('MatchResult', MatchResultSchema);

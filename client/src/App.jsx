@@ -30,14 +30,14 @@ const AppContent = () => {
       <Sidebar />
       
       {/* Content Frame */}
-      <div className="flex-1 flex flex-col min-h-screen lg:pl-64 transition-all duration-300">
+      <div className="flex-1 flex flex-col min-h-screen lg:pl-64 transition-all duration-300 w-full max-w-full overflow-x-hidden">
         {/* Top Global Header Navigation (Mobile & Tablet) */}
         <div className="lg:hidden">
           <Navbar />
         </div>
         
         {/* Main content frame */}
-        <main className="flex-1 p-6 md:p-10 pb-28">
+        <main className="flex-1 p-6 md:p-10 pb-28 w-full max-w-full overflow-x-hidden">
           <AppRoutes />
         </main>
       </div>

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const StolenItems = () => {
-  const { user } = useAuth();
+  const { user, fetchBadgeCounts } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -90,6 +90,7 @@ const StolenItems = () => {
         setSelectedItem(null);
         setRecoveryLocation('');
         fetchItems(); // Reload list
+        if (fetchBadgeCounts) fetchBadgeCounts();
       }
     } catch (err) {
       console.error('Failed to execute item recovery:', err.message);
@@ -176,10 +177,10 @@ const StolenItems = () => {
 
       {/* Grid: 12-Columns Split Layout */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-        
+
         {/* Left Column (8 Cols): Recent Submissions & Inventory */}
         <div className="xl:col-span-8 flex flex-col gap-6">
-          
+
           {/* Filters Card */}
           <div className="glass-panel p-5">
             <form onSubmit={handleSearch} className="flex flex-wrap gap-4 items-center">
@@ -278,8 +279,8 @@ const StolenItems = () => {
                             ₹{item.estimatedValue ? item.estimatedValue.toLocaleString() : '0.00'}
                           </div>
                           {item.complaintId ? (
-                            <Link 
-                              to={`/complaints/${item.complaintId._id}`} 
+                            <Link
+                              to={`/complaints/${item.complaintId._id}`}
                               className="text-primary hover:underline text-xs font-mono font-bold mt-1 block"
                             >
                               {item.complaintId.complaintNumber}
@@ -289,8 +290,8 @@ const StolenItems = () => {
                           )}
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <button 
-                            onClick={() => handleOpenRecovery(item)} 
+                          <button
+                            onClick={() => handleOpenRecovery(item)}
                             className="btn bg-[#10b981] hover:bg-emerald-600 text-white border-none py-1.5 px-3 text-xs flex items-center gap-1 font-semibold mx-auto cursor-pointer"
                           >
                             <CheckCircle size={12} />
@@ -301,7 +302,7 @@ const StolenItems = () => {
                     ))}
                   </tbody>
                 </table>
-                
+
                 {/* Pagination Controls */}
                 <div className="flex justify-between items-center mt-5 p-4 border-t border-[#d8d0c8]/40 bg-[#f6f0e8]/10">
                   <span className="text-xs text-[#605850] font-medium">
@@ -331,11 +332,11 @@ const StolenItems = () => {
 
         {/* Right Column (4 Cols): Registration Form & Protocol Reminders */}
         <div className="xl:col-span-4 flex flex-col gap-6">
-          
+
           {/* Add New Evidence Form */}
           <div className="bg-[#f2ece4]/40 rounded-xl p-6 border border-[#d8d0c8]/60 shadow-xs">
             <h3 className="font-heading text-xl md:text-2xl font-bold mb-4 text-[#3a302a]">Add New Evidence</h3>
-            
+
             {formError && (
               <div className="bg-red-50 border border-red-200 text-[#c0392b] text-xs p-3 rounded-lg mb-4 flex items-start gap-1.5">
                 <AlertTriangle size={14} className="mt-0.5 shrink-0" />
@@ -455,8 +456,8 @@ const StolenItems = () => {
       {showRecoverModal && selectedItem && (
         <div className="fixed inset-0 bg-[#3a302a]/60 backdrop-blur-xs flex items-center justify-center z-50">
           <form onSubmit={handleExecuteRecovery} className="glass-panel p-6 md:p-8 w-full max-w-md relative flex flex-col gap-5 bg-white">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => { setShowRecoverModal(false); setSelectedItem(null); }}
               className="absolute right-4 top-4 bg-transparent border-none text-[#9a9088] cursor-pointer p-1 hover:bg-[#f6f0e8] rounded-lg transition-all"
             >
@@ -485,8 +486,8 @@ const StolenItems = () => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="btn btn-primary bg-[#10b981] hover:bg-emerald-600 border-none w-full py-3 text-sm mt-2"
               disabled={recovering || !recoveryLocation.trim()}
             >

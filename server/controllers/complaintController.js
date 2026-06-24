@@ -118,10 +118,9 @@ const createComplaint = async (req, res) => {
       return sendError(res, 'Missing required fields for filing a complaint', 400);
     }
 
-    // Generate unique complaint number (Format: COMP-YYYYMMDD-XXXX)
-    const dateStr = new Date().toISOString().slice(0,10).replace(/-/g, '');
-    const randStr = Math.floor(1000 + Math.random() * 9000);
-    const complaintNumber = `COMP-${dateStr}-${randStr}`;
+    // Generate unique complaint number (Format: COMP-XXXXX)
+    const randId = Math.floor(10000 + Math.random() * 90000);
+    const complaintNumber = `COMP-${randId}`;
 
     // Generate unique complaint QR token
     const complaintToken = generateComplaintToken();

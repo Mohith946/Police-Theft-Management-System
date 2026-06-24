@@ -16,33 +16,50 @@ const getDashboardStats = async (req, res) => {
       query.reportedBy = req.user._id;
     }
 
-    // 1. Fetch complaints counts & list (limit 5 for recent)
-    const totalComplaints = await Complaint.countDocuments(query);
-    const unresolvedReportsCount = await Complaint.countDocuments({ ...query, status: 'pending' });
-    const activeInvestigationsCount = await Complaint.countDocuments({
+    // Prepare promises for parallel execution
+    const totalPromise = Complaint.countDocuments(query);
+    const unresolvedPromise = Complaint.countDocuments({ ...query, status: 'pending' });
+    const activePromise = Complaint.countDocuments({
       ...query,
       status: { $in: ['pending', 'investigating'] }
     });
-
-    const recentComplaints = await Complaint.find(query)
+    const recentPromise = Complaint.find(query)
       .sort({ createdAt: -1 })
       .limit(5)
       .populate('reportedBy', 'username email');
+    const resolvedPromise = Complaint.countDocuments({ ...query, status: { $in: ['resolved', 'closed'] } });
 
-    // 2. Fetch stats that are staff-only
-    let stolenCount = 0;
-    let recoveredCount = 0;
-    let activeMatchesCount = 0;
+    let stolenPromise = Promise.resolve(0);
+    let recoveredPromise = Promise.resolve(0);
+    let activeMatchesPromise = Promise.resolve(0);
 
     if (isStaff) {
-      stolenCount = await StolenItem.countDocuments({ status: 'stolen' });
-      recoveredCount = await StolenItem.countDocuments({ status: 'recovered' });
-      activeMatchesCount = await MatchResult.countDocuments({ status: 'pending' });
+      stolenPromise = StolenItem.countDocuments({ status: 'stolen' });
+      recoveredPromise = StolenItem.countDocuments({ status: 'recovered' });
+      activeMatchesPromise = MatchResult.countDocuments({ status: 'pending' });
     }
 
-    // 3. Calculate Average Resolution Time & Clearance Rate
-    const resolvedCasesCount = await Complaint.countDocuments({ ...query, status: { $in: ['resolved', 'closed'] } });
-    
+    // Resolve all promises concurrently
+    const [
+      totalComplaints,
+      unresolvedReportsCount,
+      activeInvestigationsCount,
+      recentComplaints,
+      resolvedCasesCount,
+      stolenCount,
+      recoveredCount,
+      activeMatchesCount
+    ] = await Promise.all([
+      totalPromise,
+      unresolvedPromise,
+      activePromise,
+      recentPromise,
+      resolvedPromise,
+      stolenPromise,
+      recoveredPromise,
+      activeMatchesPromise
+    ]);
+
     // Average resolution time fallback mock (5.2d)
     let avgResolutionTimeText = 'N/A';
     if (resolvedCasesCount > 0) {
@@ -141,7 +158,41 @@ const getAnalytics = async (req, res) => {
   }
 };
 
+const getBadgeCounts = async (req, res) => {
+  try {
+    const isStaff = req.user.role === 'officer' || req.user.role === 'admin';
+    let query = {};
+    if (!isStaff) {
+      query.reportedBy = req.user._id;
+    }
+
+    // Run active complaints and pending matches count queries in parallel
+    const activeCasesPromise = Complaint.countDocuments({
+      ...query,
+      status: { $in: ['pending', 'investigating'] }
+    });
+
+    const matchPromise = isStaff
+      ? MatchResult.countDocuments({ status: 'pending' })
+      : Promise.resolve(0);
+
+    const [activeCasesCount, matchCount] = await Promise.all([
+      activeCasesPromise,
+      matchPromise
+    ]);
+
+    return sendSuccess(res, {
+      activeCasesCount,
+      matchCount
+    }, 'Badge counts retrieved successfully');
+  } catch (error) {
+    console.error('Fetch badge counts error:', error);
+    return sendError(res, error.message, 500);
+  }
+};
+
 module.exports = {
   getDashboardStats,
-  getAnalytics
+  getAnalytics,
+  getBadgeCounts
 };

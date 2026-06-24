@@ -235,67 +235,67 @@ table tr:last-child td {
 /* Global Layout Overrides */
 
 /* Header Override */
-header {
+header:not(.mobile-drawer-panel) {
   background-color: #ffffff !important;
   border-bottom: 1px solid #d8d0c8 !important;
   box-shadow: 0 1px 3px 0 rgba(58, 48, 42, 0.04) !important;
 }
 
-header button,
-header a.bg-white\/5 {
+header button:not(.mobile-drawer-panel *),
+header a.bg-white\/5:not(.mobile-drawer-panel *) {
   background-color: #f6f0e8 !important;
   border: 1px solid #d8d0c8 !important;
   color: #605850 !important;
 }
 
-header button:hover,
-header a.bg-white\/5:hover {
+header button:hover:not(.mobile-drawer-panel *),
+header a.bg-white\/5:hover:not(.mobile-drawer-panel *) {
   background-color: #eae2da !important;
   color: #3a302a !important;
 }
 
-header nav a {
+header nav:not(.drawer-nav) a {
   background-color: #f6f0e8 !important;
   color: #605850 !important;
 }
 
-header nav a:hover {
+header nav:not(.drawer-nav) a:hover {
   background-color: #eae2da !important;
   color: #3a302a !important;
 }
 
-header nav a.active {
+header nav:not(.drawer-nav) a.active {
   background: #c2652a !important;
   color: #ffffff !important;
   box-shadow: 0 2px 4px rgba(194, 101, 42, 0.15) !important;
 }
 
-header .relative select,
-header .cursor-pointer {
+header .relative select:not(.mobile-drawer-panel *),
+header .cursor-pointer:not(.mobile-drawer-panel *) {
   color: #3a302a !important;
 }
 
-header .cursor-pointer:hover {
+header .cursor-pointer:hover:not(.mobile-drawer-panel *) {
   background-color: #f6f0e8 !important;
 }
 
-header .w-9\.5.h-9\.5.rounded-full.bg-primary\/10 {
+header .w-9\.5.h-9\.5.rounded-full.bg-primary\/10:not(.mobile-drawer-panel *) {
   background-color: rgba(194, 101, 42, 0.08) !important;
   color: #c2652a !important;
   border-color: rgba(194, 101, 42, 0.2) !important;
 }
 
-header .absolute.top-full {
+header .absolute.top-full:not(.mobile-drawer-panel *) {
   background-color: #ffffff !important;
   border: 1px solid #d8d0c8 !important;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05) !important;
 }
 
-header .absolute.top-full button {
+header .absolute.top-full button:not(.mobile-drawer-panel *) {
   color: #c0392b !important;
 }
 
-header .absolute.top-full button:hover {
+header .absolute.top-full button:hover:not(.mobile-drawer-panel *) {
   background-color: rgba(192, 57, 43, 0.05) !important;
 }
 

@@ -7,7 +7,7 @@ import { FilePlus, Search, ArrowLeft, ClipboardList, Package } from 'lucide-reac
 import ComplaintQRCodeCard from '../components/ComplaintQRCodeCard';
 
 const Complaints = () => {
-  const { user } = useAuth();
+  const { user, fetchBadgeCounts } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -108,6 +108,7 @@ const Complaints = () => {
       const response = await axios.put(`/api/complaints/${id}`, { status: newStatus });
       if (response.data.success) {
         setSingleComplaint(response.data.data);
+        if (fetchBadgeCounts) fetchBadgeCounts();
       }
     } catch (err) {
       console.error('Failed to update complaint status:', err);
@@ -142,6 +143,7 @@ const Complaints = () => {
       if (response.data.success) {
         setSingleComplaint(response.data.data);
         setShowResolveModal(false);
+        if (fetchBadgeCounts) fetchBadgeCounts();
         alert('Case resolved successfully!' + (resolveForm.caught ? ' Caught suspect profile has been stored and registered in the database.' : ''));
       }
     } catch (err) {
@@ -158,6 +160,7 @@ const Complaints = () => {
       setLoading(true);
       const response = await axios.delete(`/api/complaints/${id}`);
       if (response.data.success) {
+        if (fetchBadgeCounts) fetchBadgeCounts();
         alert("Complaint deleted successfully.");
         navigate('/complaints');
       }
@@ -197,8 +200,8 @@ const Complaints = () => {
     return (
       <div className="max-w-5xl mx-auto">
         {/* Back Link */}
-        <button 
-          onClick={() => navigate('/complaints')} 
+        <button
+          onClick={() => navigate('/complaints')}
           className="bg-transparent border-none text-slate-400 cursor-pointer flex items-center gap-1.5 text-xs mb-4 p-0 hover:text-white transition-all duration-200"
         >
           <ArrowLeft size={16} />
@@ -207,7 +210,7 @@ const Complaints = () => {
 
         {/* Case File Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
-          
+
           {/* Main Complaint info panel */}
           <div className="glass-panel p-6 md:p-8 lg:col-span-3">
             <div className="flex justify-between items-start gap-4 mb-5">
@@ -225,7 +228,7 @@ const Complaints = () => {
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Incident Category</p>
                 <p className="text-sm font-semibold text-white capitalize m-0">{singleComplaint.category}</p>
               </div>
-              
+
               <div>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Theft Date & Time</p>
                 <p className="text-sm font-semibold text-white m-0">{formatDateTime(singleComplaint.theftDate)}</p>
@@ -238,7 +241,7 @@ const Complaints = () => {
 
               <div className="border-t border-white/5 pt-4 mt-2">
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 m-0">Incident Description</p>
-                <p className="text-sm text-slate-300 leading-relaxed white-space-pre-wrap m-0">{singleComplaint.description}</p>
+                <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap break-words m-0">{singleComplaint.description}</p>
               </div>
 
               {/* Scene Photos Evidence */}
@@ -247,10 +250,10 @@ const Complaints = () => {
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 m-0">Attached Scene Photos</p>
                   <div className="flex flex-wrap gap-3">
                     {singleComplaint.scenePhotos.map((photo, idx) => (
-                      <a 
-                        key={idx} 
-                        href={photo} 
-                        target="_blank" 
+                      <a
+                        key={idx}
+                        href={photo}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="relative w-24 h-24 border border-white/10 rounded overflow-hidden hover:border-primary transition-all duration-200"
                       >
@@ -265,10 +268,10 @@ const Complaints = () => {
               {singleComplaint.audioStatement && (
                 <div className="border-t border-white/5 pt-4 mt-4">
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 m-0">Recorded Audio Statement</p>
-                  <div className="p-2 bg-white/5 border border-white/10 rounded-lg max-w-sm">
-                    <audio 
-                      src={singleComplaint.audioStatement} 
-                      controls 
+                  <div className="p-2 bg-white/5 border border-white/10 rounded-lg w-full max-w-sm">
+                    <audio
+                      src={singleComplaint.audioStatement}
+                      controls
                       className="w-full h-8"
                     />
                   </div>
@@ -280,32 +283,32 @@ const Complaints = () => {
             {(isOfficer || user.role === 'admin') && (
               <div className="flex flex-wrap gap-3 mt-8 border-t border-white/5 pt-5 items-center">
                 {isOfficer && singleComplaint.status === 'pending' && (
-                  <button 
-                    onClick={() => handleUpdateStatus('investigating')} 
+                  <button
+                    onClick={() => handleUpdateStatus('investigating')}
                     className="btn btn-primary text-xs"
                   >
                     Start Investigation
                   </button>
                 )}
                 {isOfficer && singleComplaint.status === 'investigating' && (
-                  <button 
-                    onClick={() => setShowResolveModal(true)} 
+                  <button
+                    onClick={() => setShowResolveModal(true)}
                     className="btn btn-primary text-xs bg-success hover:bg-emerald-600 border-none"
                   >
                     Mark Case Resolved
                   </button>
                 )}
                 {isOfficer && singleComplaint.status !== 'resolved' && singleComplaint.status !== 'closed' && (
-                  <button 
-                    onClick={() => handleUpdateStatus('closed')} 
+                  <button
+                    onClick={() => handleUpdateStatus('closed')}
                     className="btn btn-secondary text-xs text-danger border-white/5 hover:bg-red-950/20 hover:text-red-400 hover:border-red-500/20"
                   >
                     Close Case File
                   </button>
                 )}
                 {user.role === 'admin' && (
-                  <button 
-                    onClick={handleDeleteComplaint} 
+                  <button
+                    onClick={handleDeleteComplaint}
                     className="btn btn-danger text-xs ml-auto"
                   >
                     Delete Case File
@@ -362,7 +365,7 @@ const Complaints = () => {
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Item Details</span>
                     <h4 className="text-sm font-bold text-white mt-1 m-0">{item.itemName}</h4>
                   </div>
-                  
+
                   <div className="text-xs text-slate-400 flex flex-col gap-2">
                     <div className="flex justify-between border-b border-white/5 pb-1.5">
                       <span className="text-slate-400">Category</span>
@@ -382,7 +385,7 @@ const Complaints = () => {
                     <span className="text-slate-400 font-semibold">Status:</span>
                     <strong className={`status-badge status-${item.status} text-[9px]`}>{item.status}</strong>
                   </div>
-                  
+
                   {item.status === 'recovered' && (
                     <div className="mt-1 p-3 bg-emerald-950/20 border border-emerald-500/20 rounded-lg text-xs text-success">
                       <p className="font-bold m-0">Recovery Details:</p>
@@ -667,8 +670,8 @@ const Complaints = () => {
                     <span className={`status-badge status-${comp.status}`}>{comp.status}</span>
                   </td>
                   <td className="text-center">
-                    <Link 
-                      to={`/complaints/${comp._id}`} 
+                    <Link
+                      to={`/complaints/${comp._id}`}
                       className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/3 border border-white/5 text-primary-light hover:bg-primary hover:text-white transition-all duration-200 rotate-180"
                     >
                       <ArrowLeft size={14} />
@@ -678,9 +681,9 @@ const Complaints = () => {
               ))}
             </tbody>
           </table>
-          
+
           {/* Pagination controls */}
-          <div className="flex justify-between items-center mt-6 px-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6 px-4">
             <span className="text-xs text-slate-400 font-medium">
               Showing page {currentPage} of {totalPages} ({totalDocs} complaints total)
             </span>

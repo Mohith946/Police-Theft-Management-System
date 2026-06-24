@@ -8,50 +8,12 @@ import {
 import axios from 'axios';
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, badgeCounts } = useAuth();
+  const { activeCasesCount, matchCount } = badgeCounts;
   const navigate = useNavigate();
-  const [activeCasesCount, setActiveCasesCount] = useState(0);
-  const [matchCount, setMatchCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const fetchDataCounts = async () => {
-      if (user) {
-        const isStaff = user.role === 'officer' || user.role === 'admin';
-        
-        try {
-          // Fetch Complaints count
-          const complaintsRes = await axios.get('/api/complaints');
-          if (complaintsRes.data.success) {
-            const unresolved = complaintsRes.data.data.filter(
-              c => c.status === 'pending' || c.status === 'investigating'
-            ).length;
-            setActiveCasesCount(unresolved);
-          }
-        } catch (err) {
-          console.error('Failed to load navbar complaints count:', err.message);
-        }
-
-        if (isStaff) {
-          try {
-            // Fetch Match Alerts count
-            const matchesRes = await axios.get('/api/matches?status=pending');
-            if (matchesRes.data.success) {
-              setMatchCount(matchesRes.data.data.length);
-            }
-          } catch (err) {
-            console.error('Failed to load navbar match alerts count:', err.message);
-          }
-        }
-      }
-    };
-
-    fetchDataCounts();
-    const interval = setInterval(fetchDataCounts, 30000); // Poll every 30s
-    return () => clearInterval(interval);
-  }, [user]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -172,7 +134,7 @@ const Navbar = () => {
         {/* Search Circular Button */}
         <button 
           className="bg-white/5 hover:bg-white/10 border border-white/5 w-9.5 h-9.5 rounded-full flex items-center justify-center cursor-pointer text-slate-300 transition-all duration-200 active:scale-95"
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/criminals')}
           title="Search Console"
         >
           <Search size={16} />

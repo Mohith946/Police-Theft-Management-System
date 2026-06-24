@@ -8,7 +8,7 @@ const QRScanner = () => {
   const [scanError, setScanError] = useState('');
   const [scannerActive, setScannerActive] = useState(true);
   const [scanMode, setScanMode] = useState('camera'); // 'camera' or 'upload'
-  
+
   // Recovery parameters
   const [recoveryLocation, setRecoveryLocation] = useState('');
   const [recovering, setRecovering] = useState(false);
@@ -132,7 +132,7 @@ const QRScanner = () => {
 
   return (
     <div className="max-w-xl mx-auto">
-      
+
       {/* Invisible dummy scanner div for file scanning uploads */}
       <div id="file-scanner-dummy" className="hidden"></div>
 
@@ -154,18 +154,16 @@ const QRScanner = () => {
           <div className="glass-panel p-1 flex gap-1 rounded-xl bg-slate-950/40 border-white/5 shadow-inner">
             <button
               onClick={() => setScanMode('camera')}
-              className={`btn px-4 py-1.5 text-xs rounded-lg shadow-none ${
-                scanMode === 'camera' ? 'bg-gradient-to-r from-primary to-primary-light text-white shadow-xs' : 'bg-transparent text-slate-400 hover:text-white'
-              }`}
+              className={`btn px-4 py-1.5 text-xs rounded-lg shadow-none ${scanMode === 'camera' ? 'bg-gradient-to-r from-primary to-primary-light text-white shadow-xs' : 'bg-transparent text-slate-400 hover:text-white'
+                }`}
             >
               <Camera size={12} className="mr-1" />
               <span>Live Camera</span>
             </button>
             <button
               onClick={() => setScanMode('upload')}
-              className={`btn px-4 py-1.5 text-xs rounded-lg shadow-none ${
-                scanMode === 'upload' ? 'bg-gradient-to-r from-primary to-primary-light text-white shadow-xs' : 'bg-transparent text-slate-400 hover:text-white'
-              }`}
+              className={`btn px-4 py-1.5 text-xs rounded-lg shadow-none ${scanMode === 'upload' ? 'bg-gradient-to-r from-primary to-primary-light text-white shadow-xs' : 'bg-transparent text-slate-400 hover:text-white'
+                }`}
             >
               <Upload size={12} className="mr-1" />
               <span>Upload Image</span>
@@ -174,8 +172,8 @@ const QRScanner = () => {
 
           {/* Webcam Scanner Panel */}
           {scanMode === 'camera' ? (
-            <div 
-              id="webcam-scanner-container" 
+            <div
+              id="webcam-scanner-container"
               className="glass-panel w-full max-w-[340px] min-h-[340px] rounded-2xl overflow-hidden border-white/10"
             ></div>
           ) : (
@@ -193,9 +191,7 @@ const QRScanner = () => {
                 <span className="text-sm font-semibold text-white">
                   Select QR Label Image
                 </span>
-                <span className="text-[10px] text-slate-400 mt-1">
-                  Decodes snapshot of QR sticker
-                </span>
+
               </label>
             </div>
           )}
@@ -205,11 +201,11 @@ const QRScanner = () => {
       {/* RENDER SCANNED RESULTS PANEL */}
       {scanResult && (
         <div className="flex flex-col gap-6">
-          
+
           {scanResult.type === 'complaint' ? (
             /* COMPLAINT SCAN RESULT VIEW */
             <div className="flex flex-col gap-6">
-              
+
               {/* Complaint Overview Card */}
               <div className="glass-panel p-6 border-l-4 border-l-primary">
                 <div className="flex justify-between items-start gap-4 mb-4">
@@ -287,7 +283,7 @@ const QRScanner = () => {
                   <div className="flex flex-col gap-6">
                     {scanResult.matches.map(({ match, criminal, history }) => (
                       <div key={match._id} className="glass-panel p-4 bg-white/2 border border-white/5 flex flex-col gap-4">
-                        
+
                         {/* Suspect summary */}
                         <div className="flex justify-between items-start gap-4">
                           <div className="flex gap-3 items-center">
@@ -304,9 +300,8 @@ const QRScanner = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className={`font-extrabold text-xs px-2.5 py-1 rounded-full border ${
-                              match.matchScore >= 80 ? 'bg-red-950/20 text-danger border-red-500/20' : 'bg-indigo-950/20 text-primary-light border-indigo-500/20'
-                            }`}>
+                            <div className={`font-extrabold text-xs px-2.5 py-1 rounded-full border ${match.matchScore >= 80 ? 'bg-red-950/20 text-danger border-red-500/20' : 'bg-indigo-950/20 text-primary-light border-indigo-500/20'
+                              }`}>
                               {Math.round(match.matchScore)}% Match
                             </div>
                             <p className="text-[9px] text-slate-400 mt-1 m-0">Similarity Score</p>
@@ -401,11 +396,10 @@ const QRScanner = () => {
                       )}
                     </div>
                   </div>
-                  <span className={`rounded-full py-1 px-3.5 text-[9px] font-bold tracking-wider uppercase inline-block border ${
-                    scanResult.criminal.status === 'active' 
-                      ? 'bg-gradient-to-r from-primary/10 to-primary-light/10 text-primary border-primary/20' 
-                      : 'bg-gradient-to-r from-success/10 to-emerald-500/10 text-success border-success/20'
-                  }`}>{scanResult.criminal.status}</span>
+                  <span className={`rounded-full py-1 px-3.5 text-[9px] font-bold tracking-wider uppercase inline-block border ${scanResult.criminal.status === 'active'
+                    ? 'bg-gradient-to-r from-primary/10 to-primary-light/10 text-primary border-primary/20'
+                    : 'bg-gradient-to-r from-success/10 to-emerald-500/10 text-success border-success/20'
+                    }`}>{scanResult.criminal.status}</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-500 mt-4 border-t border-[#eae2da]/40 pt-4">
@@ -443,23 +437,23 @@ const QRScanner = () => {
                   )}
                 </div>
 
-                {((scanResult.criminal.physicalFeatures?.scars && scanResult.criminal.physicalFeatures.scars !== 'none') || 
+                {((scanResult.criminal.physicalFeatures?.scars && scanResult.criminal.physicalFeatures.scars !== 'none') ||
                   (scanResult.criminal.physicalFeatures?.tattoos && scanResult.criminal.physicalFeatures.tattoos !== 'none')) && (
-                  <div className="border-t border-[#eae2da]/40 pt-4 mt-4 text-xs text-slate-500 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {scanResult.criminal.physicalFeatures.scars !== 'none' && (
-                      <div>
-                        <span className="text-slate-400 block mb-0.5">Identified Scars:</span>
-                        <p className="text-slate-800 m-0">{scanResult.criminal.physicalFeatures.scars}</p>
-                      </div>
-                    )}
-                    {scanResult.criminal.physicalFeatures.tattoos !== 'none' && (
-                      <div>
-                        <span className="text-slate-400 block mb-0.5">Identified Tattoos:</span>
-                        <p className="text-slate-800 m-0">{scanResult.criminal.physicalFeatures.tattoos}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
+                    <div className="border-t border-[#eae2da]/40 pt-4 mt-4 text-xs text-slate-500 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {scanResult.criminal.physicalFeatures.scars !== 'none' && (
+                        <div>
+                          <span className="text-slate-400 block mb-0.5">Identified Scars:</span>
+                          <p className="text-slate-800 m-0">{scanResult.criminal.physicalFeatures.scars}</p>
+                        </div>
+                      )}
+                      {scanResult.criminal.physicalFeatures.tattoos !== 'none' && (
+                        <div>
+                          <span className="text-slate-400 block mb-0.5">Identified Tattoos:</span>
+                          <p className="text-slate-800 m-0">{scanResult.criminal.physicalFeatures.tattoos}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
               </div>
 
               {/* Case History Log Card */}
@@ -557,8 +551,8 @@ const QRScanner = () => {
                     />
                   </div>
 
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="btn btn-primary bg-success hover:bg-emerald-600 border-none w-full py-3 text-sm"
                     disabled={recovering || !recoveryLocation.trim()}
                   >

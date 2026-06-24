@@ -2,62 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import { 
-  Home, 
-  Users, 
-  Calendar, 
-  Folder, 
-  BarChart3, 
+import {
+  Home,
+  Users,
+  Calendar,
+  Folder,
+  BarChart3,
   Settings,
   ShieldAlert,
   LogOut
 } from 'lucide-react';
 
 const Sidebar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, badgeCounts } = useAuth();
+  const { activeCasesCount, matchCount } = badgeCounts;
   const navigate = useNavigate();
   
   // Stats counts
-  const [activeCasesCount, setActiveCasesCount] = useState(0);
-  const [matchCount, setMatchCount] = useState(0);
   const [avatarError, setAvatarError] = useState(false);
-
-  useEffect(() => {
-    if (user) {
-      const fetchDataCounts = async () => {
-        const isStaff = user.role === 'officer' || user.role === 'admin';
-        
-        try {
-          // Fetch Complaints count
-          const complaintsRes = await axios.get('/api/complaints');
-          if (complaintsRes.data.success) {
-            const unresolved = complaintsRes.data.data.filter(
-              c => c.status === 'pending' || c.status === 'investigating'
-            ).length;
-            setActiveCasesCount(unresolved);
-          }
-        } catch (err) {
-          console.error('Failed to load sidebar complaints count:', err.message);
-        }
-
-        if (isStaff) {
-          try {
-            // Fetch Match Alerts count
-            const matchesRes = await axios.get('/api/matches?status=pending');
-            if (matchesRes.data.success) {
-              setMatchCount(matchesRes.data.data.length);
-            }
-          } catch (err) {
-            console.error('Failed to load sidebar match alerts count:', err.message);
-          }
-        }
-      };
-
-      fetchDataCounts();
-      const interval = setInterval(fetchDataCounts, 30000); // Poll every 30s
-      return () => clearInterval(interval);
-    }
-  }, [user]);
 
   if (!user) return null;
 
@@ -70,27 +32,25 @@ const Sidebar = () => {
   };
 
   // Nav link active / inactive classes helper for primary navigation
-  const linkClass = ({ isActive }) => 
-    `flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 no-underline font-body font-semibold ${
-      isActive 
-        ? 'bg-slate-800 text-white' 
-        : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
+  const linkClass = ({ isActive }) =>
+    `flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 no-underline font-body font-semibold ${isActive
+      ? 'bg-slate-800 text-white'
+      : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
     }`;
 
   // Nav link helper for operations (no icons, indented text)
-  const operationsLinkClass = ({ isActive }) => 
-    `block py-1.5 px-3 pl-[42px] rounded-lg text-sm transition-all duration-150 no-underline font-body font-semibold ${
-      isActive 
-        ? 'text-white bg-slate-800/30' 
-        : 'text-slate-400 hover:text-white hover:bg-slate-800/10'
+  const operationsLinkClass = ({ isActive }) =>
+    `block py-1.5 px-3 pl-[42px] rounded-lg text-sm transition-all duration-150 no-underline font-body font-semibold ${isActive
+      ? 'text-white bg-slate-800/30'
+      : 'text-slate-400 hover:text-white hover:bg-slate-800/10'
     }`;
 
   return (
     <aside className="hidden lg:flex fixed inset-y-0 left-0 z-50 w-64 flex-col bg-[#111827] border-r border-slate-800">
-      
+
       {/* Scrollable interior wrapper */}
       <div className="flex grow flex-col gap-y-5 overflow-y-auto px-6 pb-4 pt-6 text-white">
-        
+
         {/* Brand/Header */}
         <div className="px-3 py-2 flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg border-2 border-white flex items-center justify-center font-bold font-headline text-lg text-white">
@@ -102,7 +62,7 @@ const Sidebar = () => {
         {/* Navigation Section */}
         <nav className="flex flex-1 flex-col">
           <ul role="list" className="flex flex-1 flex-col gap-y-7 list-none p-0 m-0">
-            
+
             {/* Primary Navigation Links */}
             <li>
               <ul className="space-y-1 list-none p-0 m-0">
@@ -149,7 +109,7 @@ const Sidebar = () => {
                     <NavLink to="/stolen-items" className={linkClass}>
                       <div className="flex items-center gap-3">
                         <Folder size={18} className="shrink-0" />
-                        <span>Evidence Locker</span>
+                        <span>Stolen Items</span>
                       </div>
                     </NavLink>
                   </li>
@@ -218,8 +178,8 @@ const Sidebar = () => {
                 <div className="flex items-center gap-3.5 min-w-0">
                   {/* Round Avatar Image / Initial Fallback */}
                   {!avatarError ? (
-                    <img 
-                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                    <img
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       onError={() => setAvatarError(true)}
                       className="w-10 h-10 rounded-full bg-slate-800 object-cover shrink-0"
                       alt={user.username}
@@ -233,9 +193,9 @@ const Sidebar = () => {
                     <span className="text-sm font-extrabold truncate text-white leading-tight">
                       {user.username}
                     </span>
-                    <a 
-                      href="#logout" 
-                      onClick={handleLogoutClick} 
+                    <a
+                      href="#logout"
+                      onClick={handleLogoutClick}
                       className="px-2.5 py-1 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer flex items-center gap-1.5 mt-2"
                     >
                       <LogOut size={11} className="shrink-0" />

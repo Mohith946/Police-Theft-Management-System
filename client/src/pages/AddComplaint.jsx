@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ArrowLeft, Save, Plus, Trash2, Lightbulb, Image, Mic, MapPin, AlertTriangle, FileText } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, Lightbulb, Image as ImageIcon, Mic, MapPin, AlertTriangle, FileText } from 'lucide-react';
 
 const AddComplaint = () => {
   const { user } = useAuth();
@@ -449,7 +449,7 @@ const AddComplaint = () => {
                 className="flex items-center justify-between p-3 bg-[#f6f0e8]/30 rounded-lg cursor-pointer hover:bg-[#f2ece4]/50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <Image size={18} className="text-[#605850]" />
+                  <ImageIcon size={18} className="text-[#605850]" />
                   <span className="text-[11px] font-bold text-[#3a302a] uppercase">Scene Photos</span>
                 </div>
                 {scenePhotos.length > 0 ? (
@@ -465,6 +465,7 @@ const AddComplaint = () => {
                   accept="image/*"
                   multiple
                   className="hidden"
+                  onClick={(e) => e.stopPropagation()}
                   onChange={handlePhotoChange}
                 />
               </div>
@@ -508,6 +509,7 @@ const AddComplaint = () => {
                   type="file"
                   accept="audio/*"
                   className="hidden"
+                  onClick={(e) => e.stopPropagation()}
                   onChange={handleAudioChange}
                 />
               </div>

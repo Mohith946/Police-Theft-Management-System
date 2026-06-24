@@ -144,6 +144,39 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const [badgeCounts, setBadgeCounts] = useState({
+    activeCasesCount: 0,
+    matchCount: 0
+  });
+
+  const fetchBadgeCounts = async () => {
+    if (!token || !user) return;
+    try {
+      const res = await axios.get('/api/reports/badge-counts');
+      if (res.data.success) {
+        setBadgeCounts({
+          activeCasesCount: res.data.data.activeCasesCount,
+          matchCount: res.data.data.matchCount
+        });
+      }
+    } catch (err) {
+      console.error('Failed to fetch navbar/sidebar badge counts:', err.message);
+    }
+  };
+
+  useEffect(() => {
+    if (token && user) {
+      fetchBadgeCounts();
+      const interval = setInterval(fetchBadgeCounts, 30000);
+      return () => clearInterval(interval);
+    } else {
+      setBadgeCounts({
+        activeCasesCount: 0,
+        matchCount: 0
+      });
+    }
+  }, [token, user]);
+
   const value = {
     user,
     token,
@@ -152,7 +185,9 @@ export const AuthProvider = ({ children }) => {
     googleLogin,
     register,
     logout,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
+    badgeCounts,
+    fetchBadgeCounts
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
