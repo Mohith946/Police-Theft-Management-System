@@ -240,12 +240,6 @@ const Login = () => {
 
               <div id="googleBtnDiv" className="w-full flex justify-center"></div>
 
-              <div className="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-left flex gap-2.5">
-                <Info size={16} className="text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-[11px] text-slate-300 leading-normal m-0">
-                  <span className="font-semibold text-amber-400">Google Auth blocked?</span> If you see an <span className="font-mono text-amber-300 text-xs">origin_mismatch</span> error, please use the <strong className="text-white">"Request Access"</strong> option below to submit your details directly to the administrator.
-                </p>
-              </div>
             </>
           )}
 
@@ -258,8 +252,8 @@ const Login = () => {
               }}
               className="text-xs text-primary-light hover:underline bg-transparent border-0 cursor-pointer font-medium"
             >
-              {isRequestAccess 
-                ? 'Already have an approved account? Back to Login' 
+              {isRequestAccess
+                ? 'Already have an approved account? Back to Login'
                 : 'Need database access? Request Access here'}
             </button>
           </div>
@@ -268,37 +262,37 @@ const Login = () => {
         {/* Demo Accounts Drawer */}
         {!isRequestAccess && (
           <div className="glass-panel mt-6 p-5 rounded-2xl border-dashed border-white/10">
-          <div className="flex items-center gap-2 mb-3">
-            <Info size={16} className="text-primary-light" />
-            <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-              Demo Credentials Drawer
-            </h3>
+            <div className="flex items-center gap-2 mb-3">
+              <Info size={16} className="text-primary-light" />
+              <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                Demo Credentials Drawer
+              </h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => handleFillDemo('officer')}
+                className="btn btn-secondary px-3.5 py-1.5 text-xs rounded-full"
+              >
+                <span>Officer Log In</span>
+              </button>
+              <button
+                onClick={() => handleFillDemo('admin')}
+                className="btn btn-secondary px-3.5 py-1.5 text-xs rounded-full"
+              >
+                <span>Admin Log In</span>
+              </button>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => handleFillDemo('officer')}
-              className="btn btn-secondary px-3.5 py-1.5 text-xs rounded-full"
-            >
-              <span>Officer Log In</span>
-            </button>
-            <button
-              onClick={() => handleFillDemo('admin')}
-              className="btn btn-secondary px-3.5 py-1.5 text-xs rounded-full"
-            >
-              <span>Admin Log In</span>
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
 
       {/* Glassmorphic Access Denial Modal Popup */}
       {showDenialModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
           <div className="bg-slate-900/90 border border-white/10 rounded-3xl max-w-md w-full p-6 text-center shadow-2xl flex flex-col items-center gap-4 relative animate-in fade-in zoom-in duration-200">
             <div className={`w-16 h-16 rounded-full flex items-center justify-center ${denialStatus === 'denied'
-                ? 'bg-red-500/10 text-red-500 border border-red-500/20'
-                : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
+              ? 'bg-red-500/10 text-red-500 border border-red-500/20'
+              : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'
               }`}>
               {denialStatus === 'denied' ? (
                 <ShieldAlert size={32} />
