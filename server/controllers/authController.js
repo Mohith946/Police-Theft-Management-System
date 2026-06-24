@@ -344,10 +344,61 @@ const updateUserStatus = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Submit a request for account access (officers self-registration)
+ * @route   POST /api/auth/request-access
+ * @access  Public
+ */
+const requestAccess = async (req, res) => {
+  try {
+    const { username, email, password, badgeNumber } = req.body;
+
+    if (!username || !email || !password) {
+      return sendError(res, 'Please provide username, email and password', 400);
+    }
+
+    // Enforce email domain restriction
+    if (!email.endsWith('@police.gov')) {
+      return sendError(res, 'Registration is restricted to official @police.gov email addresses.', 400);
+    }
+
+    // Check if user already exists
+    const userExists = await User.findOne({ $or: [{ email }, { username }] });
+    if (userExists) {
+      return sendError(res, 'User with this email or username already exists', 400);
+    }
+
+    const assignedBadge = badgeNumber || `BADGE-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    // Create user in 'pending' status
+    const user = await User.create({
+      username,
+      email,
+      passwordHash: password,
+      role: 'officer',
+      badgeNumber: assignedBadge,
+      status: 'pending'
+    });
+
+    return sendSuccess(res, {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      badgeNumber: user.badgeNumber,
+      status: user.status
+    }, 'Access request submitted successfully. Awaiting administrator approval.', 201);
+  } catch (error) {
+    console.error('Request access error:', error);
+    return sendError(res, error.message, 500);
+  }
+};
+
 module.exports = {
   register,
   login,
   googleLogin,
+  requestAccess,
   getMe,
   getUsers,
   updateUserRole,

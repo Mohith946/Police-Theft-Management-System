@@ -108,6 +108,25 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Request access handler
+  const requestAccess = async (username, email, password, badgeNumber) => {
+    try {
+      const payload = { username, email, password };
+      if (badgeNumber) payload.badgeNumber = badgeNumber;
+
+      const response = await axios.post('/api/auth/request-access', payload);
+      
+      if (response.data.success) {
+        return { success: true, message: response.data.message };
+      }
+      return { success: false, message: response.data.message || 'Request failed' };
+    } catch (err) {
+      console.error('Request access error:', err);
+      const errMsg = err.response?.data?.message || 'Failed to submit access request';
+      return { success: false, message: errMsg };
+    }
+  };
+
   // Logout handler
   const logout = () => {
     localStorage.removeItem('token');
@@ -184,6 +203,7 @@ export const AuthProvider = ({ children }) => {
     login,
     googleLogin,
     register,
+    requestAccess,
     logout,
     isAuthenticated: !!user,
     badgeCounts,

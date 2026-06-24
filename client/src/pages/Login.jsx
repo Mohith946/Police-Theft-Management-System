@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, Mail, Lock, Info, ShieldAlert } from 'lucide-react';
+import { Shield, Mail, Lock, Info, ShieldAlert, User, Award } from 'lucide-react';
 
 const Login = () => {
-  const { login, googleLogin } = useAuth();
+  const { login, googleLogin, requestAccess } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [badgeNumber, setBadgeNumber] = useState('');
+  const [isRequestAccess, setIsRequestAccess] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -70,6 +73,26 @@ const Login = () => {
     setSuccessMsg('');
     setLoading(true);
 
+    if (isRequestAccess) {
+      if (!email.endsWith('@police.gov')) {
+        setMessage('Registration is restricted to official @police.gov email addresses.');
+        setLoading(false);
+        return;
+      }
+      const res = await requestAccess(username, email, password, badgeNumber);
+      if (res.success) {
+        setSuccessMsg('Access request submitted successfully. Awaiting administrator approval.');
+        setIsRequestAccess(false);
+        setPassword('');
+        setUsername('');
+        setBadgeNumber('');
+      } else {
+        setMessage(res.message);
+      }
+      setLoading(false);
+      return;
+    }
+
     const res = await login(email, password);
     if (res.success) {
       navigate('/');
@@ -119,7 +142,7 @@ const Login = () => {
         {/* Login/Register Card */}
         <div className="glass-panel p-8 rounded-3xl">
           <h2 className="text-lg font-bold text-white text-center font-heading mb-6">
-            Officer & Admin Protocol Login
+            {isRequestAccess ? 'Request Console Access' : 'Officer & Admin Protocol Login'}
           </h2>
 
           {message && (
@@ -135,6 +158,23 @@ const Login = () => {
           )}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            {isRequestAccess && (
+              <div>
+                <label className="form-label">Username</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    className="form-input pl-10"
+                    placeholder="officer_name"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                  <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                </div>
+              </div>
+            )}
+
             <div>
               <label className="form-label">Email Address</label>
               <div className="relative">
@@ -151,7 +191,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="form-label">Secret Password</label>
+              <label className="form-label">{isRequestAccess ? 'Choose Password' : 'Secret Password'}</label>
               <div className="relative">
                 <input
                   type="password"
@@ -165,26 +205,62 @@ const Login = () => {
               </div>
             </div>
 
+            {isRequestAccess && (
+              <div>
+                <label className="form-label">Badge Number (Optional)</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    className="form-input pl-10"
+                    placeholder="e.g. BADGE-1234"
+                    value={badgeNumber}
+                    onChange={(e) => setBadgeNumber(e.target.value)}
+                  />
+                  <Award size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                </div>
+              </div>
+            )}
+
             <button
               type="submit"
               className="btn btn-primary w-full mt-2"
               disabled={loading}
             >
-              <span>{loading ? 'Processing Session...' : 'Establish Connection'}</span>
+              <span>{loading ? 'Processing Session...' : (isRequestAccess ? 'Submit Access Request' : 'Establish Connection')}</span>
             </button>
           </form>
 
-          <div className="relative flex py-4 items-center">
-            <div className="flex-grow border-t border-white/10"></div>
-            <span className="flex-shrink mx-4 text-xs text-slate-400 font-medium tracking-wide">OR</span>
-            <div className="flex-grow border-t border-white/10"></div>
-          </div>
+          {!isRequestAccess && (
+            <>
+              <div className="relative flex py-4 items-center">
+                <div className="flex-grow border-t border-white/10"></div>
+                <span className="flex-shrink mx-4 text-xs text-slate-400 font-medium tracking-wide">OR</span>
+                <div className="flex-grow border-t border-white/10"></div>
+              </div>
 
-          <div id="googleBtnDiv" className="w-full flex justify-center"></div>
+              <div id="googleBtnDiv" className="w-full flex justify-center"></div>
+            </>
+          )}
+
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => {
+                setIsRequestAccess(!isRequestAccess);
+                setMessage('');
+                setSuccessMsg('');
+              }}
+              className="text-xs text-primary-light hover:underline bg-transparent border-0 cursor-pointer font-medium"
+            >
+              {isRequestAccess 
+                ? 'Already have an approved account? Back to Login' 
+                : 'Need database access? Request Access here'}
+            </button>
+          </div>
         </div>
 
         {/* Demo Accounts Drawer */}
-        <div className="glass-panel mt-6 p-5 rounded-2xl border-dashed border-white/10">
+        {!isRequestAccess && (
+          <div className="glass-panel mt-6 p-5 rounded-2xl border-dashed border-white/10">
           <div className="flex items-center gap-2 mb-3">
             <Info size={16} className="text-primary-light" />
             <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
@@ -206,7 +282,8 @@ const Login = () => {
             </button>
           </div>
         </div>
-      </div>
+      )}
+    </div>
 
       {/* Glassmorphic Access Denial Modal Popup */}
       {showDenialModal && (

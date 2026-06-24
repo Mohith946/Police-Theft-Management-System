@@ -4,6 +4,7 @@ const {
   register, 
   login, 
   googleLogin,
+  requestAccess,
   getMe,
   getUsers,
   updateUserRole,
@@ -19,6 +20,7 @@ router.post('/register', protect, authorize('admin'), register);
 // Route for login
 router.post('/login', login);
 router.post('/google-login', googleLogin);
+router.post('/request-access', requestAccess);
 
 // Route for getting current user info
 router.get('/me', protect, getMe);

@@ -1,7 +1,42 @@
+const fs = require('fs');
+const { UTApi } = require('uploadthing/server');
 const Criminal = require('../models/Criminal');
 const MatchResult = require('../models/MatchResult');
 const { runMatchingForCriminal } = require('../services/matchingService');
 const { sendSuccess, sendError } = require('../utils/responseHandler');
+
+const uploadSuspectPhotoToCloud = async (file) => {
+  if (!file) return null;
+  if (!process.env.UPLOADTHING_TOKEN) {
+    return `/uploads/criminals/${file.filename}`;
+  }
+  try {
+    const utapi = new UTApi({
+      token: process.env.UPLOADTHING_TOKEN
+    });
+
+    const buffer = fs.readFileSync(file.path);
+    const webpFile = new File([buffer], file.filename, { type: file.mimetype });
+
+    console.log(`[UploadThing] Uploading suspect photo: ${file.filename} to Uploadthing...`);
+    const uploadResponse = await utapi.uploadFiles([webpFile]);
+
+    if (uploadResponse && uploadResponse[0] && uploadResponse[0].data) {
+      const url = uploadResponse[0].data.ufsUrl || uploadResponse[0].data.url;
+      console.log(`[UploadThing] Uploaded successfully: ${url}`);
+      
+      // Delete local file after upload
+      fs.unlinkSync(file.path);
+      return url;
+    } else {
+      console.error(`[UploadThing Error] Failed upload:`, uploadResponse[0]?.error);
+      return `/uploads/criminals/${file.filename}`;
+    }
+  } catch (err) {
+    console.error('[UploadThing Error] Failed to upload suspect photo:', err);
+    return `/uploads/criminals/${file.filename}`;
+  }
+};
 
 /**
  * @desc    Get all criminals / search suspects
@@ -80,7 +115,7 @@ const createCriminal = async (req, res) => {
 
     let photoUrl = null;
     if (req.file) {
-      photoUrl = `/uploads/criminals/${req.file.filename}`;
+      photoUrl = await uploadSuspectPhotoToCloud(req.file);
     }
 
     // Assemble physical features
@@ -164,7 +199,7 @@ const updateCriminal = async (req, res) => {
     }
 
     if (req.file) {
-      criminal.photoUrl = `/uploads/criminals/${req.file.filename}`;
+      criminal.photoUrl = await uploadSuspectPhotoToCloud(req.file);
     }
 
     await criminal.save();

@@ -1,0 +1,1 @@
+const e=t=>{if(!t)return"";if(t.startsWith("http://")||t.startsWith("https://")||t.startsWith("data:"))return t;const s="".replace(/\/$/,""),a=t.startsWith("/")?t:`/${t}`;return`${s}${a}`};export{e as g};
