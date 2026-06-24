@@ -487,3 +487,10 @@ aside nav a span.rounded-full {
   font-size: 10px !important;
   font-weight: 700 !important;
 }
+
+/* webcam scanner video stream styling */
+#webcam-scanner-container video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}

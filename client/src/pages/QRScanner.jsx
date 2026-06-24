@@ -21,7 +21,7 @@ const QRScanner = () => {
 
     const startScanner = async () => {
       try {
-        const { Html5QrcodeScanner } = await import('html5-qrcode');
+        const { Html5Qrcode } = await import('html5-qrcode');
         if (!isMounted) return;
 
         if (scanMode === 'camera' && scannerActive && !scanResult) {
@@ -29,17 +29,19 @@ const QRScanner = () => {
           const container = document.getElementById('webcam-scanner-container');
           if (container) container.innerHTML = '';
 
-          scanner = new Html5QrcodeScanner('webcam-scanner-container', {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0
-          }, false);
+          scanner = new Html5Qrcode('webcam-scanner-container');
 
-          scanner.render(
+          await scanner.start(
+            { facingMode: 'environment' },
+            {
+              fps: 10,
+              qrbox: { width: 250, height: 250 },
+              aspectRatio: 1.0
+            },
             (decodedText) => {
               handleTokenScanned(decodedText);
-              if (scanner) {
-                scanner.clear().catch(err => console.warn('Scanner clear failure', err));
+              if (scanner && scanner.isScanning) {
+                scanner.stop().catch(err => console.warn('Scanner stop failure', err));
               }
             },
             (error) => {
@@ -56,8 +58,8 @@ const QRScanner = () => {
 
     return () => {
       isMounted = false;
-      if (scanner) {
-        scanner.clear().catch(err => console.warn('Scanner clear failure', err));
+      if (scanner && scanner.isScanning) {
+        scanner.stop().catch(err => console.warn('Scanner stop failure', err));
       }
     };
   }, [scanMode, scannerActive, scanResult]);
