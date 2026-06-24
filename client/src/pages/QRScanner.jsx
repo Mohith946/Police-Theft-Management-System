@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Scan, Camera, Upload, CheckCircle, RefreshCw, AlertCircle, User, Sparkles } from 'lucide-react';
 import { formatDate } from '../utils/dateUtils';
+import { getUploadUrl } from '../utils/imageUtils';
 
 const QRScanner = () => {
   const [scanResult, setScanResult] = useState(null);
@@ -291,7 +292,7 @@ const QRScanner = () => {
                           <div className="flex gap-3 items-center">
                             <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-950 border border-white/10 flex items-center justify-center shrink-0">
                               {criminal.photoUrl ? (
-                                <img src={criminal.photoUrl} alt={criminal.name} className="w-full h-full object-cover" />
+                                <img src={getUploadUrl(criminal.photoUrl)} alt={criminal.name} className="w-full h-full object-cover" />
                               ) : (
                                 <User size={20} className="text-slate-400" />
                               )}
@@ -385,7 +386,7 @@ const QRScanner = () => {
                   <div className="flex gap-4 items-center">
                     <div className="w-16 h-16 rounded-full overflow-hidden bg-slate-900 border-2 border-white flex items-center justify-center shrink-0 shadow-sm">
                       {scanResult.criminal.photoUrl ? (
-                        <img src={scanResult.criminal.photoUrl} alt={scanResult.criminal.name} className="w-full h-full object-cover" />
+                        <img src={getUploadUrl(scanResult.criminal.photoUrl)} alt={scanResult.criminal.name} className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-3xl">👤</span>
                       )}

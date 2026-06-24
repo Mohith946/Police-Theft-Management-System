@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Search, UserPlus, Eye, Filter, UserX, Ruler, Scissors, Paintbrush } from 'lucide-react';
+import { getUploadUrl } from '../utils/imageUtils';
 
 const getTattooEmoji = (text) => {
   if (!text) return null;
@@ -160,7 +161,7 @@ const Criminals = () => {
                       <div className="w-full h-full rounded-full overflow-hidden bg-slate-900 border-2 border-white flex items-center justify-center">
                         {crim.photoUrl ? (
                           <img 
-                            src={crim.photoUrl} 
+                            src={getUploadUrl(crim.photoUrl)} 
                             alt={crim.name} 
                             className="w-full h-full object-cover"
                           />

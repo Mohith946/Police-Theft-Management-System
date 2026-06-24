@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ArrowLeft, User, MapPin, Sparkles, Bell } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import MatchScoreCard from '../components/MatchScoreCard';
+import { getUploadUrl } from '../utils/imageUtils';
 
 const CriminalDetails = () => {
   const { id } = useParams();
@@ -123,7 +124,7 @@ const CriminalDetails = () => {
           <div className="w-32 h-32 rounded-full overflow-hidden bg-slate-950 border-2 border-white/10 flex items-center justify-center shadow-md shrink-0">
             {criminal.photoUrl ? (
               <img 
-                src={criminal.photoUrl} 
+                src={getUploadUrl(criminal.photoUrl)} 
                 alt={criminal.name} 
                 className="w-full h-full object-cover"
               />
